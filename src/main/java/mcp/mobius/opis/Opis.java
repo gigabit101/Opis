@@ -55,7 +55,7 @@ import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.proxy.ProxyServer;
 import mcp.mobius.opis.tools.BlockLag;
 
-@Mod(modid="Opis", name="Opis", version="1.2.3a", dependencies="required-after:MobiusCore@[1.2.4]", acceptableRemoteVersions="*")
+@Mod(modid="Opis", name="Opis", version="1.2.3a", acceptableRemoteVersions="*")
 public class Opis {
 
 	@Mod.Instance("Opis")
