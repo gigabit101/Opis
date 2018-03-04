@@ -52,5 +52,4 @@ public class ActionPlayers implements ActionListener {
             PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_PULL_ENTITY, new TargetEntity(eid, dim)));			
 		}
 	}
-
 }

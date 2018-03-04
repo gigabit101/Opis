@@ -231,20 +231,22 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler {
 
     @Override
 	public void onDraw(IMapView mapview, IMapMode mapmode) {
-		if (this.canvas == null)
-			this.canvas = new LayoutCanvas();
-		
-		if (mapmode.getW() != 0){
-			this.canvas.hide();
-			return;
-		}
-		
-		if (!this.showList)
-			this.canvas.hide();
-		else{
-			this.canvas.show();		
-			this.canvas.draw();
-		}
+//		if (this.canvas == null)
+//			this.canvas = new LayoutCanvas();
+//
+//		//TODO: Investigate why margins were removed, and if there is another way we can detect this.
+//		//TODO: Also in OverlayEntityPerChunk
+////		if (mapmode.marginLeft() != 0){
+////			this.canvas.hide();
+////			return;
+////		}
+//
+//		if (!this.showList)
+//			this.canvas.hide();
+//		else{
+//			this.canvas.show();
+//			this.canvas.draw();
+//		}
 		
 	}
 	

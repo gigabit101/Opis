@@ -104,10 +104,7 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 		@Override
 		public int getBorderColor() { return 0xff000000; }
 		
-	}	
-	
-	//public static OverlayLoadedChunks instance = new OverlayLoadedChunks();
-	//private OverlayLoadedChunks(){};
+	}
 	
 	CoordinatesChunk selectedChunk = null;
 	public boolean    showList = false;
@@ -215,22 +212,22 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 
 	@Override
 	public void onDraw(IMapView mapview, IMapMode mapmode) {
-		if (this.canvas == null)
-			this.canvas = new LayoutCanvas();
-
-		//TODO: Investigate why margins were removed, and if there is another way we can detect this.
-        //TODO: Also in OverlayEntityPerChunk
-//		if (mapmode.marginLeft != 0){
+//		if (this.canvas == null)
+//			this.canvas = new LayoutCanvas();
+//
+//		//TODO: Investigate why margins were removed, and if there is another way we can detect this.
+//        //TODO: Also in OverlayEntityPerChunk
+////		if (mapmode.marginLeft != 0){
+////			this.canvas.hide();
+////			return;
+////		}
+//
+//		if (!this.showList)
 //			this.canvas.hide();
-//			return;
+//		else{
+//			this.canvas.show();
+//			this.canvas.draw();
 //		}
-		
-		if (!this.showList)
-			this.canvas.hide();
-		else{
-			this.canvas.show();		
-			this.canvas.draw();
-		}
 	}
 
 	@SideOnly (Side.CLIENT)

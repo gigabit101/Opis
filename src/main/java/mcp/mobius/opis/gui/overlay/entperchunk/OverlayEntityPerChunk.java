@@ -6,23 +6,16 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import mapwriter.api.*;
-import mapwriter.map.MapView;
-import mapwriter.map.mapmode.MapMode;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.data.holders.ISerializable;
-import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
 import mcp.mobius.opis.data.holders.newtypes.DataChunkEntities;
 import mcp.mobius.opis.data.holders.newtypes.DataEntity;
-import mcp.mobius.opis.gui.events.MouseEvent;
 import mcp.mobius.opis.gui.interfaces.CType;
-import mcp.mobius.opis.gui.interfaces.IWidget;
 import mcp.mobius.opis.gui.interfaces.WAlign;
 import mcp.mobius.opis.gui.widgets.LayoutBase;
 import mcp.mobius.opis.gui.widgets.LayoutCanvas;
 import mcp.mobius.opis.gui.widgets.WidgetGeometry;
-import mcp.mobius.opis.gui.widgets.tableview.TableRow;
-import mcp.mobius.opis.gui.widgets.tableview.ViewTable;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
@@ -33,55 +26,55 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	INSTANCE;
-	
+
 	class ReducedData implements Comparable{
 		CoordinatesChunk chunk;
 		int amount;
-		
+
 		public ReducedData(CoordinatesChunk chunk, int amount){
 			this.chunk = chunk;
 			this.amount = amount;
 		}
-		
+
 		@Override
 		public int compareTo(Object arg0) {
 			return ((ReducedData)arg0).amount - this.amount;
 		}
-		
+
 	}
-	
+
 	public boolean    showList = false;
 	public LayoutCanvas canvas = null;
-	public HashMap<CoordinatesChunk, Integer> overlayData = new HashMap<CoordinatesChunk, Integer>(); 
+	public HashMap<CoordinatesChunk, Integer> overlayData = new HashMap<CoordinatesChunk, Integer>();
 	public ArrayList<ReducedData> reducedData = new ArrayList<ReducedData>();
 	public ArrayList<DataEntity> entStats    = new ArrayList<DataEntity>();
 	public CoordinatesChunk selectedChunk = null;
-	
+
 	public void setEntStats(ArrayList<ISerializable> data){
 		this.entStats.clear();
 		for (ISerializable stat : data)
 			this.entStats.add((DataEntity)stat);
 	}
-	
+
 	public void reduceData(){
 		this.reducedData.clear();
 		for (CoordinatesChunk chunk : this.overlayData.keySet())
 			this.reducedData.add(new ReducedData(chunk, this.overlayData.get(chunk)));
 		Collections.sort(this.reducedData);
 	}
-	
+
 	@Override
 	public ArrayList<IMwChunkOverlay> getChunksOverlay(int dim, double centerX, double centerZ, double minX, double minZ, double maxX, double maxZ) {
 		ArrayList<IMwChunkOverlay> overlays = new ArrayList<IMwChunkOverlay>();
-		
+
 		int minEnts = 9999;
 		int maxEnts = 0;
 
 		for (CoordinatesChunk chunk : overlayData.keySet()){
 			minEnts = Math.min(minEnts, overlayData.get(chunk));
 			maxEnts = Math.max(maxEnts, overlayData.get(chunk));
-		}		
-		
+		}
+
 		for (CoordinatesChunk chunk : overlayData.keySet()){
 			if (chunk.dim == dim)
 				if (this.selectedChunk != null)
@@ -111,12 +104,12 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	@Override
 	public void onMiddleClick(int dim, int bX, int bZ, IMapView mapview) {
 		this.showList = false;
-		
+
 		int chunkX = bX >> 4;
-		int chunkZ = bZ >> 4;		
-		CoordinatesChunk clickedChunk = new CoordinatesChunk(dim, chunkX, chunkZ); 
+		int chunkZ = bZ >> 4;
+		CoordinatesChunk clickedChunk = new CoordinatesChunk(dim, chunkX, chunkZ);
 		CoordinatesChunk prevSelected = this.selectedChunk;
-		
+
 		if (this.overlayData.containsKey(clickedChunk)){
 			if (this.selectedChunk == null)
 				this.selectedChunk = clickedChunk;
@@ -127,18 +120,18 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 		} else {
 			this.selectedChunk = null;
 		}
-		
+
 		if (this.selectedChunk == null)
 			this.showList = true;
-		
+
 		if (prevSelected == null && this.selectedChunk != null)
 			PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, this.selectedChunk));
 
 		else if (this.selectedChunk != null && !this.selectedChunk.equals(prevSelected))
-			PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, this.selectedChunk));			
-		
+			PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, this.selectedChunk));
+
 		else if (this.selectedChunk == null)
-			PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_ENTITIES));			
+			PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_ENTITIES));
 	}
 
 	@Override
@@ -162,42 +155,40 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 
 	@Override
 	public void onDraw(IMapView mapview, IMapMode mapmode) {
-		if (this.canvas == null)
-			this.canvas = new LayoutCanvas();
+//		if (this.canvas == null)
+//			this.canvas = new LayoutCanvas();
 
         //TODO: Investigate why margins were removed, and if there is another way we can detect this.
         //TODO: Also in OverlayLoadedChunks
-//		if (mapmode.marginLeft != 0){
+//		if (mapmode.upda != 0){
 //			this.canvas.hide();
 //			return;
 //		}
-		
-		if (!this.showList)
-			this.canvas.hide();
-		else{
-			this.canvas.show();		
-			this.canvas.draw();
-		}		
+
+//		if (!this.showList)
+//			this.canvas.hide();
+//		else{
+//			this.canvas.show();
+//			this.canvas.draw();
+//		}
 	}
 
 	@SideOnly (Side.CLIENT)
 	public void setupChunkTable(){
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();
-		
+
 		if (this.canvas.hasWidget("Table"))
 			this.canvas.delWidget("Table");
-		
+
 		LayoutBase layout = (LayoutBase)this.canvas.addWidget("Table", new LayoutBase(null));
-		//layout.setGeometry(new WidgetGeometry(100.0,0.0,300.0,100.0,CType.RELXY, CType.REL_Y, WAlign.RIGHT, WAlign.TOP));
-		layout.setGeometry(new WidgetGeometry(100.0,0.0,20.0,100.0,CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));		
+		layout.setGeometry(new WidgetGeometry(100.0,0.0,20.0,100.0,CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));
 		layout.setBackgroundColors(0x90202020, 0x90202020);
-		
+
 		TableChunks table  = (TableChunks)layout.addWidget("Table_", new TableChunks(null, this));
-		
+
 		table.setGeometry(new WidgetGeometry(0.0,0.0,100.0,100.0,CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
 	    table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER)
-		     //.setColumnsTitle("\u00a7a\u00a7oType", "\u00a7a\u00a7oPos", "\u00a7a\u00a7oUpdate Time")
 	    	 .setColumnsTitle("Pos", "N Entities")
 			 .setColumnsWidth(75,25)
 			 .setRowColors(0xff808080, 0xff505050)
@@ -211,26 +202,24 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 		}
 
 		this.showList = true;
-	}	
-	
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void setupEntTable(){
 		if (this.canvas == null)
-			this.canvas = new LayoutCanvas();		
-		
+			this.canvas = new LayoutCanvas();
+
 		if (this.canvas.hasWidget("Table"))
 			this.canvas.delWidget("Table");
-		
+
 		LayoutBase layout = (LayoutBase)this.canvas.addWidget("Table", new LayoutBase(null));
-		//layout.setGeometry(new WidgetGeometry(100.0,0.0,300.0,100.0,CType.RELXY, CType.REL_Y, WAlign.RIGHT, WAlign.TOP));
-		layout.setGeometry(new WidgetGeometry(100.0,0.0,20.0,100.0,CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));		
+		layout.setGeometry(new WidgetGeometry(100.0,0.0,20.0,100.0,CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));
 		layout.setBackgroundColors(0x90202020, 0x90202020);
-		
+
 		TableEntities table  = (TableEntities)layout.addWidget("Table_", new TableEntities(null, this));
-		
+
 		table.setGeometry(new WidgetGeometry(0.0,0.0,100.0,100.0,CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
 	    table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER)
-		     //.setColumnsTitle("\u00a7a\u00a7oType", "\u00a7a\u00a7oPos", "\u00a7a\u00a7oUpdate Time")
 	    	 .setColumnsTitle("Name", "Pos")
 			 .setColumnsWidth(75,25)
 			 .setRowColors(0xff808080, 0xff505050)
@@ -238,28 +227,26 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 
 		int nrows = 0;
 		for (DataEntity data : this.entStats){
-			//String[] namelst = data.getName().split("\\.");
-			//String name = namelst[namelst.length - 1];
-			
+
 			String name = data.name.toString();
-			
+
 			table.addRow(data, name, String.format("[ %d %d %d ]", data.pos.x, data.pos.y, data.pos.z));
 			nrows++;
 			if (nrows > 100) break;
 		}
 
 		this.showList = true;
-	}		
-	
+	}
+
 	@Override
 	public boolean onMouseInput(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas != null && this.canvas.shouldRender() && ((LayoutCanvas)this.canvas).hasWidgetAtCursor()){
-			
+
 			if (this.canvas.getWidget("Table").getWidget("Table_") instanceof TableEntities)
 				((TableEntities)this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
 			else
 				((TableChunks)this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
-			
+
 			this.canvas.handleMouseInput();
 			return true;
 		}
@@ -268,7 +255,6 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 
 	public void requestChunkUpdate(int dim, int chunkX, int chunkZ){
 		ArrayList<CoordinatesChunk> chunks = new ArrayList<CoordinatesChunk>();
-		//HashSet<ChunkCoordIntPair> chunkCoords = new HashSet<ChunkCoordIntPair>(); 
 
 		for (int x = -5; x <= 5; x++){
 			for (int z = -5; z <= 5; z++){
@@ -279,9 +265,9 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 				}
 			}
 		}
-		
+
 		if (chunks.size() > 0)
-			PacketManager.sendToServer(new PacketReqChunks(dim, chunks));				
+			PacketManager.sendToServer(new PacketReqChunks(dim, chunks));
 	}
 
 	@Override
@@ -299,15 +285,15 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 			}
 			this.overlayData = chunkStatus;
 			this.reduceData();
-			this.setupChunkTable();			
+			this.setupChunkTable();
 		}
-		
+
 		default:
 			return false;
 		}
-		
-		
+
+
 		return true;
-	}	
+	}
 	
 }
