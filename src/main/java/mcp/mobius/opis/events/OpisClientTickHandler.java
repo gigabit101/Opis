@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import com.google.common.collect.HashBasedTable;
 
+import com.google.common.collect.Table.Cell;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.entity.Entity;
@@ -32,6 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public enum OpisClientTickHandler{
 	INSTANCE;

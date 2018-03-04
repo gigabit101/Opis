@@ -7,12 +7,9 @@ import java.util.Set;
 
 import javax.swing.table.DefaultTableModel;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import mapwriter.api.IMapMode;
+import mapwriter.api.IMapView;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkCoordIntPair;
-import mapwriter.Mw;
 import mapwriter.api.IMwChunkOverlay;
 import mapwriter.api.IMwDataProvider;
 import mapwriter.map.MapView;
@@ -40,13 +37,16 @@ import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqChunks;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
 import mcp.mobius.opis.swing.widgets.JTableStats;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 	INSTANCE;
 	
 	public class TicketTable extends ViewTable{
-		MapView mapView;
-		MapMode mapMode;
+		IMapView mapView;
+		IMapMode mapMode;
 		OverlayLoadedChunks overlay;
 		
 		public TicketTable(IWidget parent, OverlayLoadedChunks overlay) { 	
@@ -54,7 +54,7 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 			this.overlay = overlay;
 		}
 		
-		public void setMap(MapView mapView, MapMode mapMode){
+		public void setMap(IMapView mapView, IMapMode mapMode){
 		    this.mapView = mapView;
 			this.mapMode = mapMode;			
 		}
@@ -69,8 +69,8 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 					this.mapView.setDimension(coord.dim);
 					this.mapView.setViewCentre(coord.x, coord.z);
 					this.overlay.requestChunkUpdate(this.mapView.getDimension(), 
-							MathHelper.ceiling_double_int(this.mapView.getX()) >> 4, 
-							MathHelper.ceiling_double_int(this.mapView.getZ()) >> 4);
+							MathHelper.ceil(this.mapView.getX()) >> 4,
+							MathHelper.ceil(this.mapView.getZ()) >> 4);
 				} else {
 					PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_BLOCK, new CoordinatesBlock(coord)));					
 					Minecraft.getMinecraft().setIngameFocus();
@@ -143,7 +143,7 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 	}
 
 	@Override
-	public void onMiddleClick(int dim, int bX, int bZ, MapView mapview) {
+	public void onMiddleClick(int dim, int bX, int bZ, IMapView mapview) {
 		int chunkX = bX >> 4;
 		int chunkZ = bZ >> 4;
 		this.requestChunkUpdate(dim, chunkX, chunkZ);
@@ -183,34 +183,34 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 	}
 	
 	@Override
-	public void onDimensionChanged(int dimension, MapView mapview) {
+	public void onDimensionChanged(int dimension, IMapView mapview) {
 		PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_LOADED, new SerialInt(dimension)));
 	}
 
 	@Override
-	public void onMapCenterChanged(double vX, double vZ, MapView mapview) {
+	public void onMapCenterChanged(double vX, double vZ, IMapView mapview) {
 	}
 
 	@Override
-	public void onZoomChanged(int level, MapView mapview) {
+	public void onZoomChanged(int level, IMapView mapview) {
 	}
 
 	@Override
-	public void onOverlayActivated(MapView mapview) {
+	public void onOverlayActivated(IMapView mapview) {
 		this.selectedChunk = null;
 		PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_LOADED, new SerialInt(mapview.getDimension())));		
 		PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_TICKETS));		
 	}
 
 	@Override
-	public void onOverlayDeactivated(MapView mapview) {
+	public void onOverlayDeactivated(IMapView mapview) {
 		this.showList = false;
 		this.selectedChunk = null;		
 		PacketManager.sendToServer(new PacketReqData(Message.COMMAND_UNREGISTER));
 	}
 
 	@Override
-	public void onDraw(MapView mapview, MapMode mapmode) {
+	public void onDraw(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();
 		
@@ -227,7 +227,7 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public void setupTable(ArrayList<TicketData> tickets){
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();		
@@ -256,7 +256,7 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 	}	
 	
 	@Override
-	public boolean onMouseInput(MapView mapview, MapMode mapmode) {
+	public boolean onMouseInput(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas != null && this.canvas.shouldRender() && ((LayoutCanvas)this.canvas).hasWidgetAtCursor()){
 			((TicketTable)this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
 			this.canvas.handleMouseInput();

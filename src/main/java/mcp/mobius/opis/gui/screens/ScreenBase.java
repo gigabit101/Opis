@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import org.lwjgl.input.Mouse;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mcp.mobius.opis.gui.interfaces.IWidget;
 import mcp.mobius.opis.gui.widgets.LayoutCanvas;
 import net.minecraft.client.Minecraft;

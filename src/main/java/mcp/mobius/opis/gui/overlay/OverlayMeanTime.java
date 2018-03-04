@@ -36,7 +36,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler {;
+public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler {
+	INSTANCE;
     public class EntitiesTable extends ViewTable{
 		IMapView mapView;
 		IMapMode mapMode;

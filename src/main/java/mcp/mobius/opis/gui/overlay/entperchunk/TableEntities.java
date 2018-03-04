@@ -1,5 +1,7 @@
 package mcp.mobius.opis.gui.overlay.entperchunk;
 
+import mapwriter.api.IMapMode;
+import mapwriter.api.IMapView;
 import net.minecraft.client.Minecraft;
 import mapwriter.map.MapView;
 import mapwriter.map.mapmode.MapMode;
@@ -14,8 +16,8 @@ import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
 
 public class TableEntities extends ViewTable {
-	MapView mapView;
-	MapMode mapMode;
+    IMapView mapView;
+    IMapMode mapMode;
 	OverlayEntityPerChunk overlay;		
 	
 	public TableEntities(IWidget parent, OverlayEntityPerChunk overlay) { 	
@@ -23,7 +25,7 @@ public class TableEntities extends ViewTable {
 		this.overlay = overlay;			
 	}
 	
-	public void setMap(MapView mapView, MapMode mapMode){
+	public void setMap(IMapView mapView, IMapMode mapMode){
 	    this.mapView = mapView;
 		this.mapMode = mapMode;			
 	}

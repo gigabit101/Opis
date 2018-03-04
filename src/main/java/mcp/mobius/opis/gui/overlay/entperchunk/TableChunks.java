@@ -1,8 +1,7 @@
 package mcp.mobius.opis.gui.overlay.entperchunk;
 
-import net.minecraft.util.MathHelper;
-import mapwriter.map.MapView;
-import mapwriter.map.mapmode.MapMode;
+import mapwriter.api.IMapMode;
+import mapwriter.api.IMapView;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.gui.events.MouseEvent;
 import mcp.mobius.opis.gui.interfaces.IWidget;
@@ -12,10 +11,11 @@ import mcp.mobius.opis.gui.widgets.tableview.ViewTable;
 import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
+import net.minecraft.util.math.MathHelper;
 
 public class TableChunks extends ViewTable {
-	MapView mapView;
-	MapMode mapMode;
+    IMapView mapView;
+    IMapMode mapMode;
 	OverlayEntityPerChunk overlay;		
 	
 	public TableChunks(IWidget parent, OverlayEntityPerChunk overlay) { 	
@@ -23,7 +23,7 @@ public class TableChunks extends ViewTable {
 		this.overlay = overlay;			
 	}
 	
-	public void setMap(MapView mapView, MapMode mapMode){
+	public void setMap(IMapView mapView, IMapMode mapMode){
 	    this.mapView = mapView;
 		this.mapMode = mapMode;			
 	}
@@ -40,8 +40,8 @@ public class TableChunks extends ViewTable {
 			this.mapView.setDimension(coord.dim);
 			this.mapView.setViewCentre(coord.x, coord.z);
 			this.overlay.requestChunkUpdate(this.mapView.getDimension(), 
-					MathHelper.ceiling_double_int(this.mapView.getX()) >> 4, 
-					MathHelper.ceiling_double_int(this.mapView.getZ()) >> 4);
+					MathHelper.ceil(this.mapView.getX()) >> 4,
+					MathHelper.ceil(this.mapView.getZ()) >> 4);
 
 		}
 	}

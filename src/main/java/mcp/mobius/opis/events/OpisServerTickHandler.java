@@ -30,6 +30,7 @@ import mcp.mobius.opis.network.packets.server.NetDataList;
 import mcp.mobius.opis.network.packets.server.NetDataValue;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public enum OpisServerTickHandler{
 	INSTANCE;

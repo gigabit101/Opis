@@ -6,6 +6,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import java.io.IOException;
 
 public enum ObfTable {
+	WORLD_UPDATEENTITIES      ("ahb", "h", "()V",      "net/minecraft/world/World",           "updateEntities", "()V"),
     WORLD_UPDATEENTITY        ("ahb", "g", "(Lsa;)V",  "net/minecraft/world/World",           "updateEntity",   "(Lnet/minecraft/entity/Entity;)V"),
     TILEENTITY_UPDATEENTITY   ("aor", "h", "()V",      "net/minecraft/tileentity/TileEntity", "updateEntity",   "()V"),
 

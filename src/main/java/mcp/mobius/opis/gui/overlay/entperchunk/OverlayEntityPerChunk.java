@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import mapwriter.api.IMapMode;
+import mapwriter.api.IMapView;
 import mapwriter.api.IMwChunkOverlay;
 import mapwriter.api.IMwDataProvider;
 import mapwriter.map.MapView;
@@ -33,6 +31,8 @@ import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqChunks;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	INSTANCE;
@@ -88,9 +88,9 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 		for (CoordinatesChunk chunk : overlayData.keySet()){
 			if (chunk.dim == dim)
 				if (this.selectedChunk != null)
-					overlays.add(new OverlayElement(chunk.toChunkCoordIntPair().chunkXPos, chunk.toChunkCoordIntPair().chunkZPos, minEnts, maxEnts, overlayData.get(chunk), chunk.equals(this.selectedChunk)));
+					overlays.add(new OverlayElement(chunk.toChunkCoordIntPair().x, chunk.toChunkCoordIntPair().z, minEnts, maxEnts, overlayData.get(chunk), chunk.equals(this.selectedChunk)));
 				else
-					overlays.add(new OverlayElement(chunk.toChunkCoordIntPair().chunkXPos, chunk.toChunkCoordIntPair().chunkZPos, minEnts, maxEnts, overlayData.get(chunk), false));
+					overlays.add(new OverlayElement(chunk.toChunkCoordIntPair().x, chunk.toChunkCoordIntPair().z, minEnts, maxEnts, overlayData.get(chunk), false));
 		}
 		return overlays;
 	}
@@ -105,7 +105,7 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	}
 
 	@Override
-	public void onMiddleClick(int dim, int bX, int bZ, MapView mapview) {
+	public void onMiddleClick(int dim, int bX, int bZ, IMapView mapview) {
 		this.showList = false;
 		
 		int chunkX = bX >> 4;
@@ -138,26 +138,26 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	}
 
 	@Override
-	public void onDimensionChanged(int dimension, MapView mapview) {
+	public void onDimensionChanged(int dimension, IMapView mapview) {
 		//PacketDispatcher.sendPacketToServer(Packet_ReqData.create("overlay:chunk:entities"));
 	}
 
 	@Override
-	public void onMapCenterChanged(double vX, double vZ, MapView mapview) {}
+	public void onMapCenterChanged(double vX, double vZ, IMapView mapview) {}
 
 	@Override
-	public void onZoomChanged(int level, MapView mapview) {}
+	public void onZoomChanged(int level, IMapView mapview) {}
 
 	@Override
-	public void onOverlayActivated(MapView mapview) {
+	public void onOverlayActivated(IMapView mapview) {
 		PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_ENTITIES));
 	}
 
 	@Override
-	public void onOverlayDeactivated(MapView mapview) {}
+	public void onOverlayDeactivated(IMapView mapview) {}
 
 	@Override
-	public void onDraw(MapView mapview, MapMode mapmode) {
+	public void onDraw(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();
 		
@@ -174,7 +174,7 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 		}		
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public void setupChunkTable(){
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();
@@ -246,7 +246,7 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	}		
 	
 	@Override
-	public boolean onMouseInput(MapView mapview, MapMode mapmode) {
+	public boolean onMouseInput(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas != null && this.canvas.shouldRender() && ((LayoutCanvas)this.canvas).hasWidgetAtCursor()){
 			
 			if (this.canvas.getWidget("Table").getWidget("Table_") instanceof TableEntities)

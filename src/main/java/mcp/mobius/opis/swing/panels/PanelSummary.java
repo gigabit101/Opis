@@ -23,13 +23,13 @@ import mcp.mobius.opis.swing.actions.ActionRunOpis;
 import mcp.mobius.opis.swing.widgets.JButtonAccess;
 import mcp.mobius.opis.swing.widgets.JPanelMsgHandler;
 import net.miginfocom.swing.MigLayout;
-import net.minecraft.util.MathHelper;
 
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 
+import net.minecraft.util.math.MathHelper;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -294,7 +294,7 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel{
 		datasetTick.removeAllSeries();
 		datasetTick.addSeries(xydataTick);
 		
-		Double verticalScale = 50.0 * (MathHelper.floor_double(xydataTick.getMaxY() / 50.0D) + 1);
+		Double verticalScale = 50.0 * (MathHelper.floor(xydataTick.getMaxY() / 50.0D) + 1);
 		((NumberAxis)xyPlotTick.getRangeAxis()).setRange(0.0, verticalScale);
 		((NumberAxis)xyPlotTick.getDomainAxis()).setRange(0.0, 100.0);
 	}
@@ -315,7 +315,7 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel{
 		datasetPing.removeAllSeries();
 		datasetPing.addSeries(xydataPing);
 		
-		Double verticalScale = 500.0 * (MathHelper.floor_double(xydataPing.getMaxY() / 500.0D) + 1);
+		Double verticalScale = 500.0 * (MathHelper.floor(xydataPing.getMaxY() / 500.0D) + 1);
 		((NumberAxis)xyPlotPing.getRangeAxis()).setRange(0.0, verticalScale);
 		((NumberAxis)xyPlotPing.getDomainAxis()).setRange(0.0, 100.0);
 	}	
