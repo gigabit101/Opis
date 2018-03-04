@@ -8,11 +8,11 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Teleport {
 
@@ -92,12 +92,12 @@ public class Teleport {
         float f = ent.rotationYaw;
 
         srcWorld.theProfiler.startSection("placing");
-        d0 = MathHelper.clamp_int((int)d0, -29999872, 29999872);
-        d1 = MathHelper.clamp_int((int)d1, -29999872, 29999872);
+        d0 = MathHelper.clamp((int)d0, -29999872, 29999872);
+        d1 = MathHelper.clamp((int)d1, -29999872, 29999872);
 
         if (ent.isEntityAlive())
         {
-            trgWorld.spawnEntityInWorld(ent);
+            trgWorld.spawnEntity(ent);
             ent.setLocationAndAngles(d0, ent.posY, d1, ent.rotationYaw, ent.rotationPitch);
             trgWorld.updateEntityWithOptionalForce(ent, false);
         }
@@ -107,7 +107,7 @@ public class Teleport {
     
     public boolean moveEntityToDimension(Entity target, int targetID)
     {
-        if (!target.worldObj.isRemote && !target.isDead)
+        if (!target.world.isRemote && !target.isDead)
         {
             MinecraftServer server = MinecraftServer.getServer();
             int sourceID = target.dimension;
@@ -119,7 +119,7 @@ public class Teleport {
             
             target.dimension = targetID;
             
-            target.worldObj.removeEntity(target);
+            target.world.removeEntity(target);
             target.isDead = false;
             this.transferEntityToWorld(target, sourceID, sourceWorld, targetWorld);
             Entity entity = EntityList.createEntityByName(EntityList.getEntityString(target), targetWorld);

@@ -2,9 +2,9 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import java.util.WeakHashMap;
 
+import mcp.mobius.opis.profiler.ProfilerSection;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.managers.EntityManager;
 import mcp.mobius.opis.data.profilers.ProfilerRenderEntity;

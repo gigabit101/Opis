@@ -2,8 +2,8 @@ package mcp.mobius.opis.gui.overlay.entperchunk;
 
 import java.awt.Point;
 
-import net.minecraft.util.MathHelper;
 import mapwriter.api.IMwChunkOverlay;
+import net.minecraft.util.math.MathHelper;
 
 public class OverlayElement implements IMwChunkOverlay {
 
@@ -27,8 +27,8 @@ public class OverlayElement implements IMwChunkOverlay {
 	@Override
 	public int getColor() {
 		double scaledAmount = (double)this.ents / (double)this.maxEnts;
-		int    red          = MathHelper.ceiling_double_int(scaledAmount * 255.0);
-		int    blue         = 255 - MathHelper.ceiling_double_int(scaledAmount * 255.0);
+		int    red          = MathHelper.ceil(scaledAmount * 255.0);
+		int    blue         = 255 - MathHelper.ceil(scaledAmount * 255.0);
 		
 		return (200 << 24) + (red << 16) + (blue);  }
 

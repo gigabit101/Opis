@@ -3,13 +3,12 @@ package mcp.mobius.opis.gui.overlay;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import mapwriter.api.*;
 import mcp.mobius.opis.Opis;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import mapwriter.api.IMwChunkOverlay;
-import mapwriter.api.IMwDataProvider;
 import mapwriter.map.MapView;
 import mapwriter.map.mapmode.MapMode;
 import mcp.mobius.opis.api.IMessageHandler;
@@ -37,12 +36,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
-	INSTANCE;
-	
-	public class EntitiesTable extends ViewTable{
-		MapView mapView;
-		MapMode mapMode;
+public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler {;
+    public class EntitiesTable extends ViewTable{
+		IMapView mapView;
+		IMapMode mapMode;
 		OverlayMeanTime overlay;		
 		
 		public EntitiesTable(IWidget parent, OverlayMeanTime overlay) { 	
@@ -50,7 +47,7 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 			this.overlay = overlay;			
 		}
 		
-		public void setMap(MapView mapView, MapMode mapMode){
+		public void setMap(IMapView mapView, IMapMode mapMode){
 		    this.mapView = mapView;
 			this.mapMode = mapMode;			
 		}
@@ -147,7 +144,12 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 		return overlays;
 	}
 
-	@Override
+    @Override
+    public ILabelInfo getLabelInfo(int i, int i1) {
+        return null;
+    }
+
+    @Override
 	public String getStatusString(int dim, int bX, int bY, int bZ) {
 		int xChunk = bX >> 4;
 		int zChunk = bZ >> 4;
@@ -164,7 +166,7 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 	}
 
 	@Override
-	public void onMiddleClick(int dim, int bX, int bZ, MapView mapview) {
+	public void onMiddleClick(int dim, int bX, int bZ, IMapView mapview) {
 		this.showList = false;
 		
 		int chunkX = bX >> 4;
@@ -199,39 +201,39 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 		if (this.selectedChunk != null)
 			PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_TILEENTS, this.selectedChunk));		
 	}
-	
+
 	@Override
-	public void onDimensionChanged(int dimension, MapView mapview) {
+	public void onDimensionChanged(int dimension, IMapView mapview) {
 		PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_TIMING, new SerialInt(dimension)));
 	}
 
 	@Override
-	public void onMapCenterChanged(double vX, double vZ, MapView mapview) {
+	public void onMapCenterChanged(double vX, double vZ, IMapView mapview) {
 	}
 
 	@Override
-	public void onZoomChanged(int level, MapView mapview) {
+	public void onZoomChanged(int level, IMapView mapview) {
 	}
 
 	@Override
-	public void onOverlayActivated(MapView mapview) {
+	public void onOverlayActivated(IMapView mapview) {
 		this.selectedChunk = null;
 		PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_TIMING, new SerialInt(mapview.getDimension())));		
 	}
 
 	@Override
-	public void onOverlayDeactivated(MapView mapview) {
+	public void onOverlayDeactivated(IMapView mapview) {
 		this.showList = false;
 		this.selectedChunk = null;
 		PacketManager.sendToServer(new PacketReqData(Message.COMMAND_UNREGISTER));		
 	}
 
-	@Override
-	public void onDraw(MapView mapview, MapMode mapmode) {
+    @Override
+	public void onDraw(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();
 		
-		if (mapmode.marginLeft != 0){
+		if (mapmode.getW() != 0){
 			this.canvas.hide();
 			return;
 		}
@@ -294,7 +296,7 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 	}
 
 	@Override
-	public boolean onMouseInput(MapView mapview, MapMode mapmode) {
+	public boolean onMouseInput(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas != null && this.canvas.shouldRender() && ((LayoutCanvas)this.canvas).hasWidgetAtCursor()){
 			((EntitiesTable)this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
 			this.canvas.handleMouseInput();
