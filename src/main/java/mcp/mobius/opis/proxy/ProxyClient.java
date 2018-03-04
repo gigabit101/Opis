@@ -1,12 +1,10 @@
 package mcp.mobius.opis.proxy;
 
+import mcp.mobius.opis.profiler.ProfilerSection;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Level;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import mapwriter.api.MwAPI;
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.api.MessageHandlerRegistrar;

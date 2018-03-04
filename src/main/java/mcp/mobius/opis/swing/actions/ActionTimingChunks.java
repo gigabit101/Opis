@@ -31,7 +31,7 @@ public class ActionTimingChunks implements ActionListener {
 		if (e.getSource() == panel.getBtnCenter()){
             OverlayMeanTime.INSTANCE.setSelectedChunk(data.getChunk().dim, data.getChunk().chunkX, data.getChunk().chunkZ);
             MwAPI.setCurrentDataProvider(OverlayMeanTime.INSTANCE);
-            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.instance, data.getChunk().dim, data.getChunk().x + 8, data.getChunk().z + 8));   			
+            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.getInstance(), data.getChunk().dim, data.getChunk().x + 8, data.getChunk().z + 8));
 		}				
 		
 		if (e.getSource() == panel.getBtnTeleport()){

@@ -8,10 +8,6 @@ import mcp.mobius.opis.Opis;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import mapwriter.api.IMwChunkOverlay;
 import mapwriter.api.IMwDataProvider;
 import mapwriter.map.MapView;
@@ -37,6 +33,9 @@ import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqChunks;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 	INSTANCE;
@@ -65,8 +64,8 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 				if (this.mapView.getX() != coord.x || this.mapView.getZ() != coord.z){
 					this.mapView.setViewCentre(coord.x, coord.z);
 					this.overlay.requestChunkUpdate(this.mapView.getDimension(), 
-							MathHelper.ceiling_double_int(this.mapView.getX()) >> 4, 
-							MathHelper.ceiling_double_int(this.mapView.getZ()) >> 4);
+							MathHelper.ceil(this.mapView.getX()) >> 4,
+							MathHelper.ceil(this.mapView.getZ()) >> 4);
 				}
 				else{
 					//Opis.selectedBlock = coord;
@@ -102,8 +101,8 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 		public int getColor() {
 			//System.out.printf("%s\n", this.maxTime);
 			double scaledTime = this.time / this.maxTime;
-			int    red        = MathHelper.ceiling_double_int(scaledTime * 255.0);
-			int    blue       = 255 - MathHelper.ceiling_double_int(scaledTime * 255.0);
+			int    red        = MathHelper.ceil(scaledTime * 255.0);
+			int    blue       = 255 - MathHelper.ceil(scaledTime * 255.0);
 			//System.out.printf("%s\n", red);
 			
 			return (200 << 24) + (red << 16) + (blue); 

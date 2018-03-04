@@ -1,7 +1,5 @@
 package mcp.mobius.opis.network;
 
-import static cpw.mods.fml.relauncher.Side.CLIENT;
-import static cpw.mods.fml.relauncher.Side.SERVER;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -11,17 +9,23 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.EnumMap;
 
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import mcp.mobius.opis.profiler.ProfilerSection;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLIndexedMessageToMessageCodec;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Table.Cell;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.AmountHolder;
 import mcp.mobius.opis.data.holders.basetypes.SerialInt;
@@ -50,20 +54,10 @@ import mcp.mobius.opis.network.packets.server.PacketChunks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.util.ChatComponentText;
 
 @Sharable
-//public class PacketManager extends FMLIndexedMessageToMessageCodec<PacketBase>
 public class PacketManager
 {
     //private static final PacketManager INSTANCE = new PacketManager();
@@ -139,13 +133,13 @@ public class PacketManager
         private void actionClient(PacketBase packet)
         {
             Minecraft mc = Minecraft.getMinecraft();
-            packet.actionClient(mc.theWorld, mc.thePlayer);
+            packet.actionClient(mc.world, mc.player);
         }
 
         private void actionServer(ChannelHandlerContext ctx, PacketBase packet)
         {
-            EntityPlayerMP player = ((NetHandlerPlayServer) ctx.channel().attr(NetworkRegistry.NET_HANDLER).get()).playerEntity;
-            packet.actionServer(player.worldObj, player);
+            EntityPlayerMP player = ((NetHandlerPlayServer) ctx.channel().attr(NetworkRegistry.NET_HANDLER).get()).player;
+            packet.actionServer(player.world, player);
         }
 
         @Override
@@ -192,7 +186,7 @@ public class PacketManager
         protected void channelRead0(ChannelHandlerContext ctx, PacketBase packet) throws Exception
         {
             Minecraft mc = Minecraft.getMinecraft();
-            packet.actionClient(mc.theWorld, mc.thePlayer);
+            packet.actionClient(mc.world, mc.player);
         }
     }
 
@@ -202,8 +196,8 @@ public class PacketManager
         @Override
         protected void channelRead0(ChannelHandlerContext ctx, PacketBase packet) throws Exception
         {
-            EntityPlayerMP player = ((NetHandlerPlayServer) ctx.channel().attr(NetworkRegistry.NET_HANDLER).get()).playerEntity;
-            packet.actionServer(player.worldObj, player);
+            EntityPlayerMP player = ((NetHandlerPlayServer) ctx.channel().attr(NetworkRegistry.NET_HANDLER).get()).player;
+            packet.actionServer(player.world, player);
         }
     }    
     
@@ -211,15 +205,15 @@ public class PacketManager
     
     public static void sendToServer(PacketBase packet)
     {
-        channels.get(CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-        channels.get(CLIENT).writeAndFlush(packet);
+        channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+        channels.get(Side.CLIENT).writeAndFlush(packet);
     }
     
     public static void sendToPlayer(PacketBase packet, EntityPlayer player)
     {
-        channels.get(SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-        channels.get(SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-        channels.get(SERVER).writeAndFlush(packet);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+        channels.get(Side.SERVER).writeAndFlush(packet);
     }
 
     public static void sendToPlayer(Packet packet, EntityPlayerMP player)
@@ -229,22 +223,22 @@ public class PacketManager
     
     public static void sendToAllAround(PacketBase packet, NetworkRegistry.TargetPoint point)
     {
-        channels.get(SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-        channels.get(SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
-        channels.get(SERVER).writeAndFlush(packet);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
+        channels.get(Side.SERVER).writeAndFlush(packet);
     }
 
     public static void sendToDimension(PacketBase packet, int dimension)
     {
-        channels.get(SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
-        channels.get(SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimension);
-        channels.get(SERVER).writeAndFlush(packet);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimension);
+        channels.get(Side.SERVER).writeAndFlush(packet);
     }
     
     public static void sendToAll(PacketBase packet)
     {
-		channels.get(SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-		channels.get(SERVER).writeAndFlush(packet);
+		channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+		channels.get(Side.SERVER).writeAndFlush(packet);
     }
     
     public static Packet toMcPacket(PacketBase packet)
@@ -281,7 +275,7 @@ public class PacketManager
 	}	
 	
 	public static void sendChatMsg(String msg, EntityPlayerMP player){
-		PacketManager.sendToPlayer(new S02PacketChat(new ChatComponentText(msg)), player);
+		PacketManager.sendToPlayer(new S02PacketChat(new TextComponentString(msg)), player);
 	}	
 	
 	public static void splitAndSend(Message msg, ArrayList<? extends ISerializable> data, EntityPlayerMP player){
@@ -307,7 +301,7 @@ public class PacketManager
 		DataBlockTick totalWorldTick   = new DataBlockTick().fill();
 
 		ArrayList<DataEvent> timingEvents = new ArrayList<DataEvent>();
-		HashBasedTable<Class, String, DescriptiveStatistics> eventData = ((ProfilerEvent)ProfilerSection.EVENT_INVOKE.getProfiler()).data;
+		HashBasedTable<Class, String, DescriptiveStatistics> eventData = ((ProfilerEvent) ProfilerSection.EVENT_INVOKE.getProfiler()).data;
 		HashBasedTable<Class, String, String>                eventMod  = ((ProfilerEvent)ProfilerSection.EVENT_INVOKE.getProfiler()).dataMod;
 		for (Cell<Class, String, DescriptiveStatistics> cell : eventData.cellSet()){
 			timingEvents.add(new DataEvent().fill(cell, eventMod.get(cell.getRowKey(), cell.getColumnKey())));

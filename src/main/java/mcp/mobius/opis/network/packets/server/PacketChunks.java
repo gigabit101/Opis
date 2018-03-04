@@ -1,21 +1,20 @@
 package mcp.mobius.opis.network.packets.server;
 
+import mapwriter.Mw;
+import mapwriter.region.MwChunk;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import mapwriter.Mw;
-import mapwriter.region.MwChunk;
 import mcp.mobius.opis.network.PacketBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketChunks extends PacketBase{
 
 	public int  dim;
-	public MwChunk[] chunks;	
+	public MwChunk[] chunks;
 	
 	@Override
 	public void encode(ByteArrayDataOutput output) {
@@ -32,7 +31,7 @@ public class PacketChunks extends PacketBase{
     @Override
 	@SideOnly(Side.CLIENT)
     public void actionClient(World world, EntityPlayer player){
-    	Mw.instance.chunkManager.forceChunks(this.chunks);
-    }		
+//    	Mw.getInstance().chunkManager.forceChunks(this.chunks);
+    }
 	
 }

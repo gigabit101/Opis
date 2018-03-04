@@ -1,11 +1,12 @@
 package mcp.mobius.opis.data.profilers;
 
 import mcp.mobius.opis.data.profilers.Clock.IClock;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class ProfilerTick extends ProfilerAbstract {
 
 	private IClock clock = Clock.getNewClock();
-	public  DescriptiveStatistics data = new DescriptiveStatistics(20);
+	public DescriptiveStatistics data = new DescriptiveStatistics(20);
 	
 	@Override
 	public void reset() {
