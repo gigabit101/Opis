@@ -55,10 +55,10 @@ import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.proxy.ProxyServer;
 import mcp.mobius.opis.tools.BlockLag;
 
-@Mod(modid="Opis", name="Opis", version="1.2.3a", acceptableRemoteVersions="*")
+@Mod(modid="opis", name="Opis", version="1.2.3a", acceptableRemoteVersions="*")
 public class Opis {
 
-	@Mod.Instance("Opis")
+	@Mod.Instance("opis")
 	public static Opis instance;
 
 	public static Logger log = LogManager.getLogger("Opis");
