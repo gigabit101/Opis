@@ -22,7 +22,7 @@ public class DataTileEntity implements ISerializable {
 	public CachedString cause;
 	
 	public DataTileEntity fill(TileEntity tileEntity, String cause){
-		this.pos        = new CoordinatesBlock(tileEntity.getWorldObj().provider.dimensionId, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+		this.pos        = new CoordinatesBlock(tileEntity.getWorld().provider.getDimension(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ());
 		this.clazz      = new CachedString(tileEntity.getClass().getCanonicalName());
 		this.hashCode   = System.identityHashCode(tileEntity);
 		this.isValid    = !tileEntity.isInvalid();

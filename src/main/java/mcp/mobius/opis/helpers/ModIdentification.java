@@ -5,10 +5,12 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.registries.GameData;
 
+//TODO Covers: Rewrite this, MC has a mod container.. why? what?
 public class ModIdentification {
 	
 	public static HashMap<String, String> modSource_Name    = new HashMap<String,  String>();
@@ -62,9 +64,8 @@ public class ModIdentification {
 		try{
 			//String modID = itemMap.get(itemstack.itemID);
 			//ModContainer mod = ModIdentification.findModContainer(modID);
-			ModContainer mod = GameData.findModOwner(GameData.itemRegistry.getNameForObject(stack.getItem()));
-			String modname = mod == null ? "Minecraft" : mod.getName();		
-			return modname;
+            ModContainer mod = FMLCommonHandler.instance().findContainerFor(stack.getItem().getRegistryName().getResourceDomain());
+            return mod == null ? "Minecraft" : mod.getName();
 		} catch (NullPointerException e){
 			//System.out.printf("NPE : %s\n",itemstack.toString());
 			return "";

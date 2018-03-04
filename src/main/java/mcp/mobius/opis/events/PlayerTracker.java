@@ -42,9 +42,9 @@ public enum PlayerTracker{
 	}
 	
 	public AccessLevel getPlayerAccessLevel(String name){
-		GameProfile profile = ServerUtils.mc().getConfigurationManager().func_152612_a(name).getGameProfile();
+		GameProfile profile = ServerUtils.mc().getPlayerList().getPlayerByUsername(name).getGameProfile();
 		
-		if (ServerUtils.mc().getConfigurationManager().func_152596_g(profile) || ServerUtils.mc().isSinglePlayer())
+		if (ServerUtils.mc().getPlayerList().canSendCommands(profile) || ServerUtils.mc().isSinglePlayer())
 			return AccessLevel.ADMIN;
 		else if (playerPrivileged.contains(name))
 			return AccessLevel.PRIVILEGED;

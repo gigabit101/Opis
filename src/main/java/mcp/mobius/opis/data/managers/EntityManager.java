@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import codechicken.lib.util.ServerUtils;
+import mcp.mobius.opis.helpers.TeleportUtils;
 import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -157,17 +159,18 @@ public enum EntityManager {
 	
 	public boolean teleportPlayer(CoordinatesBlock coord, EntityPlayerMP player){
 		//System.out.printf("%s %s\n", coord, getTeleportTarget(coord));
-		CoordinatesBlock target = Teleport.instance().getTeleportTarget(coord);
-		if (target == null) return false;
-		
-		target = Teleport.instance().fixNetherTP(target);
-
-		if (target == null) return false;
-		
-		if (Teleport.instance().movePlayerToDimension(player, coord.dim))
-			player.setPositionAndUpdate(target.x + 0.5, target.y, target.z + 0.5);
-		else
-			return false;
+        TeleportUtils.teleportEntity(player, coord.dim, coord.x + 0.5, coord.y + 0.5, coord.z + 0.5);
+//		CoordinatesBlock target = Teleport.instance().getTeleportTarget(coord);
+//		if (target == null) return false;
+//
+//		target = Teleport.instance().fixNetherTP(target);
+//
+//		if (target == null) return false;
+//
+//		if (Teleport.instance().movePlayerToDimension(player, coord.dim))
+//			player.setPositionAndUpdate(target.x + 0.5, target.y, target.z + 0.5);
+//		else
+//			return false;
 		
 		return true;
 	}
@@ -181,20 +184,20 @@ public enum EntityManager {
 		if ((trg == null) && (msgtrg != null)) {
 			PacketManager.sendChatMsg(String.format("\u00A7oCannot find target entity %s", src), msgtrg);			
 			return false;
-		}				
-		
-		if (src instanceof EntityPlayerMP){
-			if (Teleport.instance().movePlayerToDimension((EntityPlayerMP)src, trg.world.provider.getDimension()))
-				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
-			else
-				return false;
 		}
-		else{
-			if (Teleport.instance().moveEntityToDimension(src, trg.world.provider.getDimension()))
-				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
-			else
-				return false;
-		}
+        TeleportUtils.teleportEntity(src, trg.world.provider.getDimension(), trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
+//		if (src instanceof EntityPlayerMP){
+//			if (Teleport.instance().movePlayerToDimension((EntityPlayerMP)src, trg.world.provider.getDimension()))
+//				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
+//			else
+//				return false;
+//		}
+//		else{
+//			if (Teleport.instance().moveEntityToDimension(src, trg.world.provider.getDimension()))
+//				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
+//			else
+//				return false;
+//		}
 	
 		return true;		
 		
@@ -280,12 +283,12 @@ public enum EntityManager {
 	
 	public ArrayList<DataEntity> getAllPlayers(){
 		//List players = MinecraftServer.getServerConfigurationManager(MinecraftServer.getServer()).playerEntityList;
-		List players = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		List<EntityPlayerMP> players = ServerUtils.mc().getPlayerList().getPlayers();
 		
 		ArrayList<DataEntity> outList = new ArrayList<DataEntity>();
 		
-		for (Object p : players)
-			outList.add(new DataEntity().fill((EntityPlayer) p));
+		for (EntityPlayerMP p : players)
+			outList.add(new DataEntity().fill(p));
 		
 		return outList;
 	}

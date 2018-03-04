@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import mapwriter.api.IMapMode;
-import mapwriter.api.IMapView;
-import mapwriter.api.IMwChunkOverlay;
-import mapwriter.api.IMwDataProvider;
+import mapwriter.api.*;
 import mapwriter.map.MapView;
 import mapwriter.map.mapmode.MapMode;
 import mcp.mobius.opis.api.IMessageHandler;
@@ -95,7 +92,14 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 		return overlays;
 	}
 
-	@Override
+    //TODO: What should we return here?
+    //TOOD: Also in OverlayLoadedChunks
+    @Override
+    public ILabelInfo getLabelInfo(int i, int i1) {
+        return null;
+    }
+
+    @Override
 	public String getStatusString(int dim, int bX, int bY, int bZ) {
 		CoordinatesChunk chunk = new CoordinatesChunk(dim, bX >> 4, bZ >> 4);
 		if (this.overlayData.containsKey(chunk))
@@ -160,11 +164,13 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	public void onDraw(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();
-		
-		if (mapmode.marginLeft != 0){
-			this.canvas.hide();
-			return;
-		}
+
+        //TODO: Investigate why margins were removed, and if there is another way we can detect this.
+        //TODO: Also in OverlayLoadedChunks
+//		if (mapmode.marginLeft != 0){
+//			this.canvas.hide();
+//			return;
+//		}
 		
 		if (!this.showList)
 			this.canvas.hide();

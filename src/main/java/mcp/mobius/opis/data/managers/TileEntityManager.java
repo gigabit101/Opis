@@ -18,8 +18,10 @@ import mcp.mobius.opis.data.holders.stats.StatsChunk;
 import mcp.mobius.opis.data.profilers.ProfilerTileEntityUpdate;
 import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -142,8 +144,10 @@ public enum TileEntityManager {
 		for (WorldServer world : DimensionManager.getWorlds()){
 			for (Object o : world.loadedTileEntityList){
 				TileEntity tileEntity = (TileEntity)o;
-				int id   = Block.getIdFromBlock(world.getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord));
-				int meta = world.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+				//TODO
+                IBlockState state = world.getBlockState(tileEntity.getPos());
+				int id   = Block.getIdFromBlock(state.getBlock());
+				int meta = state.getBlock().getMetaFromState(state);
 				
 				if (!data.contains(id, meta))
 					data.put(id, meta, new DataBlockTileEntityPerClass(id, meta));
@@ -160,8 +164,10 @@ public enum TileEntityManager {
 		
 		for (CoordinatesBlock coord : ((ProfilerTileEntityUpdate)ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()){
 			World world = DimensionManager.getWorld(coord.dim);
-			int   id    = Block.getIdFromBlock(world.getBlock(coord.x, coord.y, coord.z));
-			int   meta  = world.getBlockMetadata(coord.x, coord.y, coord.z);
+            //TODO
+            IBlockState state = world.getBlockState(new BlockPos(coord.x, coord.y, coord.z));
+            int id   = Block.getIdFromBlock(state.getBlock());
+            int meta = state.getBlock().getMetaFromState(state);
 		
 			if (!data.contains(id, meta))
 				data.put(id, meta, new DataBlockTileEntityPerClass(id, meta));

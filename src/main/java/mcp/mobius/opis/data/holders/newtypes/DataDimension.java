@@ -38,7 +38,7 @@ public class DataDimension implements ISerializable {
 		WorldServer  world = DimensionManager.getWorld(dim);
 		
 		this.dim      = dim;
-		this.name     = new CachedString(world.provider.getDimensionName());
+		this.name     = new CachedString(world.provider.getDimensionType().getName());
 		this.players  = world.playerEntities.size();
 		this.forced   = world.getPersistentChunks().size();
 		this.loaded   = world.getChunkProvider().getLoadedChunkCount();

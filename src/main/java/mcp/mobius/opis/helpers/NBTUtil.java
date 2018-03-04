@@ -1,36 +1,30 @@
 package mcp.mobius.opis.helpers;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import net.minecraft.nbt.*;
 
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagShort;
+import java.io.*;
 
+//This will die with packet rewrite.
+@Deprecated
 public class NBTUtil {
 
-	public static NBTBase getTag(String key, NBTTagCompound tag){
-		String[] path = key.split("\\.");
-		
-		NBTTagCompound deepTag = tag;
-		for (String i : path){
-			if (deepTag.hasKey(i)){
-				if (deepTag.getTag(i) instanceof NBTTagCompound)
-					deepTag = deepTag.getCompoundTag(i);
-				else{
-					return deepTag.getTag(i);
-				}
-			} else {
-				return null;
-			}
-		}
-		return deepTag;
-	}
+    public static NBTBase getTag(String key, NBTTagCompound tag) {
+        String[] path = key.split("\\.");
+
+        NBTTagCompound deepTag = tag;
+        for (String i : path) {
+            if (deepTag.hasKey(i)) {
+                if (deepTag.getTag(i) instanceof NBTTagCompound) {
+                    deepTag = deepTag.getCompoundTag(i);
+                } else {
+                    return deepTag.getTag(i);
+                }
+            } else {
+                return null;
+            }
+        }
+        return deepTag;
+    }
 	
 	/*
 	public static NBTTagCompound setTag(String key, NBTTagCompound targetTag, NBTBase addedTag){
@@ -64,53 +58,50 @@ public class NBTUtil {
 		return outTag;
 	}
 	*/
-	
-    public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, DataOutputStream ostream) throws IOException
-    {
-        if (par0NBTTagCompound == null)
-        {
+
+    public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, DataOutputStream ostream) throws IOException {
+        if (par0NBTTagCompound == null) {
             ostream.writeShort(-1);
-        }
-        else
-        {
-            byte[] abyte = CompressedStreamTools.compress(par0NBTTagCompound);
-            
-            if (abyte.length > 32000)
-            	ostream.writeShort(-1);
-            else{
-            	ostream.writeShort((short)abyte.length);
-            	ostream.write(abyte);
+        } else {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            CompressedStreamTools.writeCompressed(par0NBTTagCompound, out);
+            byte[] abyte = out.toByteArray();
+
+            if (abyte.length > 32000) {
+                ostream.writeShort(-1);
+            } else {
+                ostream.writeShort((short) abyte.length);
+                ostream.write(abyte);
             }
         }
-    }	
+    }
 
-    public static NBTTagCompound readNBTTagCompound(DataInputStream istream) throws IOException
-    {
+    public static NBTTagCompound readNBTTagCompound(DataInputStream istream) throws IOException {
         short short1 = istream.readShort();
 
-        if (short1 < 0)
-        {
+        if (short1 < 0) {
             return null;
-        }
-        else
-        {
+        } else {
             byte[] abyte = new byte[short1];
             istream.readFully(abyte);
-            return CompressedStreamTools.func_152457_a(abyte, NBTSizeTracker.field_152451_a);
+            return CompressedStreamTools.readCompressed(new ByteArrayInputStream(abyte));
         }
-    }   	
-	
-	public static int getNBTInteger(NBTTagCompound tag, String keyname){
-		NBTBase subtag = tag.getTag(keyname);
-		if (subtag instanceof NBTTagInt)
-			return tag.getInteger(keyname);
-		if (subtag instanceof NBTTagShort)
-			return tag.getShort(keyname);
-		if (subtag instanceof NBTTagByte)
-			return tag.getByte(keyname);
+    }
 
-		return 0;
-	}    
-    
+    public static int getNBTInteger(NBTTagCompound tag, String keyname) {
+        NBTBase subtag = tag.getTag(keyname);
+        if (subtag instanceof NBTTagInt) {
+            return tag.getInteger(keyname);
+        }
+        if (subtag instanceof NBTTagShort) {
+            return tag.getShort(keyname);
+        }
+        if (subtag instanceof NBTTagByte) {
+            return tag.getByte(keyname);
+        }
+
+        return 0;
+    }
+
 }
 

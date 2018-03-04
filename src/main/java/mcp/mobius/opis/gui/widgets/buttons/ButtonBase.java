@@ -1,5 +1,6 @@
 package mcp.mobius.opis.gui.widgets.buttons;
 
+import codechicken.lib.gui.GuiDraw;
 import mcp.mobius.opis.gui.events.MouseEvent;
 import mcp.mobius.opis.gui.helpers.UIHelper;
 import mcp.mobius.opis.gui.interfaces.IWidget;
@@ -7,8 +8,10 @@ import mcp.mobius.opis.gui.interfaces.Signal;
 import mcp.mobius.opis.gui.widgets.LabelFixedFont;
 import mcp.mobius.opis.gui.widgets.WidgetBase;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
@@ -67,7 +70,7 @@ public abstract class ButtonBase extends WidgetBase {
 	@Override
 	public void onMouseClick(MouseEvent event){
 		if (event.button == 0)
-			this.mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+			this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		
 		this.emit(Signal.CLICKED, event.button);
 	}

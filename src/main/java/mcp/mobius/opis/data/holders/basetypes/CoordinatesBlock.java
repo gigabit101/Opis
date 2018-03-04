@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 
+@Deprecated//TODO Covers: Why.
 public final class CoordinatesBlock implements ISerializable {
 	public final int dim, x, y, z;
 	public final int chunkX, chunkZ;

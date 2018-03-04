@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import mcp.mobius.opis.Opis;
+import mcp.mobius.opis.profiler.ProfilerSection;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.entity.item.EntityItem;
@@ -11,8 +14,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-import cpw.mods.fml.relauncher.Side;
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.AmountHolder;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -167,7 +168,7 @@ public class ServerMessageHandler {
 			World world = DimensionManager.getWorld(chunkCoord.dim);
 			if (world == null) return;
 			
-			CoordinatesBlock blockCoord = new CoordinatesBlock(chunkCoord.dim, chunkCoord.x + 8, world.getTopSolidOrLiquidBlock(chunkCoord.x, chunkCoord.z), chunkCoord.z + 8);
+			CoordinatesBlock blockCoord = new CoordinatesBlock(chunkCoord.dim, chunkCoord.x + 8, world.getTopSolidOrLiquidBlock(new BlockPos(chunkCoord.x, 0, chunkCoord.z)).getY(), chunkCoord.z + 8);
 			
 			EntityManager.INSTANCE.teleportPlayer(blockCoord, player);
 		}		

@@ -7,11 +7,8 @@ import java.util.Set;
 
 import javax.swing.table.DefaultTableModel;
 
-import mapwriter.api.IMapMode;
-import mapwriter.api.IMapView;
+import mapwriter.api.*;
 import net.minecraft.client.Minecraft;
-import mapwriter.api.IMwChunkOverlay;
-import mapwriter.api.IMwDataProvider;
 import mapwriter.map.MapView;
 import mapwriter.map.mapmode.MapMode;
 import mcp.mobius.opis.api.IMessageHandler;
@@ -121,12 +118,19 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 		ArrayList<IMwChunkOverlay> overlays = new ArrayList<IMwChunkOverlay>();
 		
 		for (CoordinatesChunk chunk : ChunkManager.INSTANCE.getLoadedChunks()){
-			overlays.add(new ChunkOverlay(chunk.chunkX, chunk.chunkZ, chunk.metadata == 0 ? false : true));
+			overlays.add(new ChunkOverlay(chunk.chunkX, chunk.chunkZ, chunk.metadata != 0));
 		}
 		return overlays;
 	}
 
-	@Override
+	//TODO: What should we return here?
+    //TODO: Also in OverlayEntityPerChunk
+    @Override
+    public ILabelInfo getLabelInfo(int i, int i1) {
+        return null;
+    }
+
+    @Override
 	public String getStatusString(int dim, int bX, int bY, int bZ) {
 		int xChunk = bX >> 4;
 		int zChunk = bZ >> 4;
@@ -213,11 +217,13 @@ public enum OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 	public void onDraw(IMapView mapview, IMapMode mapmode) {
 		if (this.canvas == null)
 			this.canvas = new LayoutCanvas();
-		
-		if (mapmode.marginLeft != 0){
-			this.canvas.hide();
-			return;
-		}
+
+		//TODO: Investigate why margins were removed, and if there is another way we can detect this.
+        //TODO: Also in OverlayEntityPerChunk
+//		if (mapmode.marginLeft != 0){
+//			this.canvas.hide();
+//			return;
+//		}
 		
 		if (!this.showList)
 			this.canvas.hide();
