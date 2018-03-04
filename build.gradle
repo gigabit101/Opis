@@ -1,0 +1,146 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        //jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'forge'
+
+version = "1.2.4_dev1_1.7.10"
+group= "mcp.mobius.opis" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Opis"
+
+minecraft {
+    version = "1.7.10-10.13.0.1208"
+    assetDir = "eclipse/assets"
+    srgExtra "PK: org/apache/commons/math3 opisapache/math3"
+}
+
+configurations {
+    deployerJars
+    shade
+    compile.extendsFrom shade    
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }    
+}
+
+dependencies {
+    shade 'org.apache.commons:commons-math3:3.2'
+    shade 'org.jfree:jcommon:1.0.21'
+    shade 'org.jfree:jfreechart:1.0.17'
+    shade 'com.miglayout:miglayout-swing:4.2'
+    shade 'net.sf.opencsv:opencsv:2.3'    
+    compile "mcp.mobius.mobiuscore:MobiusCore:1.2.4_1.7.10:dev"
+    deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+}
+
+def root = project.projectDir.parentFile
+sourceSets {
+    main {
+        java {
+            srcDir new File(root, "src")
+        }
+        resources {
+            srcDir new File(root, "resources")
+        }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.java
+    from new File(root, "dev")
+    classifier = 'sources'
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+}
+
+// some crazy stuff to make sure the chicken stuff is in the mods folder...
+// because it wont work otherwise... because FML doesnt laod coremods from the classpath
+task copyCoreMods(type: Copy, dependsOn: "extractUserDev") {
+    from configurations.compile
+    include "**/*Mobius*.jar"
+    //include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
+    //exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-    
+    into file(minecraft.runDir + "/../mods") // paralell to the assets dir
+}
+tasks.setupDevWorkspace.dependsOn copyCoreMods
+tasks.setupDecompWorkspace.dependsOn copyCoreMods
+
+artifacts {
+    archives sourceJar, devJar
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+uploadArchives {
+    dependsOn 'reobf'
+    repositories.mavenDeployer {
+        configuration = configurations.deployerJars
+        repository(url: "scp://mobiusstrip.eu/home/mobius/web/maven"){
+            authentication(userName: "mobius")
+        }
+
+        pom {
+            groupId = project.group
+            version = project.version
+            artifactId = project.archivesBaseName
+            project {
+                name project.archivesBaseName
+                packaging 'jar'
+                description 'Opis '
+                url 'http://mobiusstrip.eu'        
+            }
+        }
+    }
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+
+}
