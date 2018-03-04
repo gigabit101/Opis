@@ -2,10 +2,10 @@ package mcp.mobius.opis.data.profilers;
 
 import mcp.mobius.opis.data.profilers.Clock.IClock;
 
+import net.minecraftforge.fml.common.ModContainer;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.collect.HashBasedTable;
-import cpw.mods.fml.common.ModContainer;
 
 public class ProfilerEvent extends ProfilerAbstract {
 

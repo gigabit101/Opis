@@ -7,7 +7,6 @@ import java.util.HashSet;
 
 import com.google.common.collect.HashBasedTable;
 
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
@@ -17,6 +16,7 @@ import mcp.mobius.opis.data.holders.newtypes.DataTileEntity;
 import mcp.mobius.opis.data.holders.newtypes.DataTiming;
 import mcp.mobius.opis.data.holders.stats.StatsChunk;
 import mcp.mobius.opis.data.profilers.ProfilerTileEntityUpdate;
+import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -30,7 +30,7 @@ public enum TileEntityManager {
 	public HashMap<CoordinatesChunk, StatsChunk> getTimes(int dim){
 		HashMap<CoordinatesChunk, StatsChunk> chunks = new HashMap<CoordinatesChunk, StatsChunk>();
 		
-		for (CoordinatesBlock coord : ((ProfilerTileEntityUpdate)ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()){
+		for (CoordinatesBlock coord : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()){
 			if (coord.dim == dim){
 
 				CoordinatesChunk coordC = new CoordinatesChunk(coord);
@@ -44,28 +44,7 @@ public enum TileEntityManager {
 		return chunks;
 	}
 	
-	private void cleanUpStats(){
-		
-		/*
-		HashSet<CoordinatesBlock> dirty = new HashSet<CoordinatesBlock>();
-		
-		for (CoordinatesBlock tecoord : TileEntityManager.stats.keySet()){
-				World world     = DimensionManager.getWorld(tecoord.dim);
-				int   blockID   = world.getBlockId(tecoord.x, tecoord.y, tecoord.z);
-				short blockMeta = (short)world.getBlockMetadata(tecoord.x, tecoord.y, tecoord.z);
-				
-				if ((blockID != TileEntityManager.stats.get(tecoord).getID()) || (blockMeta != TileEntityManager.stats.get(tecoord).getMeta())){
-					dirty.add(tecoord);
-				}
-		}
-		
-		for (CoordinatesBlock tecoord : dirty){
-			stats.remove(tecoord);
-			references.remove(tecoord);
-		}
-		*/
-		
-	}
+	private void cleanUpStats(){}
 	
 	public ArrayList<DataBlockTileEntity> getTileEntitiesInChunk(CoordinatesChunk coord){
 		cleanUpStats();
@@ -123,16 +102,16 @@ public enum TileEntityManager {
 		for (WorldServer world : DimensionManager.getWorlds()){
 			for (Object o : world.loadedTileEntityList){
 				TileEntity tileEntity = (TileEntity)o;
-				CoordinatesBlock coord = new CoordinatesBlock(world.provider.dimensionId, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+				CoordinatesBlock coord = new CoordinatesBlock(world.provider.getDimension(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ());
 				int hash = System.identityHashCode(tileEntity);
 				
 				if (registeredEntities.contains(hash)) continue;	//This entitie has already been seen;
 				
-				Block block = world.getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-				if (block == Blocks.air || block == null
+				Block block = world.getBlockState(tileEntity.getPos()).getBlock();
+				if (block == Blocks.AIR || block == null
 							|| !block.hasTileEntity()
-						    || world.getTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord) == null
-						    || world.getTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).getClass() != tileEntity.getClass()){
+						    || world.getTileEntity(tileEntity.getPos()) == null
+						    || world.getTileEntity(tileEntity.getPos()).getClass() != tileEntity.getClass()){
 
 					orphans.add(new DataTileEntity().fill(tileEntity, "Orphan"));
 					registeredEntities.add(hash);

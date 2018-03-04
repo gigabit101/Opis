@@ -1,14 +1,9 @@
 package mcp.mobius.opis.gui.widgets;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
-
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -43,7 +38,7 @@ public abstract class WidgetBase implements IWidget {
 	public WidgetBase(){
 		this.setParent(null);
 		this.mc  = Minecraft.getMinecraft();	
-		this.rez = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight); 
+		this.rez = new ScaledResolution(mc);
 		this.texManager = this.mc.renderEngine;
 		this.setGeometry(new WidgetGeometry(0, 0, 50, 50, CType.ABSXY, CType.ABSXY));
 	}
@@ -51,7 +46,7 @@ public abstract class WidgetBase implements IWidget {
 	public WidgetBase(IWidget parent){
 		this.setParent(parent);
 		this.mc  = Minecraft.getMinecraft();
-		this.rez = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		this.rez = new ScaledResolution(mc);
 		this.texManager = this.mc.renderEngine;
 		this.setGeometry(new WidgetGeometry(0, 0, 50, 50, CType.ABSXY, CType.ABSXY));
 	}

@@ -22,8 +22,8 @@ public class ProfilerDimTick extends ProfilerAbstract implements IProfilerBase {
 		World world = (World)key;
 		if (world.isRemote) return;
 		
-		if (!data.containsKey(world.provider.dimensionId))
-			data.put(world.provider.dimensionId, new DescriptiveStatistics(20));
+		if (!data.containsKey(world.provider.getDimension()))
+			data.put(world.provider.getDimension(), new DescriptiveStatistics(20));
 		clock.start();
 	}
 	
@@ -33,6 +33,6 @@ public class ProfilerDimTick extends ProfilerAbstract implements IProfilerBase {
 		if (world.isRemote) return;
 		
 		clock.stop();
-		data.get(world.provider.dimensionId).addValue(clock.getDelta());
+		data.get(world.provider.getDimension()).addValue(clock.getDelta());
 	}
 }

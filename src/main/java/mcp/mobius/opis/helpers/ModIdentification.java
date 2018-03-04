@@ -5,9 +5,9 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.registries.GameData;
 
 public class ModIdentification {
 	

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -17,8 +16,9 @@ import mcp.mobius.opis.data.profilers.ProfilerEntityUpdate;
 import mcp.mobius.opis.data.profilers.ProfilerTileEntityUpdate;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.enums.Message;
+import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.entity.Entity;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
@@ -58,14 +58,14 @@ public enum ChunkManager implements IMessageHandler{
 		WorldServer world = DimensionManager.getWorld(dimension);
 		if (world != null)
 		{
-			for (ChunkCoordIntPair coord : world.getPersistentChunks().keySet()){
+			for (ChunkPos coord : world.getPersistentChunks().keySet()){
 				chunkStatus.add(new CoordinatesChunk(dimension, coord, (byte)1));
 			}
 			
-			for (Object o : ((ChunkProviderServer)world.getChunkProvider()).loadedChunks){
+			for (Object o : ((ChunkProviderServer)world.getChunkProvider()).getLoadedChunks()){
 				Chunk chunk = (Chunk)o;
 				
-				chunkStatus.add(new CoordinatesChunk(dimension, chunk.getChunkCoordIntPair(), (byte)0));
+				chunkStatus.add(new CoordinatesChunk(dimension, chunk.getPos(), (byte)0));
 			}
 		}
 		
@@ -84,7 +84,7 @@ public enum ChunkManager implements IMessageHandler{
 	public ArrayList<StatsChunk> getChunksUpdateTime(){
 		HashMap<CoordinatesChunk, StatsChunk> chunks = new HashMap<CoordinatesChunk, StatsChunk>();
 		
-		for (CoordinatesBlock coords : ((ProfilerTileEntityUpdate)ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()){
+		for (CoordinatesBlock coords : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()){
 			DataBlockTileEntity   data  = new DataBlockTileEntity().fill(coords);
 			CoordinatesChunk chunk = data.pos.asCoordinatesChunk();
 			
@@ -147,11 +147,11 @@ public enum ChunkManager implements IMessageHandler{
 		
 		int loadedChunksDelta = 100;
 		
-		((ChunkProviderServer)world.getChunkProvider()).unloadAllChunks();
+		((ChunkProviderServer)world.getChunkProvider()).queueUnloadAll();
 		
 		while(loadedChunksDelta >= 100){
 			int loadedBefore = world.getChunkProvider().getLoadedChunkCount();
-			world.getChunkProvider().unloadQueuedChunks();
+			world.getChunkProvider().queueUnloadAll();
 			loadedChunksDelta = loadedBefore - world.getChunkProvider().getLoadedChunkCount();
 		}		
 	}

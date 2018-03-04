@@ -22,7 +22,7 @@ public class ProfilerTileEntityUpdate extends ProfilerAbstract {
 	@Override
 	public void start(Object key) {
 		TileEntity tileent = (TileEntity)key;
-		if (tileent.getWorldObj().isRemote) return;
+		if (tileent.getWorld().isRemote) return;
 		
 		CoordinatesBlock coord = new CoordinatesBlock(tileent);
 		
@@ -36,7 +36,7 @@ public class ProfilerTileEntityUpdate extends ProfilerAbstract {
 	@Override
 	public void stop(Object key) {
 		TileEntity tileent = (TileEntity)key;
-		if (tileent.getWorldObj().isRemote) return;
+		if (tileent.getWorld().isRemote) return;
 		
 		clock.stop();
 		CoordinatesBlock coord = new CoordinatesBlock(tileent);

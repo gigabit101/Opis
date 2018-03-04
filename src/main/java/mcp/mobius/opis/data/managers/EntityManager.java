@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +14,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.data.holders.basetypes.AmountHolder;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
@@ -31,7 +31,7 @@ public enum EntityManager {
 		ArrayList<DataEntity> sorted      = new ArrayList<DataEntity>();
 		ArrayList<DataEntity> topEntities = new ArrayList<DataEntity>();
 		
-		for (Entity entity : ((ProfilerEntityUpdate)ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.keySet())
+		for (Entity entity : ((ProfilerEntityUpdate) ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.keySet())
 			sorted.add(new DataEntity().fill(entity));
 
 		Collections.sort(sorted);
@@ -184,13 +184,13 @@ public enum EntityManager {
 		}				
 		
 		if (src instanceof EntityPlayerMP){
-			if (Teleport.instance().movePlayerToDimension((EntityPlayerMP)src, trg.worldObj.provider.dimensionId))
+			if (Teleport.instance().movePlayerToDimension((EntityPlayerMP)src, trg.world.provider.getDimension()))
 				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
 			else
 				return false;
 		}
 		else{
-			if (Teleport.instance().moveEntityToDimension(src, trg.worldObj.provider.dimensionId))			
+			if (Teleport.instance().moveEntityToDimension(src, trg.world.provider.getDimension()))
 				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
 			else
 				return false;
@@ -217,7 +217,7 @@ public enum EntityManager {
 			return "Dropped Item";
 		} else if (ent instanceof EntityItem && !filtered){
 			try {
-				return "[Stack] " + ((EntityItem)ent).getEntityItem().getDisplayName();
+				return "[Stack] " + ((EntityItem)ent).getItem().getDisplayName();
 			} catch (Exception e) {
 				return "<Unknown dropped item>";
 			}
@@ -229,7 +229,7 @@ public enum EntityManager {
 		else if (ent instanceof EntityPlayerMP && !filtered)
 			return "[ Player ] " + ((EntityPlayerMP)ent).getGameProfile().getName();
 		
-		String name = ent.getCommandSenderName();
+		String name = ent.getName();
 		
 		if (name.contains(".")){
 			String[] namelst = ent.getClass().getName().split("\\.");

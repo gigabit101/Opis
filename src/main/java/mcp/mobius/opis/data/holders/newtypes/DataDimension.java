@@ -72,7 +72,6 @@ public class DataDimension implements ISerializable {
 		stream.writeInt(mobs);
 		stream.writeInt(neutral);
 		stream.writeInt(itemstacks);
-		//stream.writeDouble(update);
 		this.update.writeToStream(stream);
 		this.name.writeToStream(stream);
 	}

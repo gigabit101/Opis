@@ -22,7 +22,7 @@ public class ProfilerEntityUpdate extends ProfilerAbstract implements IProfilerB
 	@Override
 	public void start(Object key) {
 		Entity entity = (Entity)key;
-		if (entity.worldObj.isRemote) return;
+		if (entity.world.isRemote) return;
 		
 		if (!data.containsKey(entity))
 			data.put(entity, new DescriptiveStatistics());
@@ -32,7 +32,7 @@ public class ProfilerEntityUpdate extends ProfilerAbstract implements IProfilerB
 	@Override
 	public void stop(Object key) {
 		Entity entity = (Entity)key;
-		if (entity.worldObj.isRemote) return;
+		if (entity.world.isRemote) return;
 		
 		clock.stop();
 		try{

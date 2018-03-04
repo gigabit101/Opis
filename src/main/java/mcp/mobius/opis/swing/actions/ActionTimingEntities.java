@@ -36,7 +36,7 @@ public class ActionTimingEntities implements ActionListener {
             PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, data.pos.asCoordinatesChunk()));           
             MwAPI.setCurrentDataProvider(OverlayEntityPerChunk.INSTANCE);
             OverlayEntityPerChunk.INSTANCE.selectedChunk = coord.asCoordinatesChunk();
-            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.instance, coord.dim, coord.x, coord.z));              			
+            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.getInstance(), coord.dim, coord.x, coord.z));
 		}				
 		
 		if (e.getSource() == panel.getBtnTeleport()){
