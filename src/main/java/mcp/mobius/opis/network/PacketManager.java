@@ -1,5 +1,6 @@
 package mcp.mobius.opis.network;
 
+import com.google.common.collect.Table;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.common.network.FMLOutboundHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import com.google.common.collect.HashBasedTable;
@@ -215,11 +217,6 @@ public class PacketManager
         channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
         channels.get(Side.SERVER).writeAndFlush(packet);
     }
-
-    public static void sendToPlayer(Packet packet, EntityPlayerMP player)
-    {
-    	player.playerNetServerHandler.sendPacket(packet);
-    }
     
     public static void sendToAllAround(PacketBase packet, NetworkRegistry.TargetPoint point)
     {
@@ -275,7 +272,7 @@ public class PacketManager
 	}	
 	
 	public static void sendChatMsg(String msg, EntityPlayerMP player){
-		PacketManager.sendToPlayer(new S02PacketChat(new TextComponentString(msg)), player);
+		player.sendMessage(new TextComponentString(msg));
 	}	
 	
 	public static void splitAndSend(Message msg, ArrayList<? extends ISerializable> data, EntityPlayerMP player){
@@ -303,14 +300,14 @@ public class PacketManager
 		ArrayList<DataEvent> timingEvents = new ArrayList<DataEvent>();
 		HashBasedTable<Class, String, DescriptiveStatistics> eventData = ((ProfilerEvent) ProfilerSection.EVENT_INVOKE.getProfiler()).data;
 		HashBasedTable<Class, String, String>                eventMod  = ((ProfilerEvent)ProfilerSection.EVENT_INVOKE.getProfiler()).dataMod;
-		for (Cell<Class, String, DescriptiveStatistics> cell : eventData.cellSet()){
+		for (Table.Cell<Class, String, DescriptiveStatistics> cell : eventData.cellSet()){
 			timingEvents.add(new DataEvent().fill(cell, eventMod.get(cell.getRowKey(), cell.getColumnKey())));
 		}		
 
 		ArrayList<DataEvent> timingTicks = new ArrayList<DataEvent>();
 		HashBasedTable<Class, String, DescriptiveStatistics> eventTickData = ((ProfilerEvent)ProfilerSection.EVENT_INVOKE.getProfiler()).dataTick;
 		HashBasedTable<Class, String, String>                eventTickMod  = ((ProfilerEvent)ProfilerSection.EVENT_INVOKE.getProfiler()).dataModTick;
-		for (Cell<Class, String, DescriptiveStatistics> cell : eventTickData.cellSet()){
+		for (Table.Cell<Class, String, DescriptiveStatistics> cell : eventTickData.cellSet()){
 			timingTicks.add(new DataEvent().fill(cell, eventTickMod.get(cell.getRowKey(), cell.getColumnKey())));
 		}		
 		
