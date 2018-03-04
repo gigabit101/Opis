@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         mavenCentral()
-        //jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -12,135 +11,193 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
-apply plugin: 'java'
+apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
-apply plugin: 'forge'
 
-version = "1.2.4_dev1_1.7.10"
-group= "mcp.mobius.opis" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "mcp.mobius" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Opis"
 
+targetCompatibility = "1.8"
+sourceCompatibility = "1.8"
+
+// Define properties file
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    // Load config.  It shall from now be referenced as simply config or project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+version = "${project.config.mod_version}." + (System.getenv("BUILD_NUMBER") ?: "1")
+
+println config.mc_version + "-" + config.forge_version
+
 minecraft {
-    version = "1.7.10-10.13.0.1208"
-    assetDir = "eclipse/assets"
-    srgExtra "PK: org/apache/commons/math3 opisapache/math3"
+    version = config.mc_version + "-" + config.forge_version
+    mappings = config.mappings
+    runDir = "run"
+    replace '${mod_version}', project.config.mod_version
+    makeObfSourceJar = false
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // Replace properties in info files
+    from(sourceSets.main.resources.srcDirs) {
+        include '*.info'
+        expand 'version': project.version, 'mc_version': config.mc_version
+    }
+
+    // Move access transformer to META-INF
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 configurations {
     deployerJars
     shade
-    compile.extendsFrom shade    
+    compile.extendsFrom shade
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }    
+        name = "CB Repo"
+        url = "http://chickenbones.net/maven"
+    }
 }
 
 dependencies {
+    compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"
     shade 'org.apache.commons:commons-math3:3.2'
     shade 'org.jfree:jcommon:1.0.21'
     shade 'org.jfree:jfreechart:1.0.17'
     shade 'com.miglayout:miglayout-swing:4.2'
-    shade 'net.sf.opencsv:opencsv:2.3'    
-    compile "mcp.mobius.mobiuscore:MobiusCore:1.2.4_1.7.10:dev"
-    deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+    shade 'net.sf.opencsv:opencsv:2.3'
 }
 
-def root = project.projectDir.parentFile
-sourceSets {
-    main {
-        java {
-            srcDir new File(root, "src")
-        }
-        resources {
-            srcDir new File(root, "resources")
-        }
-    }
+version = "${project.minecraft.version}-${project.version}"
+def commonManifest = {
+    attributes 'FMLAT': 'opis_at.cfg'
 }
-
-task sourceJar(type: Jar) {
-    from sourceSets.main.java
-    from new File(root, "dev")
-    classifier = 'sources'
-}
-
-task devJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'dev'
-}
-
-// some crazy stuff to make sure the chicken stuff is in the mods folder...
-// because it wont work otherwise... because FML doesnt laod coremods from the classpath
-task copyCoreMods(type: Copy, dependsOn: "extractUserDev") {
-    from configurations.compile
-    include "**/*Mobius*.jar"
-    //include "**/*Chicken*.jar", "**/*NotEnoughItems*.jar"
-    //exclude "**/CodeChickenLib*" // because CCC downloads it anyways.. -_-    
-    into file(minecraft.runDir + "/../mods") // paralell to the assets dir
-}
-tasks.setupDevWorkspace.dependsOn copyCoreMods
-tasks.setupDecompWorkspace.dependsOn copyCoreMods
-
-artifacts {
-    archives sourceJar, devJar
-}
-
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
-
-uploadArchives {
-    dependsOn 'reobf'
-    repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-        repository(url: "scp://mobiusstrip.eu/home/mobius/web/maven"){
-            authentication(userName: "mobius")
-        }
-
-        pom {
-            groupId = project.group
-            version = project.version
-            artifactId = project.archivesBaseName
-            project {
-                name project.archivesBaseName
-                packaging 'jar'
-                description 'Opis '
-                url 'http://mobiusstrip.eu'        
-            }
-        }
-    }
 
 jar {
+    classifier = 'universal'
+    manifest commonManifest
     configurations.shade.each { dep ->
-        from(project.zipTree(dep)){
+        from(project.zipTree(dep)) {
             exclude 'META-INF', 'META-INF/**'
         }
     }
 }
 
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+    manifest commonManifest
+}
+
+task srcJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+    manifest commonManifest
+}
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf { // Skip the task if our secret data isn't available
+        project.hasProperty('keyStore')
+    }
+
+    if (project.hasProperty('keyStore')) {
+        keyStore = project.keyStore // This needs to be a path to the keystore file
+        alias = project.keyStoreAlias
+        storePass = project.keyStorePass
+        keyPass = project.keyStoreKeyPass
+        inputFile = jar.archivePath
+        outputFile = jar.archivePath
+    }
+}
+
+build.dependsOn signJar
+
+// Tell the artifact system about our extra jars
+artifacts {
+    archives deobfJar
+    archives srcJar
+}
+
+// Configure an upload task.
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            if (project.hasProperty("local_maven") || project.hasProperty("maven_pass")) {
+                if (project.hasProperty("maven_pass")) {
+                    println "Uploading to remote maven."
+                    repository(url: "http://maven_upload.covers1624.net/") {
+                        authentication(userName: "covers1624", password: project.getProperty("maven_pass"))
+                    }
+                } else {
+                    println "Uploading to local maven."
+                    repository(url: "file://${local_maven}")
+                }
+                pom {
+                    groupId = project.group
+                    // Force the maven upload to use the <mcversion>-<version> syntax preferred at files
+                    artifactId = project.archivesBaseName
+                    project {
+                        name project.archivesBaseName
+                        packaging 'jar'
+                        description 'Opis'
+                        url 'https://github.com/Gigabit101/Opis'
+
+                        scm {
+                            url 'https://github.com/Gigabit101/Opis'
+                            connection 'scm:git:git://github.com/Gigabit101/Opis.git'
+                            developerConnection 'scm:git:git@github.com:Gigabit101/Opis.git'
+                        }
+
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/Gigabit101/Opis/issues'
+                        }
+
+                        licenses {
+                            license {
+                                name 'GNU Lesser Public License (GPL), Version 2.1'
+                                url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                                distribution 'repo'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'Gigabit101'
+                                name 'Gigabit101'
+                                roles { role 'developer' }
+                            }
+                            developer {
+                                id 'cover1624'
+                                name 'covers1624'
+                                roles { role 'developer' }
+                            }
+                            developer {
+                                id 'ProfMobius'
+                                name 'ProfMobius'
+                                roles { role 'developer' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
