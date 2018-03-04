@@ -6,6 +6,7 @@ import java.util.WeakHashMap;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.profilers.Clock.IClock;
 import net.minecraft.tileentity.TileEntity;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class ProfilerRenderTileEntity extends ProfilerAbstract {
 

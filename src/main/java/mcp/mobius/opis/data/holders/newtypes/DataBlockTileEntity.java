@@ -1,11 +1,9 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
 import mcp.mobius.opis.profiler.ProfilerSection;
+import net.minecraft.util.math.BlockPos;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -29,8 +27,8 @@ public class DataBlockTileEntity implements ISerializable, Comparable {
 		this.pos    = coord;
 		World world = DimensionManager.getWorld(this.pos.dim);
 		
-		this.id     = (short) Block.getIdFromBlock(world.getBlock(this.pos.x, this.pos.y, this.pos.z));
-		this.meta   = (short) world.getBlockMetadata(this.pos.x, this.pos.y, this.pos.z);
+		this.id     = (short) Block.getIdFromBlock(world.getBlockState(new BlockPos(this.pos.x, this.pos.y, this.pos.z)).getBlock());
+//		this.meta   = (short) world.getBlockMetadata(this.pos.x, this.pos.y, this.pos.z);
 
 		HashMap<CoordinatesBlock, DescriptiveStatistics> data = ((ProfilerTileEntityUpdate)(ProfilerSection.TILEENT_UPDATETIME.getProfiler())).data;
 		this.update  = new DataTiming(data.containsKey(this.pos) ? data.get(this.pos).getGeometricMean() : 0.0D);		

@@ -1,17 +1,14 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mcp.mobius.opis.profiler.ProfilerSection;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import mcp.mobius.mobiuscore.profiler.ProfilerSection;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.profilers.ProfilerDimTick;
 import net.minecraft.entity.Entity;

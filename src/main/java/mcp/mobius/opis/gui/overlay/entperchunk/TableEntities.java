@@ -1,15 +1,12 @@
 package mcp.mobius.opis.gui.overlay.entperchunk;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
 import mapwriter.map.MapView;
 import mapwriter.map.mapmode.MapMode;
-import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.TargetEntity;
 import mcp.mobius.opis.data.holders.newtypes.DataEntity;
 import mcp.mobius.opis.gui.events.MouseEvent;
 import mcp.mobius.opis.gui.interfaces.IWidget;
-import mcp.mobius.opis.gui.overlay.entperchunk.OverlayEntityPerChunk.ReducedData;
 import mcp.mobius.opis.gui.widgets.tableview.TableRow;
 import mcp.mobius.opis.gui.widgets.tableview.ViewTable;
 import mcp.mobius.opis.network.PacketManager;
