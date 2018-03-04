@@ -1,6 +1,10 @@
 package mcp.mobius.opis;
 
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.tools.BlockDebug;
+import mcp.mobius.opis.tools.TileDebug;
+import mcp.mobius.opis.tools.TileLag;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -8,6 +12,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.GameData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -120,21 +126,27 @@ public class Opis {
 	
 	@Mod.EventHandler
 	public void load(FMLInitializationEvent event) {
-		
-		if (lagGenID != -1){
-			Block blockDemo = new BlockLag(Material.WOOD);
-//			GameRegistry.registerBlock(blockDemo, "opis.laggen");
-//			GameRegistry.registerTileEntity(TileLag.class, "opis.laggen");
-//
-//			Block blockDebug = new BlockDebug(Material.wood);
-//			GameRegistry.registerBlock(blockDebug, "opis.debug");
-//			GameRegistry.registerTileEntity(TileDebug.class, "opis.debug");
-		}
+
+        Block blockDemo = new BlockLag(Material.WOOD);
+        registerBlock(blockDemo, "opis.laggen");
+        GameRegistry.registerTileEntity(TileLag.class, "opis.laggen");
+
+        Block blockDebug = new BlockDebug(Material.WOOD);
+        registerBlock(blockDebug, "opis.debug");
+        GameRegistry.registerTileEntity(TileDebug.class, "opis.debug");
 
 		ProfilerSection.RENDER_TILEENTITY  .setProfiler(new ProfilerRenderTileEntity());
 		ProfilerSection.RENDER_ENTITY      .setProfiler(new ProfilerRenderEntity());
 		ProfilerSection.RENDER_BLOCK       .setProfiler(new ProfilerRenderBlock());
 		ProfilerSection.EVENT_INVOKE       .setProfiler(new ProfilerEvent());		
+	}
+
+	public static void registerBlock(Block block, String name) {
+		block.setRegistryName(name);
+		GameData.register_impl(block);
+		ItemBlock itemBlock = new ItemBlock(block);
+		itemBlock.setRegistryName(block.getRegistryName());
+		GameData.register_impl(itemBlock);
 	}
 	
 	@Mod.EventHandler
