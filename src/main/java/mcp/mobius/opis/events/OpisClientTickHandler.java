@@ -5,10 +5,10 @@ import java.util.Collections;
 
 import com.google.common.collect.HashBasedTable;
 
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import mcp.mobius.opis.modOpis;
 import mcp.mobius.opis.api.TabPanelRegistrar;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.SerialLong;
@@ -50,13 +50,13 @@ public enum OpisClientTickHandler{
 			
 		// One second timer
 		if (timer1000.isDone()){
-			if(modOpis.swingOpen)
+			if(Opis.swingOpen)
 				PacketManager.sendToServer(new PacketReqData(Message.STATUS_PING, new SerialLong(System.nanoTime())));
 		}
 		
 		
 		
-		if (modOpis.profilerRunClient){
+		if (Opis.profilerRunClient){
 			((PanelRenderTileEnts)(TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS))).getBtnRunRender().setText("Running...");
 			((PanelRenderEntities)(TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES))).getBtnRunRender().setText("Running...");
 			((PanelRenderHandlers)(TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERHANDLERS))).getBtnRunRender().setText("Running...");
@@ -71,11 +71,11 @@ public enum OpisClientTickHandler{
 		
 		profilerUpdateTickCounter++;
 		
-		if (profilerRunningTicks < modOpis.profilerMaxTicks && modOpis.profilerRunClient){
+		if (profilerRunningTicks < Opis.profilerMaxTicks && Opis.profilerRunClient){
 			profilerRunningTicks++;
-		}else if (profilerRunningTicks >= modOpis.profilerMaxTicks && modOpis.profilerRunClient){
+		}else if (profilerRunningTicks >= Opis.profilerMaxTicks && Opis.profilerRunClient){
 			profilerRunningTicks = 0;
-			modOpis.profilerRunClient = false;
+			Opis.profilerRunClient = false;
 			ProfilerSection.desactivateAll(Side.CLIENT);
 			
 			System.out.printf("Profiling done\n");
@@ -96,7 +96,7 @@ public enum OpisClientTickHandler{
 				tileEntData.add(dataTe);
 				tileEntTotal += dataTe.update.timing;
 			} catch (Exception e) {
-				modOpis.log.warn(String.format("Error while adding entity %s to the list", te));
+				Opis.log.warn(String.format("Error while adding entity %s to the list", te));
 			}
 		}
 
@@ -116,7 +116,7 @@ public enum OpisClientTickHandler{
 				entData.add(dataEnt);
 				entTotal += dataEnt.update.timing;
 			} catch (Exception e) {
-				modOpis.log.warn(String.format("Error while adding entity %s to the list", ent));
+				Opis.log.warn(String.format("Error while adding entity %s to the list", ent));
 			}					
 		}
 
@@ -148,7 +148,7 @@ public enum OpisClientTickHandler{
 				DataBlockRender dataBlock = new DataBlockRender().fill(coord);
 				blockData.add(dataBlock);
 			} catch (Exception e) {
-				modOpis.log.warn(String.format("Error while adding block %s to the list", coord));
+				Opis.log.warn(String.format("Error while adding block %s to the list", coord));
 			}					
 		}
 

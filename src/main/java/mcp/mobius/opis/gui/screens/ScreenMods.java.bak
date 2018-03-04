@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import net.minecraft.client.gui.GuiScreen;
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.stats.StatsMod;
 import mcp.mobius.opis.gui.interfaces.CType;
 import mcp.mobius.opis.gui.interfaces.WAlign;

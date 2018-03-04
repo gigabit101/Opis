@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiScreen;
 import mapwriter.Mw;
 import mapwriter.api.MwAPI;
 import mapwriter.gui.MwGui;
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.ChunkStats;
 import mcp.mobius.opis.data.holders.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.CoordinatesChunk;

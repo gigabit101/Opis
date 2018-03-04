@@ -1,6 +1,6 @@
 package mcp.mobius.opis.swing.panels.timingserver;
 
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.api.ITabPanel;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.newtypes.DataBlockTileEntity;
@@ -115,7 +115,7 @@ public class PanelTimingTileEnts extends JPanelMsgHandler implements ITabPanel{
 			break;
 		}		
 		case CLIENT_HIGHLIGHT_BLOCK:{
-			modOpis.selectedBlock = (CoordinatesBlock)rawdata.value;
+			Opis.selectedBlock = (CoordinatesBlock)rawdata.value;
 			this.getBtnReset().setEnabled(true);
 			break;
 		}

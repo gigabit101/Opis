@@ -3,11 +3,10 @@ package mcp.mobius.opis.gui.overlay;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import org.lwjgl.input.Mouse;
+import mcp.mobius.opis.Opis;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -17,7 +16,6 @@ import mapwriter.api.IMwChunkOverlay;
 import mapwriter.api.IMwDataProvider;
 import mapwriter.map.MapView;
 import mapwriter.map.mapmode.MapMode;
-import mcp.mobius.opis.modOpis;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -71,7 +69,7 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 							MathHelper.ceiling_double_int(this.mapView.getZ()) >> 4);
 				}
 				else{
-					//modOpis.selectedBlock = coord;
+					//Opis.selectedBlock = coord;
 					PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_BLOCK, coord));
 					Minecraft.getMinecraft().setIngameFocus();
 				}
@@ -157,7 +155,7 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
 		CoordinatesChunk chunkCoord = new CoordinatesChunk(dim, xChunk, zChunk);
 		
 		if (ChunkManager.INSTANCE.getChunkMeanTime().containsKey(chunkCoord))
-			if (modOpis.microseconds)
+			if (Opis.microseconds)
 				return String.format("%.3f \u00B5s", ChunkManager.INSTANCE.getChunkMeanTime().get(chunkCoord).getDataSum());
 			else
 				return String.format(", %.5f ms", ChunkManager.INSTANCE.getChunkMeanTime().get(chunkCoord).getDataSum()/1000.0);
@@ -287,7 +285,7 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler{
         		name = data.getType();	
         	*/
         	
-			if (modOpis.microseconds)
+			if (Opis.microseconds)
 				table.addRow(data, name, String.format("[ %s %s %s ]", data.pos.x, data.pos.y, data.pos.z),  data.update.asMillisecond().toString());			
 			else
 				table.addRow(data, name, String.format("[ %s %s %s ]", data.pos.x, data.pos.y, data.pos.z),  data.update.toString());				

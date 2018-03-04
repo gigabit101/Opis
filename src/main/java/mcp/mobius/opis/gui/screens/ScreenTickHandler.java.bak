@@ -2,7 +2,7 @@ package mcp.mobius.opis.gui.screens;
 
 import java.util.ArrayList;
 
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.TickHandlerStats;
 import mcp.mobius.opis.gui.interfaces.CType;
 import mcp.mobius.opis.gui.interfaces.WAlign;

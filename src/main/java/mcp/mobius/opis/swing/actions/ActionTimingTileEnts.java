@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import mapwriter.Mw;
 import mapwriter.api.MwAPI;
 import mapwriter.gui.MwGui;
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
@@ -39,13 +39,13 @@ public class ActionTimingTileEnts implements ActionListener {
 		
 		if (e.getSource() == panel.getBtnTeleport()){
             CoordinatesBlock coord = data.pos;
-            modOpis.selectedBlock = coord;
+            Opis.selectedBlock = coord;
             PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_BLOCK, coord));
             Minecraft.getMinecraft().setIngameFocus(); 
 		}
 		
 		if (e.getSource() == panel.getBtnReset()){
-			modOpis.selectedBlock = null;
+			Opis.selectedBlock = null;
 		}		
 	}
 

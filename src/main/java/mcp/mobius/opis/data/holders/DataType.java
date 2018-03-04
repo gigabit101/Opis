@@ -1,8 +1,6 @@
 package mcp.mobius.opis.data.holders;
 
-import java.util.EnumSet;
-
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.basetypes.AmountHolder;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
@@ -10,7 +8,6 @@ import mcp.mobius.opis.data.holders.basetypes.SerialDouble;
 import mcp.mobius.opis.data.holders.basetypes.SerialFloat;
 import mcp.mobius.opis.data.holders.basetypes.SerialInt;
 import mcp.mobius.opis.data.holders.basetypes.SerialLong;
-import mcp.mobius.opis.data.holders.basetypes.SerialNumeral;
 import mcp.mobius.opis.data.holders.basetypes.SerialString;
 import mcp.mobius.opis.data.holders.basetypes.TargetEntity;
 import mcp.mobius.opis.data.holders.basetypes.TicketData;
@@ -98,7 +95,7 @@ public enum DataType {
 	public static DataType getForClass(Class clazz){
 		DataType type = bimap.inverse().get(clazz);
 		if (type == null){
-			modOpis.log.warn(String.format("Class %s was not registered with the DataType enum", clazz));			
+			Opis.log.warn(String.format("Class %s was not registered with the DataType enum", clazz));
 		}
 		return type;
 	}
@@ -109,11 +106,11 @@ public enum DataType {
 			DataType type   = DataType.values()[ordinal];
 			retVal = bimap.get(type);
 			if (retVal == null){
-				modOpis.log.warn(String.format("DataType doesn't have a class registered for %s", type));
+				Opis.log.warn(String.format("DataType doesn't have a class registered for %s", type));
 			}
 		} catch (Exception e) {
 			retVal = null;
-			modOpis.log.warn(String.format("Index out of bound for ordinal %d in DataType", ordinal));
+			Opis.log.warn(String.format("Index out of bound for ordinal %d in DataType", ordinal));
 		}
 		return retVal;
 	}	

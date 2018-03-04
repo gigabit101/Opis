@@ -1,9 +1,9 @@
 package mcp.mobius.opis.data.profilers;
 
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.profiler.IProfilerBase;
 import net.minecraft.entity.Entity;
 
-import mcp.mobius.opis.modOpis;
 import mcp.mobius.opis.data.profilers.Clock.IClock;
 
 public class ProfilerEntityUpdate extends ProfilerAbstract implements IProfilerBase {
@@ -35,7 +35,7 @@ public class ProfilerEntityUpdate extends ProfilerAbstract implements IProfilerB
 		try{
 			data.get(entity).addValue(clock.getDelta());
 		} catch (Exception e){
-			modOpis.log.warn(String.format("Error while profiling entity %s\n", key));
+			Opis.log.warn(String.format("Error while profiling entity %s\n", key));
 		}
 	}
 }

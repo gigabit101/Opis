@@ -19,9 +19,9 @@ import java.util.HashSet;
 
 import javax.swing.SwingConstants;
 
+import mcp.mobius.opis.Opis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
-import mcp.mobius.opis.modOpis;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.api.ITabPanel;
 import mcp.mobius.opis.data.holders.basetypes.SerialInt;
@@ -85,7 +85,7 @@ public class SwingUI extends JFrame implements WindowListener, ChangeListener, I
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		modOpis.swingOpen = false;
+		Opis.swingOpen = false;
 		PacketManager.sendToServer(new PacketReqData(Message.COMMAND_UNREGISTER_SWING));
 	}
 
@@ -129,7 +129,7 @@ public class SwingUI extends JFrame implements WindowListener, ChangeListener, I
 			} catch (Exception e) {}
 			*/			
 			
-			modOpis.swingOpen = true;
+			Opis.swingOpen = true;
 			this.showUI();
 			Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
 			PacketManager.sendToServer(new PacketReqData(Message.SWING_TAB_CHANGED, new SerialInt(SelectedTab.SUMMARY.ordinal())));

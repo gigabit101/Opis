@@ -1,9 +1,5 @@
 package mcp.mobius.opis.proxy;
 
-import java.awt.Font;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.relauncher.Side;
@@ -11,14 +7,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import mapwriter.api.MwAPI;
 import mcp.mobius.mobiuscore.profiler.ProfilerSection;
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.api.MessageHandlerRegistrar;
 import mcp.mobius.opis.api.TabPanelRegistrar;
 import mcp.mobius.opis.data.client.DataCache;
-import mcp.mobius.opis.data.holders.basetypes.SerialLong;
-import mcp.mobius.opis.data.holders.newtypes.DataTiming;
-import mcp.mobius.opis.data.holders.stats.StatsChunk;
 import mcp.mobius.opis.data.managers.ChunkManager;
 import mcp.mobius.opis.data.managers.MetaManager;
 import mcp.mobius.opis.data.managers.StringCache;
@@ -27,7 +20,6 @@ import mcp.mobius.opis.gui.font.TrueTypeFont;
 import mcp.mobius.opis.gui.overlay.OverlayLoadedChunks;
 import mcp.mobius.opis.gui.overlay.OverlayMeanTime;
 import mcp.mobius.opis.gui.overlay.entperchunk.OverlayEntityPerChunk;
-import mcp.mobius.opis.gui.screens.ScreenBase;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.swing.SwingUI;
@@ -189,9 +181,9 @@ public class ProxyClient extends ProxyServer implements IMessageHandler{
 		
 		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_THREADS, panelThreads);
 		
-		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_CLEAR_SELECTION,  modOpis.proxy);
-		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_START_PROFILING,  modOpis.proxy);
-		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_SHOW_RENDER_TICK, modOpis.proxy);
+		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_CLEAR_SELECTION,  Opis.proxy);
+		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_START_PROFILING,  Opis.proxy);
+		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_SHOW_RENDER_TICK, Opis.proxy);
 
 		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.OVERLAY_CHUNK_ENTITIES, OverlayEntityPerChunk.INSTANCE);
 		MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_ENTITIES,    OverlayEntityPerChunk.INSTANCE);
@@ -210,18 +202,18 @@ public class ProxyClient extends ProxyServer implements IMessageHandler{
 	public boolean handleMessage(Message msg, PacketBase rawdata) {
 		switch(msg){
 		case CLIENT_CLEAR_SELECTION:{
-			modOpis.selectedBlock = null;
+			Opis.selectedBlock = null;
 			break;
 		}
 		case CLIENT_START_PROFILING:{
-			modOpis.log.log(Level.INFO, "Started profiling");
+			Opis.log.log(Level.INFO, "Started profiling");
 			MetaManager.reset();		
-			modOpis.profilerRun = true;
+			Opis.profilerRun = true;
 			ProfilerSection.activateAll(Side.CLIENT);
 			break;
 		}
 		case CLIENT_SHOW_RENDER_TICK:{
-			modOpis.log.log(Level.INFO, "=== RENDER TICK ===");
+			Opis.log.log(Level.INFO, "=== RENDER TICK ===");
 			//ArrayList<DataHandler> stats = TickHandlerManager.getCumulatedStatsServer();
 			//for (DataHandler stat : stats){
 			//	System.out.printf("%s \n", stat);

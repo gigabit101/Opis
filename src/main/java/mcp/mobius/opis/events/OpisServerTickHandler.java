@@ -3,10 +3,10 @@ package mcp.mobius.opis.events;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.DimensionManager;
-import mcp.mobius.opis.modOpis;
 import mcp.mobius.opis.data.holders.basetypes.SerialInt;
 import mcp.mobius.opis.data.holders.basetypes.SerialLong;
 import mcp.mobius.opis.data.holders.newtypes.DataDimension;
@@ -91,8 +91,8 @@ public enum OpisServerTickHandler{
 				PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_DIMENSION_DATA, dimData));
 
 				// Profiler update (if running)
-				if (modOpis.profilerRun){
-					PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_RUNNING,    new SerialInt(modOpis.profilerMaxTicks)));
+				if (Opis.profilerRun){
+					PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_RUNNING,    new SerialInt(Opis.profilerMaxTicks)));
 					PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_RUN_UPDATE, new SerialInt(profilerRunningTicks)));
 				}
 				
@@ -127,14 +127,14 @@ public enum OpisServerTickHandler{
 			
 			profilerUpdateTickCounter++;
 			
-			if (profilerRunningTicks < modOpis.profilerMaxTicks && modOpis.profilerRun){
+			if (profilerRunningTicks < Opis.profilerMaxTicks && Opis.profilerRun){
 				profilerRunningTicks++;
-			}else if (profilerRunningTicks >= modOpis.profilerMaxTicks && modOpis.profilerRun){
+			}else if (profilerRunningTicks >= Opis.profilerMaxTicks && Opis.profilerRun){
 				profilerRunningTicks = 0;
-				modOpis.profilerRun = false;
+				Opis.profilerRun = false;
 				ProfilerSection.desactivateAll(Side.SERVER);
 				
-				PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_STOP, new SerialInt(modOpis.profilerMaxTicks)));
+				PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_STOP, new SerialInt(Opis.profilerMaxTicks)));
 				
 				for (EntityPlayerMP player : PlayerTracker.INSTANCE.playersSwing){
 					PacketManager.sendFullUpdate(player);

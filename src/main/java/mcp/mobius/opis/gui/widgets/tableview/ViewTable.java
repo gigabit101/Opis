@@ -1,18 +1,14 @@
 package mcp.mobius.opis.gui.widgets.tableview;
 
-import mcp.mobius.opis.modOpis;
 import mcp.mobius.opis.gui.helpers.UIException;
 import mcp.mobius.opis.gui.interfaces.CType;
 import mcp.mobius.opis.gui.interfaces.IWidget;
 import mcp.mobius.opis.gui.interfaces.WAlign;
-import mcp.mobius.opis.gui.widgets.LabelTTF;
 import mcp.mobius.opis.gui.widgets.LayoutBase;
 import mcp.mobius.opis.gui.widgets.ViewportScrollable;
 import mcp.mobius.opis.gui.widgets.WidgetBase;
 import mcp.mobius.opis.gui.widgets.WidgetGeometry;
-import mcp.mobius.opis.proxy.ProxyClient;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
 public class ViewTable extends WidgetBase{

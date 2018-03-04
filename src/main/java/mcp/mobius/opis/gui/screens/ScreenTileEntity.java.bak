@@ -6,7 +6,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import mapwriter.Mw;
 import mapwriter.api.MwAPI;
 import mapwriter.gui.MwGui;
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.TileEntityStats;
 import mcp.mobius.opis.gui.events.MouseEvent;

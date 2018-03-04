@@ -1,6 +1,6 @@
 package mcp.mobius.opis.commands.server;
 
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.commands.IOpisCommand;
 import mcp.mobius.opis.data.holders.basetypes.SerialInt;
 import mcp.mobius.opis.data.managers.MetaManager;
@@ -53,10 +53,10 @@ public class CommandStart extends CommandBase implements IOpisCommand {
 		}
 
 		MetaManager.reset();
-		modOpis.profilerRun = true;
+		Opis.profilerRun = true;
 		ProfilerSection.activateAll(Side.SERVER);
 
-		PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_START, new SerialInt(modOpis.profilerMaxTicks)));
-		sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis started with a tick delay %s.", modOpis.profilerDelay)));
+		PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_START, new SerialInt(Opis.profilerMaxTicks)));
+		sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis started with a tick delay %s.", Opis.profilerDelay)));
 	}
 }

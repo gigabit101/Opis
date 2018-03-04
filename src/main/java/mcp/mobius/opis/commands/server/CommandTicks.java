@@ -1,6 +1,6 @@
 package mcp.mobius.opis.commands.server;
 
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.commands.IOpisCommand;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -42,7 +42,7 @@ public class CommandTicks extends CommandBase implements IOpisCommand {
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length < 1) return;
 		try{
-			modOpis.profilerMaxTicks = Integer.valueOf(args[0]);
+			Opis.profilerMaxTicks = Integer.valueOf(args[0]);
 			sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis ticks set to %s ticks.", args[0])));
 
 		} catch (Exception e){}

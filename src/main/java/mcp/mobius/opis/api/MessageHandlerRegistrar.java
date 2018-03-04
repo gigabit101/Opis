@@ -3,7 +3,7 @@ package mcp.mobius.opis.api;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.enums.Message;
 
@@ -24,12 +24,12 @@ public enum MessageHandlerRegistrar {
 		if (msgHandlers.containsKey(msg)){
 			for (IMessageHandler handler : msgHandlers.get(msg)){
 				if (!handler.handleMessage(msg, rawdata)){
-					modOpis.log.warn(String.format("Unhandled msg %s in handler %s", msg, handler));
+					Opis.log.warn(String.format("Unhandled msg %s in handler %s", msg, handler));
 				}
 			}
 		}
 		else{
-			modOpis.log.warn(String.format("Unhandled msg : %s", msg));
+			Opis.log.warn(String.format("Unhandled msg : %s", msg));
 		}
 	}
 }

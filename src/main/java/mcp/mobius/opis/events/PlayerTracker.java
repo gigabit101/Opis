@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.mojang.authlib.GameProfile;
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.basetypes.SerialLong;
 import mcp.mobius.opis.data.managers.StringCache;
 import mcp.mobius.opis.gui.overlay.OverlayStatus;
@@ -54,8 +54,8 @@ public enum PlayerTracker{
 	public void addPrivilegedPlayer(String name, boolean save){
 		this.playerPrivileged.add(name);
 		if (save){
-			modOpis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, modOpis.commentPrivileged).set(playerPrivileged.toArray(new String[]{}));
-			modOpis.instance.config.save();
+			Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, Opis.commentPrivileged).set(playerPrivileged.toArray(new String[]{}));
+			Opis.instance.config.save();
 		}
 	}
 	
@@ -65,12 +65,12 @@ public enum PlayerTracker{
 	
 	public void rmPrivilegedPlayer(String name){
 		this.playerPrivileged.remove(name);
-		modOpis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, modOpis.commentPrivileged).set(playerPrivileged.toArray(new String[]{}));
-		modOpis.instance.config.save();		
+		Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, Opis.commentPrivileged).set(playerPrivileged.toArray(new String[]{}));
+		Opis.instance.config.save();
 	}
 	
 	public void reloeadPriviligedPlayers(){
-		String[] users   = modOpis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, modOpis.commentPrivileged).getStringList();
+		String[] users   = Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, Opis.commentPrivileged).getStringList();
 		for (String s : users)
 			PlayerTracker.INSTANCE.addPrivilegedPlayer(s,false);		
 	}

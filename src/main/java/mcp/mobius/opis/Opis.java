@@ -53,18 +53,13 @@ import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.AccessLevel;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.proxy.ProxyServer;
-import mcp.mobius.opis.tools.BlockDebug;
 import mcp.mobius.opis.tools.BlockLag;
-import mcp.mobius.opis.tools.TileDebug;
-import mcp.mobius.opis.tools.TileLag;
 
 @Mod(modid="Opis", name="Opis", version="1.2.3a", dependencies="required-after:MobiusCore@[1.2.4]", acceptableRemoteVersions="*")
-//@Mod(modid="Opis", name="Opis", version="1.2.2")
-
-public class modOpis {
+public class Opis {
 
 	@Mod.Instance("Opis")
-	public static modOpis instance;	
+	public static Opis instance;
 
 	public static Logger log = LogManager.getLogger("Opis");
 
@@ -119,15 +114,12 @@ public class modOpis {
 		FMLCommonHandler.instance().bus().register(OpisClientTickHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(OpisServerTickHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(PlayerTracker.INSTANCE);
-		//Packet.addIdClassMapping(251, true, true, Packet251Extended.class);
-		
+
 		PacketManager.init();
 	}	
 	
 	@Mod.EventHandler
 	public void load(FMLInitializationEvent event) {
-		//TickRegistry.registerTickHandler(OpisServerTickHandler.INSTANCE, Side.SERVER);
-		//TickRegistry.registerTickHandler(OpisClientTickHandler.INSTANCE, Side.CLIENT);
 		
 		if (lagGenID != -1){
 			Block blockDemo = new BlockLag(Material.WOOD);
@@ -142,8 +134,6 @@ public class modOpis {
 		ProfilerSection.RENDER_TILEENTITY  .setProfiler(new ProfilerRenderTileEntity());
 		ProfilerSection.RENDER_ENTITY      .setProfiler(new ProfilerRenderEntity());
 		ProfilerSection.RENDER_BLOCK       .setProfiler(new ProfilerRenderBlock());
-		//ProfilerSection.HANDLER_TICKSTART  .setProfiler(new ProfilerHandler());
-		//ProfilerSection.HANDLER_TICKSTOP   .setProfiler(new ProfilerHandler());
 		ProfilerSection.EVENT_INVOKE       .setProfiler(new ProfilerEvent());		
 	}
 	
@@ -178,22 +168,8 @@ public class modOpis {
 		event.registerServerCommand(new CommandEntityCreate());
 		event.registerServerCommand(new CommandOpis());
 		event.registerServerCommand(new CommandAddPrivileged());
-		event.registerServerCommand(new CommandRmPrivileged());		
-		
-		//event.registerServerCommand(new CommandClientTest());
-		//event.registerServerCommand(new CommandClientStart());
-		//event.registerServerCommand(new CommandClientShowRenderTick());		
+		event.registerServerCommand(new CommandRmPrivileged());
 		
 		event.registerServerCommand(new CommandHelp());
-		
-		
-		//GameRegistry.registerPlayerTracker(PlayerTracker.instance());
-		
-		//DeadManSwitch.startDeadManSwitch(MinecraftServer.getServer());
-		/*
-		for (ProfilerSection sec : ProfilerSection.values()){
-			System.out.printf("%s : %s\n", sec, sec.getProfiler().getClass().getSimpleName());
-		}
-		*/
 	}	
 }

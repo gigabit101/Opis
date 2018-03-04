@@ -40,7 +40,7 @@ public class CommandChunkDump extends CommandBase implements IOpisCommand{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-//		modOpis.log.log(Level.INFO, "== CHUNK DUMP ==");
+//		Opis.log.log(Level.INFO, "== CHUNK DUMP ==");
 //
 //		HashMap<BlockPos, Boolean> chunkStatus = new HashMap<BlockPos, Boolean>();
 //
@@ -50,7 +50,7 @@ public class CommandChunkDump extends CommandBase implements IOpisCommand{
 //			Set<ChunkCoordIntPair> chunks = (Set<ChunkCoordIntPair>)DimensionManager.getWorld(worldID).activeChunkSet;
 //
 //			for (ChunkCoordIntPair chunk : chunks){
-//				modOpis.log.log(Level.INFO, String.format("Dim : %s, %s, Forced : %s", worldID, chunk, persistantChunks.contains(chunk)));
+//				Opis.log.log(Level.INFO, String.format("Dim : %s, %s, Forced : %s", worldID, chunk, persistantChunks.contains(chunk)));
 //				chunkStatus.put(chunk, persistantChunks.contains(chunk));
 //			}
 //		}

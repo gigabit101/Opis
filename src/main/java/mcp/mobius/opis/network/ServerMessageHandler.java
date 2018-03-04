@@ -3,6 +3,7 @@ package mcp.mobius.opis.network;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mcp.mobius.opis.Opis;
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.entity.item.EntityItem;
@@ -12,7 +13,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.relauncher.Side;
 import mcp.mobius.mobiuscore.profiler.ProfilerSection;
-import mcp.mobius.opis.modOpis;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.AmountHolder;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -144,9 +144,9 @@ public class ServerMessageHandler {
 
 		else if (maintype == Message.COMMAND_START){
 			MetaManager.reset();	
-			modOpis.profilerRun = true;
+			Opis.profilerRun = true;
 			ProfilerSection.activateAll(Side.SERVER);
-			PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_START, new SerialInt(modOpis.profilerMaxTicks)));			
+			PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_START, new SerialInt(Opis.profilerMaxTicks)));
 		}		
 		
 		else if (maintype == Message.COMMAND_TELEPORT_BLOCK){
@@ -228,7 +228,7 @@ public class ServerMessageHandler {
 		}
 		
 		else{
-			modOpis.log.log(Level.WARN, String.format("Unknown data request : %s ", maintype));
+			Opis.log.log(Level.WARN, String.format("Unknown data request : %s ", maintype));
 		}
 	}
 	

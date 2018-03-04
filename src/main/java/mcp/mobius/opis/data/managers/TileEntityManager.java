@@ -8,7 +8,7 @@ import java.util.HashSet;
 import com.google.common.collect.HashBasedTable;
 
 import mcp.mobius.mobiuscore.profiler.ProfilerSection;
-import mcp.mobius.opis.modOpis;
+import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
 import mcp.mobius.opis.data.holders.newtypes.DataBlockTileEntity;
@@ -152,7 +152,7 @@ public enum TileEntityManager {
 			}
 		}
 		
-		modOpis.log.warn(String.format("Found %d potential orphans !", orphans.size()));
+		Opis.log.warn(String.format("Found %d potential orphans !", orphans.size()));
 		
 		return orphans;
 	}
