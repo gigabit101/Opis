@@ -12,38 +12,38 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
 public class CommandOpis extends CommandBase {
-	
-	@Override
-    public int getRequiredPermissionLevel(){
+
+    @Override
+    public int getRequiredPermissionLevel() {
         return 0;
     }
 
-	@Override
-	public String getName() {
-		return "opis";
-	}
+    @Override
+    public String getName() {
+        return "opis";
+    }
 
-	@Override
-	public String getUsage(ICommandSender sender) {
-		return "";
-	}
+    @Override
+    public String getUsage(ICommandSender sender) {
+        return "";
+    }
 
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (!(sender instanceof EntityPlayerMP)){
-			sender.sendMessage(new TextComponentString("You are not a normal client and can't open the Swing interface."));
-			return;
-		}
+    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (!(sender instanceof EntityPlayerMP)) {
+            sender.sendMessage(new TextComponentString("You are not a normal client and can't open the Swing interface."));
+            return;
+        }
 
-		if (!Message.COMMAND_OPEN_SWING.canPlayerUseCommand((EntityPlayerMP)sender)){
-			sender.sendMessage(new TextComponentString("Your access level prevents you from doing that."));
-			return;
-		}
+        if (!Message.COMMAND_OPEN_SWING.canPlayerUseCommand((EntityPlayerMP) sender)) {
+            sender.sendMessage(new TextComponentString("Your access level prevents you from doing that."));
+            return;
+        }
 
-		PlayerTracker.INSTANCE.playersSwing.add((EntityPlayerMP)sender);
-		if (sender instanceof EntityPlayerMP)
-			PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_SHOW_SWING), (EntityPlayerMP)sender);
+        PlayerTracker.INSTANCE.playersSwing.add((EntityPlayerMP) sender);
+        if (sender instanceof EntityPlayerMP)
+            PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_SHOW_SWING), (EntityPlayerMP) sender);
 
-		PacketManager.sendFullUpdate((EntityPlayerMP)sender);
-	}
+        PacketManager.sendFullUpdate((EntityPlayerMP) sender);
+    }
 }

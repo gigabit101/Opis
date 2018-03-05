@@ -9,56 +9,55 @@ import net.minecraft.util.text.TextComponentString;
 
 public class CommandHelp extends CommandBase implements IOpisCommand {
 
-	@Override
-	public String getCommandNameOpis() {
-		return this.getName();
-	}
+    @Override
+    public String getCommandNameOpis() {
+        return this.getName();
+    }
 
-	@Override
-    public int getRequiredPermissionLevel()
-    {
+    @Override
+    public int getRequiredPermissionLevel() {
         return 3;
     }
 
-	@Override
-	public String getDescription() {
-		return "This message.";
-	}
+    @Override
+    public String getDescription() {
+        return "This message.";
+    }
 
-	@Override
-	public String getName() {
-		return "opis_help";
-	}
+    @Override
+    public String getName() {
+        return "opis_help";
+    }
 
-	@Override
-	public String getUsage(ICommandSender sender) {
-		return "";
-	}
+    @Override
+    public String getUsage(ICommandSender sender) {
+        return "";
+    }
 
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-		IOpisCommand[] commands = {
-				new CommandStart(),
-				new CommandStop(),
-				new CommandReset(),
-				new CommandFrequency(),
-				new CommandTicks(),
+        IOpisCommand[] commands = {
+                new CommandStart(),
+                new CommandStop(),
+                new CommandReset(),
+                new CommandFrequency(),
+                new CommandTicks(),
 
-				new CommandChunkList(),
-				new CommandTimingTileEntities(),
+                new CommandChunkList(),
+                new CommandTimingTileEntities(),
 
-				new CommandTimingEntities(),
-				new CommandAmountEntities(),
+                new CommandTimingEntities(),
+                new CommandAmountEntities(),
 
-				new CommandKill(),
-				new CommandKillAll(),
+                new CommandKill(),
+                new CommandKillAll(),
 
-				new CommandAddPrivileged(),
-				new CommandRmPrivileged()
-		};
+                new CommandAddPrivileged(),
+                new CommandRmPrivileged()
+        };
 
-		for (IOpisCommand cmd : commands)
-			sender.sendMessage(new TextComponentString(String.format("/%s : %s", cmd.getCommandNameOpis(), cmd.getDescription())));
-	}
+        for (IOpisCommand cmd : commands)
+            sender.sendMessage(new TextComponentString(String.format("/%s : %s", cmd.getCommandNameOpis(), cmd.getDescription())));
+    }
 }

@@ -11,25 +11,24 @@ import net.minecraft.server.MinecraftServer;
 
 public class CommandClientStart extends CommandBase {
 
-	@Override
-    public int getRequiredPermissionLevel()
-    {
+    @Override
+    public int getRequiredPermissionLevel() {
         return 0;
     }
 
-	@Override
-	public String getName() {
-		return "opis_cstart";
-	}
+    @Override
+    public String getName() {
+        return "opis_cstart";
+    }
 
-	@Override
-	public String getUsage(ICommandSender sender) {
-		return "";
-	}
+    @Override
+    public String getUsage(ICommandSender sender) {
+        return "";
+    }
 
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (sender instanceof EntityPlayerMP)
-			PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_START_PROFILING), (EntityPlayerMP)sender);
-	}
+    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        if (sender instanceof EntityPlayerMP)
+            PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_START_PROFILING), (EntityPlayerMP) sender);
+    }
 }

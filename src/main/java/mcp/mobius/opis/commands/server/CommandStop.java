@@ -15,15 +15,14 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class CommandStop extends CommandBase implements IOpisCommand {
 
-	@Override
-	public String getCommandNameOpis() {
-		return this.getName();
-	}	
+    @Override
+    public String getCommandNameOpis() {
+        return this.getName();
+    }
 
 
-	@Override
-    public int getRequiredPermissionLevel()
-    {
+    @Override
+    public int getRequiredPermissionLevel() {
         return 3;
     }
 
@@ -31,28 +30,28 @@ public class CommandStop extends CommandBase implements IOpisCommand {
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         if (sender instanceof DedicatedServer) return true;
         if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
-        return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP)sender).getGameProfile().getName());
+        return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP) sender).getGameProfile().getName());
     }
 
     @Override
-	public String getDescription() {
-		return "Ends a run before completion.";
-	}
+    public String getDescription() {
+        return "Ends a run before completion.";
+    }
 
-	@Override
-	public String getName() {
-		return "opis_stop";
-	}
+    @Override
+    public String getName() {
+        return "opis_stop";
+    }
 
-	@Override
-	public String getUsage(ICommandSender sender) {
-		return "";
-	}
+    @Override
+    public String getUsage(ICommandSender sender) {
+        return "";
+    }
 
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		Opis.profilerRun = false;
-		ProfilerSection.desactivateAll(Side.SERVER);
-		sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis stopped.")));
-	}
+    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        Opis.profilerRun = false;
+        ProfilerSection.desactivateAll(Side.SERVER);
+        sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis stopped.")));
+    }
 }

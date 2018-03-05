@@ -14,12 +14,12 @@ public class BlockDebug extends BlockContainer {
         super(par2Material);
         setCreativeTab(CreativeTabs.MISC);
         this.setUnlocalizedName("debug_companion_cube");
-    }	
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new TileDebug();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World var1, int var2) {
+        return new TileDebug();
+    }
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {

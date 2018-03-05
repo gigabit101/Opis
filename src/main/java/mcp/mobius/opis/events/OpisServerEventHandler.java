@@ -2,9 +2,9 @@ package mcp.mobius.opis.events;
 
 public class OpisServerEventHandler {
 
-	public static boolean printEntityTrace = false;
-	public static boolean printEntityFull  = false;
-	
+    public static boolean printEntityTrace = false;
+    public static boolean printEntityFull = false;
+
 	/*
 	@SubscribeEvent
     @SideOnly(Side.SERVER)

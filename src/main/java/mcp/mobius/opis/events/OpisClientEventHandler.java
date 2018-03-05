@@ -21,7 +21,7 @@ public class OpisClientEventHandler {
     public static final Colour RED = EnumColour.RED.getColour(128);
 
     @SubscribeEvent
-    @SideOnly (Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         if (Opis.selectedBlock == null) {
             return;

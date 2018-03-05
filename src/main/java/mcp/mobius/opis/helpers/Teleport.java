@@ -1,25 +1,16 @@
 package mcp.mobius.opis.helpers;
 
-import java.util.Iterator;
-
-import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
-
 @Deprecated//Kept for now untill we reimplement safe tp.
 public class Teleport {
 
-	private static Teleport _instance = new Teleport();
-	public  static Teleport instance(){return _instance;};
-	
+    private static Teleport _instance = new Teleport();
+
+    public static Teleport instance() {
+        return _instance;
+    }
+
+    ;
+
 //	// Originally in EntityPlayerMP
 //    public boolean movePlayerToDimension(EntityPlayerMP player, int dim)
 //    {
@@ -138,7 +129,7 @@ public class Teleport {
 //
 //        return true;
 //    }
-    
+
 //	public CoordinatesBlock getTeleportTarget(CoordinatesBlock coord){
 //		World world = DimensionManager.getWorld(coord.dim);
 //		if (world == null) {return null;}
@@ -231,5 +222,5 @@ public class Teleport {
 //		else
 //			return null;
 //	}
-	
+
 }

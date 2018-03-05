@@ -25,7 +25,7 @@ public class NBTUtil {
         }
         return deepTag;
     }
-	
+
 	/*
 	public static NBTTagCompound setTag(String key, NBTTagCompound targetTag, NBTBase addedTag){
 		String[] path = key.split("\\.");

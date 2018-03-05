@@ -6,8 +6,6 @@ import codechicken.asm.ModularASMTransformer;
 import codechicken.asm.ObfMapping;
 import codechicken.asm.transformers.MethodInjector;
 import net.minecraft.launchwrapper.IClassTransformer;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
 
 import java.util.Map;
 

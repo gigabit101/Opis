@@ -16,50 +16,49 @@ import net.minecraft.util.text.TextComponentString;
 
 public class CommandReset extends CommandBase implements IOpisCommand {
 
-	@Override
-	public String getCommandNameOpis() {
-		return this.getName();
-	}	
+    @Override
+    public String getCommandNameOpis() {
+        return this.getName();
+    }
 
 
-	@Override
-    public int getRequiredPermissionLevel()
-    {
+    @Override
+    public int getRequiredPermissionLevel() {
         return 3;
     }
 
-	@Override
-	public String getDescription() {
-		return "Cleans up all profiling data and remove client block overlay.";
-	}
+    @Override
+    public String getDescription() {
+        return "Cleans up all profiling data and remove client block overlay.";
+    }
 
-	@Override
-	public String getName() {
-		return "opis_reset";
-	}
+    @Override
+    public String getName() {
+        return "opis_reset";
+    }
 
-	@Override
-	public String getUsage(ICommandSender sender) {
-		return "";
-	}
+    @Override
+    public String getUsage(ICommandSender sender) {
+        return "";
+    }
 
-	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    @Override
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-		MetaManager.reset();
+        MetaManager.reset();
 
-		sender.sendMessage(new TextComponentString(String.format("\u00A7oInternal data reseted.")));
+        sender.sendMessage(new TextComponentString(String.format("\u00A7oInternal data reseted.")));
 
-		//PacketDispatcher.sendPacketToAllPlayers(NetDataCommand.create(Message.CLIENT_CLEAR_SELECTION));
-		if (sender instanceof EntityPlayerMP)
-			PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_CLEAR_SELECTION), (EntityPlayerMP)sender);
-	}
+        //PacketDispatcher.sendPacketToAllPlayers(NetDataCommand.create(Message.CLIENT_CLEAR_SELECTION));
+        if (sender instanceof EntityPlayerMP)
+            PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_CLEAR_SELECTION), (EntityPlayerMP) sender);
+    }
 
-	@Override
-	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-		if (sender instanceof DedicatedServer) return true;
-		//if ((sender instanceof EntityPlayerMP) && ((EntityPlayerMP)sender).playerNetServerHandler.netManager instanceof MemoryConnection) return true;
-		if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
-		return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP)sender).getGameProfile().getName());
-	}
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        if (sender instanceof DedicatedServer) return true;
+        //if ((sender instanceof EntityPlayerMP) && ((EntityPlayerMP)sender).playerNetServerHandler.netManager instanceof MemoryConnection) return true;
+        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+        return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP) sender).getGameProfile().getName());
+    }
 }

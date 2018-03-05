@@ -17,14 +17,14 @@ public class BlockLag extends BlockContainer {
 
     public BlockLag(Material par2Material) {
         super(par2Material);
-		setCreativeTab(CreativeTabs.MISC);
-		this.setUnlocalizedName("lag_generator_9001");
-    }	
+        setCreativeTab(CreativeTabs.MISC);
+        this.setUnlocalizedName("lag_generator_9001");
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new TileLag();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World var1, int var2) {
+        return new TileLag();
+    }
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {

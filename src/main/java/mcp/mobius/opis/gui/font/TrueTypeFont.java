@@ -256,7 +256,7 @@ public class TrueTypeFont {
         buffer.pos(drawX, drawY, 0).tex(TextureSrcX, TextureSrcY).endVertex();
         buffer.pos(drawX, drawY + DrawHeight, 0).tex(TextureSrcX, TextureSrcY + RenderHeight).endVertex();
         buffer.pos(drawX + DrawWidth, drawY + DrawHeight, 0).tex(TextureSrcX + RenderWidth, TextureSrcY + RenderHeight).endVertex();
-        buffer.pos(drawX + DrawWidth, drawY, 0).tex( TextureSrcX + RenderWidth, TextureSrcY).endVertex();
+        buffer.pos(drawX + DrawWidth, drawY, 0).tex(TextureSrcX + RenderWidth, TextureSrcY).endVertex();
     }
 
     public int getWidth(String whatchars) {
@@ -484,7 +484,7 @@ public class TrueTypeFont {
     }
 
     public static byte[] intToByteArray(int value) {
-        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
+        return new byte[]{(byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value};
     }
 
     public void destroy() {

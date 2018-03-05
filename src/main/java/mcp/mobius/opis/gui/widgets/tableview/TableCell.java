@@ -1,7 +1,5 @@
 package mcp.mobius.opis.gui.widgets.tableview;
 
-import org.lwjgl.util.Point;
-
 import mcp.mobius.opis.gui.helpers.UIException;
 import mcp.mobius.opis.gui.interfaces.CType;
 import mcp.mobius.opis.gui.interfaces.IWidget;
@@ -10,17 +8,18 @@ import mcp.mobius.opis.gui.widgets.LabelTTF;
 import mcp.mobius.opis.gui.widgets.WidgetBase;
 import mcp.mobius.opis.gui.widgets.WidgetGeometry;
 import mcp.mobius.opis.proxy.ProxyClient;
+import org.lwjgl.util.Point;
 
-class TableCell extends WidgetBase{
-	float    fontSize = 1.0f;
-	
-	public TableCell(IWidget parent, String text, WAlign align, float fontSize){
-		super(parent);
-		
-		this.fontSize = fontSize;
-		
-		//this.addWidget("Crop", new LayoutCropping(null)).setGeometry(new WidgetGeometry(50.0, 50.0, 90.0, 100.0, CType.RELXY, CType.RELXY, WAlign.CENTER, WAlign.CENTER));
-		
+class TableCell extends WidgetBase {
+    float fontSize = 1.0f;
+
+    public TableCell(IWidget parent, String text, WAlign align, float fontSize) {
+        super(parent);
+
+        this.fontSize = fontSize;
+
+        //this.addWidget("Crop", new LayoutCropping(null)).setGeometry(new WidgetGeometry(50.0, 50.0, 90.0, 100.0, CType.RELXY, CType.RELXY, WAlign.CENTER, WAlign.CENTER));
+
 		/*
 		switch(align){
 		case CENTER:
@@ -46,33 +45,34 @@ class TableCell extends WidgetBase{
 		}
 		*/
 
-		//LabelTTF label = (LabelTTF)this.addWidget("Text", new LabelTTF(null, text, ProxyClient.fontMC16));		
-		LabelTTF label = (LabelTTF)this.addWidget("Text", new LabelTTF(null, text, ProxyClient.fontMC8));
-		switch(align){
-		case CENTER:
-			label.setGeometry(new WidgetGeometry(50.0, 50.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.CENTER, WAlign.CENTER));
-			label.setScale(this.fontSize);
-			break;
-		case LEFT:
-			label.setGeometry(new WidgetGeometry(5.0, 50.0, 95.0, 100.0,  CType.RELXY, CType.RELXY, WAlign.LEFT,    WAlign.CENTER));
-			label.setScale(this.fontSize);
-			break;
-		case RIGHT: 
-			label.setGeometry(new WidgetGeometry(5.0, 50.0, 95.0, 100.0,  CType.RELXY, CType.RELXY, WAlign.RIGHT,   WAlign.CENTER));
-			label.setScale(this.fontSize);
-			break;
-		default:
-			throw new UIException(String.format("Unexpected align value : %s", align));
-		}			
-		
-	}
-	
-	@Override
-	public void draw(Point pos){}
-	
+        //LabelTTF label = (LabelTTF)this.addWidget("Text", new LabelTTF(null, text, ProxyClient.fontMC16));
+        LabelTTF label = (LabelTTF) this.addWidget("Text", new LabelTTF(null, text, ProxyClient.fontMC8));
+        switch (align) {
+            case CENTER:
+                label.setGeometry(new WidgetGeometry(50.0, 50.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.CENTER, WAlign.CENTER));
+                label.setScale(this.fontSize);
+                break;
+            case LEFT:
+                label.setGeometry(new WidgetGeometry(5.0, 50.0, 95.0, 100.0, CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.CENTER));
+                label.setScale(this.fontSize);
+                break;
+            case RIGHT:
+                label.setGeometry(new WidgetGeometry(5.0, 50.0, 95.0, 100.0, CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.CENTER));
+                label.setScale(this.fontSize);
+                break;
+            default:
+                throw new UIException(String.format("Unexpected align value : %s", align));
+        }
 
-	public void setFontSize(float size){
-		this.fontSize = size;
-	}			
-	
+    }
+
+    @Override
+    public void draw(Point pos) {
+    }
+
+
+    public void setFontSize(float size) {
+        this.fontSize = size;
+    }
+
 }
