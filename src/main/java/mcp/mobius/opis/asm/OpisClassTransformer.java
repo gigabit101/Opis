@@ -6,6 +6,8 @@ import codechicken.asm.ModularASMTransformer;
 import codechicken.asm.ObfMapping;
 import codechicken.asm.transformers.MethodInjector;
 import net.minecraft.launchwrapper.IClassTransformer;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
 
 import java.util.Map;
 
@@ -31,6 +33,12 @@ public class OpisClassTransformer implements IClassTransformer {
             ASMBlock needle = blocks.get("n_UpdateEntity");
             transformer.add(new MethodInjector(mapping, needle, blocks.get("i_UpdateEntityPre"), true));
             transformer.add(new MethodInjector(mapping, needle, blocks.get("i_UpdateEntityPost"), false));
+        }
+        {
+            mapping = new ObfMapping("net/minecraft/world/WorldServer", "func_72835_b", "()V");
+            ASMBlock needle = blocks.get("n_WorldServerTick");
+            transformer.add(new MethodInjector(mapping, null, blocks.get("i_WorldServerTickPre"), true));//Top of method.
+            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_WorldServerTickPre"), true));//Before the return statements.
         }
     }
 
