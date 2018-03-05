@@ -41,9 +41,9 @@ public class CommandOpis extends CommandBase {
 		}
 
 		PlayerTracker.INSTANCE.playersSwing.add((EntityPlayerMP)sender);
-		//((EntityPlayerMP)icommandsender).playerNetServerHandler.sendPacketToPlayer(NetDataCommand.create(Message.CLIENT_SHOW_SWING));
 		if (sender instanceof EntityPlayerMP)
 			PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_SHOW_SWING), (EntityPlayerMP)sender);
+
 		PacketManager.sendFullUpdate((EntityPlayerMP)sender);
 	}
 }

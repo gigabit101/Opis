@@ -20,13 +20,11 @@ public class CommandKillAll extends CommandBase implements IOpisCommand {
 		return this.getName();
 	}	
 
-
 	@Override
     public int getRequiredPermissionLevel()
     {
         return 3;
     }	
-
 
 	@Override
 	public String getDescription() {

@@ -23,7 +23,6 @@ public class CommandFrequency extends CommandBase implements IOpisCommand {
         return 3;
     }	
 
-
 	@Override
 	public String getDescription() {
 		return "Sets the delay in ticks between 2 data points."; 

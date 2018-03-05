@@ -23,7 +23,6 @@ public class CommandStart extends CommandBase implements IOpisCommand {
 		return this.getName();
 	}	
 
-
 	@Override
     public int getRequiredPermissionLevel()
     {
@@ -47,7 +46,7 @@ public class CommandStart extends CommandBase implements IOpisCommand {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if (sender instanceof EntityPlayerMP){
+		if (sender instanceof EntityPlayerMP) {
 			sender.sendMessage(new TextComponentString("DEPRECATED ! Please run /opis instead."));
 			return;
 		}

@@ -16,8 +16,7 @@ public class CommandEntityCreate extends CommandBase {
     public int getRequiredPermissionLevel()
     {
         return 3;
-    }	
-
+    }
 
 	@Override
 	public String getName() {

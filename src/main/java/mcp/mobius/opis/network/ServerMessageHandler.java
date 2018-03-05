@@ -56,7 +56,7 @@ public class ServerMessageHandler {
 		String   name  = player.getGameProfile().getName();
 		
 		if (maintype == Message.OVERLAY_CHUNK_ENTITIES){
-			this.handleOverlayChunkEntities((CoordinatesChunk)param1, player);
+			this.handleOverlayChunkEntities((CoordinatesChunk) param1, player);
 		}
 		
 		else if (maintype == Message.OVERLAY_CHUNK_TIMING){

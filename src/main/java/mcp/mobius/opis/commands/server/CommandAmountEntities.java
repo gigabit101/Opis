@@ -25,7 +25,6 @@ public class CommandAmountEntities extends CommandBase implements IOpisCommand{
         return 0;
     }	
 
-
 	@Override
 	public String getDescription() {
 		return "Opens a summary of the number of entities on the server, by type.";

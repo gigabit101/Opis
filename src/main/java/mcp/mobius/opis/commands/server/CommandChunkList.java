@@ -19,7 +19,6 @@ public class CommandChunkList extends CommandBase implements IOpisCommand {
 		return this.getName();
 	}	
 
-
 	@Override
     public int getRequiredPermissionLevel()
     {

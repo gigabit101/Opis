@@ -13,14 +13,12 @@ import mcp.mobius.opis.events.PlayerTracker;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.enums.AccessLevel;
 
-public class PacketReqChunks extends PacketBase{
+public class PacketReqChunks extends PacketBase {
 
 	public int dim;
 	public ArrayList<CoordinatesChunk> chunks = new ArrayList<CoordinatesChunk>();	
 	
-    public PacketReqChunks()
-    {
-    }
+    public PacketReqChunks() {}
 
     public PacketReqChunks(int dim, ArrayList<CoordinatesChunk> chunks)
     {
@@ -52,20 +50,7 @@ public class PacketReqChunks extends PacketBase{
 			if (world != null){
 				for (CoordinatesChunk chunk : chunks)
 					list.add(world.getChunkFromChunkCoords(chunk.chunkX, chunk.chunkZ));
-				
-				//if (!list.isEmpty()){
-				//	Packet_Chunks.send(castedPacket.dim, !world.provider.hasNoSky, list, player);
-				
-					
-					/*
-					Packet250CustomPayload chunkPacket = Packet_Chunks.create(castedPacket.dim, !world.provider.hasNoSky, list);
-					if (chunkPacket != null)
-						PacketDispatcher.sendPacketToPlayer( chunkPacket, player);
-					*/
-				//}
 			}
-		}		
-		
+		}
 	}
-
 }
