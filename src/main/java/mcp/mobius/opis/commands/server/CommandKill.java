@@ -1,11 +1,14 @@
 package mcp.mobius.opis.commands.server;
 
 import mcp.mobius.opis.commands.IOpisCommand;
+import mcp.mobius.opis.events.PlayerTracker;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -61,5 +64,12 @@ public class CommandKill extends CommandBase implements IOpisCommand {
 		entity.setDead();
 		sender.sendMessage(new TextComponentString(String.format("\u00A7oKilled entity %d in dim %d", eid, dim)));
 		return;
+	}
+
+	@Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+		if (sender instanceof DedicatedServer) return true;
+		if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+		return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP)sender).getGameProfile().getName());
 	}
 }

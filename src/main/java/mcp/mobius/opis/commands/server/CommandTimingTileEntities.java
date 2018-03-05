@@ -17,8 +17,7 @@ public class CommandTimingTileEntities extends CommandBase implements IOpisComma
 	@Override
 	public String getCommandNameOpis() {
 		return this.getName();
-	}	
-
+	}
 
 	@Override
     public int getRequiredPermissionLevel()

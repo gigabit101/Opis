@@ -5,7 +5,9 @@ import mcp.mobius.opis.events.PlayerTracker;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.text.TextComponentString;
 
 public class CommandRmPrivileged extends CommandBase implements IOpisCommand{
@@ -44,5 +46,12 @@ public class CommandRmPrivileged extends CommandBase implements IOpisCommand{
 		} else {
 			sender.sendMessage(new TextComponentString(String.format("Player %s not found in list.", args[0])));
 		}
+	}
+
+	@Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+		if (sender  instanceof DedicatedServer) return true;
+		if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+		return PlayerTracker.INSTANCE.isAdmin(((EntityPlayerMP)sender).getGameProfile().getName());
 	}
 }

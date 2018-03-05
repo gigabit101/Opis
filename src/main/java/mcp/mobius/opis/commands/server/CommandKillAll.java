@@ -1,6 +1,9 @@
 package mcp.mobius.opis.commands.server;
 
+import mcp.mobius.opis.events.PlayerTracker;
 import net.minecraft.command.CommandException;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,5 +57,12 @@ public class CommandKillAll extends CommandBase implements IOpisCommand {
 		}
 
 		sender.sendMessage(new TextComponentString(String.format("\u00A7oKilled %d entities of type %s", nkilled, searchname)));
+	}
+
+	@Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+		if (sender instanceof DedicatedServer) return true;
+		if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+		return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP)sender).getGameProfile().getName());
 	}
 }
