@@ -122,13 +122,13 @@ public class PacketManager
             input.skipBytes(1); // skip the packet identifier byte
             packet.decode(input);
 
-            if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+            if (ctx.channel().attr(NetworkRegistry.CHANNEL_SOURCE).get().isClient())
             {
-                actionClient(packet);
+                Minecraft.getMinecraft().addScheduledTask(() -> actionClient(packet));
             }
             else
             {
-                actionServer(ctx, packet);
+                ServerUtils.mc().addScheduledTask(() -> actionServer(ctx, packet));
             }
         }
 
