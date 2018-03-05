@@ -465,11 +465,8 @@ public class TrueTypeFont {
             return textureId.get(0);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(-1);
+            throw new RuntimeException("Unable to load TrueTypeFont.", e);
         }
-
-        return -1;
     }
 
     public static boolean isSupported(String fontname) {

@@ -12,7 +12,7 @@
 !settings.gradle
 
 # Other Files.
-!LICENSE
+!LICENSE.txt
 !README.md
 !.travis.yml
 
