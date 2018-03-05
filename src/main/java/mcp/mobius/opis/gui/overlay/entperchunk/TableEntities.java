@@ -34,8 +34,6 @@ public class TableEntities extends ViewTable {
 	public void onMouseClick(MouseEvent event){
 		TableRow row = this.getRow(event.x, event.y);
 		if (row != null){
-			//CoordinatesBlock coord = ((EntityStats)row.getObject()).getCoord();
-			//PacketDispatcher.sendPacketToServer(Packet_ReqTeleport.create(coord));
 			int eid = ((DataEntity)row.getObject()).eid;
 			int dim = ((DataEntity)row.getObject()).pos.dim;
 			PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_TO_ENTITY, new TargetEntity(eid, dim)));

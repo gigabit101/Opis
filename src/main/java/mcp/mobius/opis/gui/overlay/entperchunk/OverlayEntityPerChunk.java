@@ -1,6 +1,5 @@
 package mcp.mobius.opis.gui.overlay.entperchunk;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import mapwriter.api.*;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
+import mcp.mobius.opis.data.holders.basetypes.SerialInt;
 import mcp.mobius.opis.data.holders.newtypes.DataChunkEntities;
 import mcp.mobius.opis.data.holders.newtypes.DataEntity;
 import mcp.mobius.opis.gui.interfaces.CType;
@@ -24,10 +24,11 @@ import mcp.mobius.opis.network.packets.client.PacketReqData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
-	INSTANCE;
+public class OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 
-	class ReducedData implements Comparable{
+	public static OverlayEntityPerChunk INSTANCE = new OverlayEntityPerChunk();
+
+	class ReducedData implements Comparable {
 		CoordinatesChunk chunk;
 		int amount;
 
@@ -85,8 +86,6 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 		return overlays;
 	}
 
-    //TODO: What should we return here?
-    //TOOD: Also in OverlayLoadedChunks
     @Override
     public ILabelInfo getLabelInfo(int i, int i1) {
         return null;
@@ -136,7 +135,7 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 
 	@Override
 	public void onDimensionChanged(int dimension, IMapView mapview) {
-		//PacketDispatcher.sendPacketToServer(Packet_ReqData.create("overlay:chunk:entities"));
+        PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_ENTITIES, new SerialInt(dimension)));
 	}
 
 	@Override
@@ -154,24 +153,7 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 	public void onOverlayDeactivated(IMapView mapview) {}
 
 	@Override
-	public void onDraw(IMapView mapview, IMapMode mapmode) {
-//		if (this.canvas == null)
-//			this.canvas = new LayoutCanvas();
-
-        //TODO: Investigate why margins were removed, and if there is another way we can detect this.
-        //TODO: Also in OverlayLoadedChunks
-//		if (mapmode.upda != 0){
-//			this.canvas.hide();
-//			return;
-//		}
-
-//		if (!this.showList)
-//			this.canvas.hide();
-//		else{
-//			this.canvas.show();
-//			this.canvas.draw();
-//		}
-	}
+	public void onDraw(IMapView mapview, IMapMode mapmode) {}
 
 	@SideOnly (Side.CLIENT)
 	public void setupChunkTable(){
@@ -278,6 +260,7 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 			this.setupEntTable();
 			break;
 		}
+		//TODO look into why this is Unhandled
 		case OVERLAY_CHUNK_ENTITIES:{
 			HashMap<CoordinatesChunk, Integer> chunkStatus = new HashMap<CoordinatesChunk, Integer>();
 			for (ISerializable s : rawdata.array){
@@ -291,8 +274,6 @@ public enum OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 		default:
 			return false;
 		}
-
-
 		return true;
 	}
 	

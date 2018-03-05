@@ -30,9 +30,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public enum  OverlayLoadedChunks implements IMwDataProvider, IMessageHandler
+public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler
 {
-    INSTANCE;
+    public static OverlayLoadedChunks INSTANCE = new OverlayLoadedChunks();
+
 	public class TicketTable extends ViewTable
     {
 		IMapView mapView;
