@@ -1,5 +1,7 @@
 package mcp.mobius.opis.events;
 
+import codechicken.lib.colour.Colour;
+import codechicken.lib.colour.EnumColour;
 import codechicken.lib.render.RenderUtils;
 import codechicken.lib.vec.Cuboid6;
 import mcp.mobius.opis.Opis;
@@ -16,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 public class OpisClientEventHandler {
 
     public static final Cuboid6 BOX = Cuboid6.full.copy().expand(0.02);
+    public static final Colour RED = EnumColour.RED.getColour(128);
 
     @SubscribeEvent
     @SideOnly (Side.CLIENT)
@@ -40,7 +43,7 @@ public class OpisClientEventHandler {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.depthMask(false);
-
+        RED.glColour();
         RenderUtils.drawCuboidSolid(BOX);
 
         GlStateManager.enableTexture2D();

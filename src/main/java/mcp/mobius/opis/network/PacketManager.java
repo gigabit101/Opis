@@ -1,5 +1,6 @@
 package mcp.mobius.opis.network;
 
+import codechicken.lib.util.ServerUtils;
 import com.google.common.collect.Table;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -188,7 +189,7 @@ public class PacketManager
         protected void channelRead0(ChannelHandlerContext ctx, PacketBase packet) throws Exception
         {
             Minecraft mc = Minecraft.getMinecraft();
-            packet.actionClient(mc.world, mc.player);
+            mc.addScheduledTask(() -> packet.actionClient(mc.world, mc.player));
         }
     }
 
@@ -199,7 +200,7 @@ public class PacketManager
         protected void channelRead0(ChannelHandlerContext ctx, PacketBase packet) throws Exception
         {
             EntityPlayerMP player = ((NetHandlerPlayServer) ctx.channel().attr(NetworkRegistry.NET_HANDLER).get()).player;
-            packet.actionServer(player.world, player);
+            ServerUtils.mc().addScheduledTask(() -> packet.actionServer(player.world, player));
         }
     }    
     
