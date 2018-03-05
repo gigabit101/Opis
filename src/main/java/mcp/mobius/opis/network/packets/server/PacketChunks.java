@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import mapwriter.Mw;
 import mapwriter.region.MwChunk;
+import mapwriter.tasks.UpdateSurfaceChunksTask;
 import mcp.mobius.opis.network.PacketBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -24,6 +25,6 @@ public class PacketChunks extends PacketBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void actionClient(World world, EntityPlayer player) {
-//    	Mw.getInstance().chunkManager.forceChunks(this.chunks);
+    	Mw.getInstance().chunkManager.updateSurfaceChunks();
     }
 }

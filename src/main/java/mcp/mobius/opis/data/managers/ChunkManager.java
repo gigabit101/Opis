@@ -34,7 +34,6 @@ public enum ChunkManager implements IMessageHandler {
     public ArrayList<TicketData> tickets = new ArrayList<TicketData>();
 
     public void addLoadedChunks(ArrayList<ISerializable> data) {
-        //chunksLoad.clear();
         for (ISerializable chunk : data) {
             chunksLoad.add((CoordinatesChunk) chunk);
         }

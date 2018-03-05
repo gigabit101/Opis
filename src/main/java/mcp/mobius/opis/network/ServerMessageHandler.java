@@ -46,7 +46,7 @@ public class ServerMessageHandler {
         String name = player.getGameProfile().getName();
 
         if (maintype == Message.OVERLAY_CHUNK_ENTITIES) {
-            this.handleOverlayChunkEntities((CoordinatesChunk) param1, player);
+            this.handleOverlayChunkEntities(player);
         } else if (maintype == Message.OVERLAY_CHUNK_TIMING) {
             ArrayList<StatsChunk> timingChunks = ChunkManager.INSTANCE.getTopChunks(100);
             PacketManager.validateAndSend(new NetDataList(Message.LIST_TIMING_CHUNK, timingChunks), player);
@@ -152,7 +152,7 @@ public class ServerMessageHandler {
         }
     }
 
-    public void handleOverlayChunkEntities(CoordinatesChunk coord, EntityPlayerMP player) {
+    public void handleOverlayChunkEntities(EntityPlayerMP player) {
 
         HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = EntityManager.INSTANCE.getAllEntitiesPerChunk();
         ArrayList<DataChunkEntities> perChunk = new ArrayList<DataChunkEntities>();

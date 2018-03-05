@@ -10,7 +10,6 @@ public final class CoordinatesChunk implements ISerializable {
     public final int dim, x, y, z;
     public final int chunkX, chunkZ;
     public final byte metadata;
-    //public boolean isChunk;
 
     public final static CoordinatesChunk INVALID = new CoordinatesChunk(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
@@ -52,8 +51,8 @@ public final class CoordinatesChunk implements ISerializable {
 
     public CoordinatesChunk(int dim, ChunkPos coord) {
         this.dim = dim;
-        this.chunkX = coord.getXStart();
-        this.chunkZ = coord.getZStart();
+        this.chunkX = coord.x;
+        this.chunkZ = coord.z;
 
         this.x = chunkX << 4;
         this.y = 0;
@@ -64,8 +63,8 @@ public final class CoordinatesChunk implements ISerializable {
 
     public CoordinatesChunk(int dim, ChunkPos coord, byte metadata) {
         this.dim = dim;
-        this.chunkX = coord.getXStart();
-        this.chunkZ = coord.getZStart();
+        this.chunkX = coord.x;
+        this.chunkZ = coord.z;
 
         this.x = chunkX << 4;
         this.y = 0;
@@ -103,7 +102,6 @@ public final class CoordinatesChunk implements ISerializable {
     //11111111 11111111 11111111 11122222 22222222 22222222 22222200 00000000
 
     public int hashCode() {
-        //return String.format("%s %s %s", this.dim, this.chunkX, this.chunkZ).hashCode();
         return this.dim + 31 * this.chunkX + 877 * this.chunkZ;
     }
 
