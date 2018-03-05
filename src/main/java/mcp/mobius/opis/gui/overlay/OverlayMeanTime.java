@@ -36,8 +36,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler {
-	INSTANCE;
+public enum  OverlayMeanTime implements IMwDataProvider, IMessageHandler {
+    INSTANCE;
+
     public class EntitiesTable extends ViewTable{
 		IMapView mapView;
 		IMapMode mapMode;
@@ -65,8 +66,8 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler {
 							MathHelper.ceil(this.mapView.getX()) >> 4,
 							MathHelper.ceil(this.mapView.getZ()) >> 4);
 				}
-				else{
-					//Opis.selectedBlock = coord;
+				else
+				    {
 					PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_BLOCK, coord));
 					Minecraft.getMinecraft().setIngameFocus();
 				}
@@ -231,22 +232,21 @@ public enum OverlayMeanTime implements IMwDataProvider, IMessageHandler {
 
     @Override
 	public void onDraw(IMapView mapview, IMapMode mapmode) {
-//		if (this.canvas == null)
-//			this.canvas = new LayoutCanvas();
-//
-//		//TODO: Investigate why margins were removed, and if there is another way we can detect this.
-//		//TODO: Also in OverlayEntityPerChunk
-////		if (mapmode.marginLeft() != 0){
-////			this.canvas.hide();
-////			return;
-////		}
-//
-//		if (!this.showList)
+		if (this.canvas == null)
+			this.canvas = new LayoutCanvas();
+		//TODO: Investigate why margins were removed, and if there is another way we can detect this.
+		//TODO: Also in OverlayEntityPerChunk
+//		if (mapmode.marginLeft() != 0){
 //			this.canvas.hide();
-//		else{
-//			this.canvas.show();
-//			this.canvas.draw();
+//			return;
 //		}
+
+		if (!this.showList)
+			this.canvas.hide();
+		else{
+			this.canvas.show();
+			this.canvas.draw();
+		}
 		
 	}
 	

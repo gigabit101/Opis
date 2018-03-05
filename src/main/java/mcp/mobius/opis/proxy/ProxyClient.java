@@ -50,19 +50,10 @@ public class ProxyClient extends ProxyServer implements IMessageHandler{
 	
 	@Override
 	public void init(){
-		//MwAPI.registerDataProvider("Loaded chunks", OverlayLoadedChunks.instance);
 		MwAPI.registerDataProvider("Loaded chunks", OverlayLoadedChunks.INSTANCE);
 		MwAPI.registerDataProvider("Mean time",     OverlayMeanTime.INSTANCE);
 		MwAPI.registerDataProvider("Ent per chunk", OverlayEntityPerChunk.INSTANCE);
-		
-		//fontMC12 = Fonts.createFont(new ResourceLocation("opis", "fonts/Minecraftia.ttf"), 12, false);
-		//fontMC24 = Fonts.createFont(new ResourceLocation("opis", "fonts/Minecraftia.ttf"), 24, false);
-		//fontMC8  = Fonts.createFont(new ResourceLocation("opis", "fonts/Minecraftia.ttf"),  8, true);
-		//fontMC12 = Fonts.createFont(new ResourceLocation("opis", "fonts/Minecraftia.ttf"), 12, true);
-		//fontMC16 = Fonts.createFont(new ResourceLocation("opis", "fonts/Minecraftia.ttf"), 16, true);		
-		//fontMC18 = Fonts.createFont(new ResourceLocation("opis", "fonts/Minecraftia.ttf"), 18, true);		
-		//fontMC24 = Fonts.createFont(new ResourceLocation("opis", "fonts/Minecraftia.ttf"), 24, true);
-		//fontMC8 = Fonts.loadSystemFont("Monospace", 12, true, Font.TRUETYPE_FONT | Font.BOLD);
+
 		fontMC8 = Fonts.createFont(new ResourceLocation("opis", "fonts/LiberationMono-Bold.ttf"), 14, true);
 
 		IMessageHandler panelSummary        = (IMessageHandler)TabPanelRegistrar.INSTANCE.registerTab(new PanelSummary(), "Summary");				
@@ -212,10 +203,6 @@ public class ProxyClient extends ProxyServer implements IMessageHandler{
 		}
 		case CLIENT_SHOW_RENDER_TICK:{
 			Opis.log.log(Level.INFO, "=== RENDER TICK ===");
-			//ArrayList<DataHandler> stats = TickHandlerManager.getCumulatedStatsServer();
-			//for (DataHandler stat : stats){
-			//	System.out.printf("%s \n", stat);
-			//}			
 			break;
 		}
 		default:

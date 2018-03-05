@@ -26,7 +26,6 @@ public class OpisClassTransformer implements IClassTransformer {
             transformer.add(new MethodInjector(mapping, needle, blocks.get("i_TileEntityTickPre"), true));
             transformer.add(new MethodInjector(mapping, needle, blocks.get("i_TileEntityTickPost"), false));
         }
-
     }
 
     @Override
