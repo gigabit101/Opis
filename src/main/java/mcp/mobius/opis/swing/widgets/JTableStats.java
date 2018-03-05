@@ -121,14 +121,4 @@ public class JTableStats extends JTable {
 
         }
     }
-
-	/*
-	public void setStatistics(ArrayList<ISerializable> statistics){
-		this.statistics = new ArrayList<ISerializable>();
-		for (Object o : statistics){
-			this.statistics.add((StatAbstract)o);
-		}
-	}
-	*/
-
 }

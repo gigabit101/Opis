@@ -120,12 +120,6 @@ public class SwingUI extends JFrame implements WindowListener, ChangeListener, I
                 break;
             }
             case CLIENT_SHOW_SWING: {
-            /*
-			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			} catch (Exception e) {}
-			*/
-
                 Opis.swingOpen = true;
                 this.showUI();
                 Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
