@@ -44,12 +44,10 @@ public class CommandReset extends CommandBase implements IOpisCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-
         MetaManager.reset();
 
         sender.sendMessage(new TextComponentString(String.format("\u00A7oInternal data reseted.")));
 
-        //PacketDispatcher.sendPacketToAllPlayers(NetDataCommand.create(Message.CLIENT_CLEAR_SELECTION));
         if (sender instanceof EntityPlayerMP)
             PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_CLEAR_SELECTION), (EntityPlayerMP) sender);
     }
@@ -57,7 +55,6 @@ public class CommandReset extends CommandBase implements IOpisCommand {
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         if (sender instanceof DedicatedServer) return true;
-        //if ((sender instanceof EntityPlayerMP) && ((EntityPlayerMP)sender).playerNetServerHandler.netManager instanceof MemoryConnection) return true;
         if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
         return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP) sender).getGameProfile().getName());
     }

@@ -7,6 +7,7 @@ import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.profilers.ProfilerTileEntityUpdate;
 import mcp.mobius.opis.profiler.ProfilerSection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -26,7 +27,8 @@ public class DataBlockTileEntity implements ISerializable, Comparable {
         World world = DimensionManager.getWorld(this.pos.dim);
 
         this.id = (short) Block.getIdFromBlock(world.getBlockState(new BlockPos(this.pos.x, this.pos.y, this.pos.z)).getBlock());
-//		this.meta   = (short) world.getBlockMetadata(this.pos.x, this.pos.y, this.pos.z);
+        IBlockState state = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z));
+		this.meta   = (short) state.getBlock().getMetaFromState(state);
 
         HashMap<CoordinatesBlock, DescriptiveStatistics> data = ((ProfilerTileEntityUpdate) (ProfilerSection.TILEENT_UPDATETIME.getProfiler())).data;
         this.update = new DataTiming(data.containsKey(this.pos) ? data.get(this.pos).getGeometricMean() : 0.0D);

@@ -15,8 +15,6 @@ public class DataCache implements IMessageHandler {
         return _instance;
     }
 
-    ;
-
     private long clockScrew = 0;
     private AccessLevel clientAccess = AccessLevel.NONE;
 

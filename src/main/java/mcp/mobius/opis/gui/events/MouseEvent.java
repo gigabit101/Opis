@@ -8,8 +8,6 @@ public class MouseEvent {
 
     public enum EventType {NONE, MOVE, CLICK, RELEASED, DRAG, WHEEL, ENTER, LEAVE}
 
-    ;
-
     public long timestamp;
     public Minecraft mc;
     public IWidget srcwidget;
