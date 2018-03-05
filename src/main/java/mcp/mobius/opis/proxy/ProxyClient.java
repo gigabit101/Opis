@@ -203,7 +203,6 @@ public class ProxyClient extends ProxyServer implements IMessageHandler {
                 return false;
         }
 
-
         return true;
     }
 }

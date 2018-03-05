@@ -60,7 +60,6 @@ public class ServerMessageHandler {
             PacketManager.validateAndSend(new NetDataCommand(Message.LIST_CHUNK_LOADED_CLEAR), player);
             PacketManager.splitAndSend(Message.LIST_CHUNK_LOADED, ChunkManager.INSTANCE.getLoadedChunks(((SerialInt) param1).value), player);
         } else if (maintype == Message.LIST_CHUNK_TICKETS) {
-            //PacketManager.sendToPlayer(new PacketTickets(ChunkManager.INSTANCE.getTickets()), player);
             PacketManager.validateAndSend(new NetDataList(Message.LIST_CHUNK_TICKETS, new ArrayList<TicketData>(ChunkManager.INSTANCE.getTickets())), player);
         } else if (maintype == Message.LIST_TIMING_TILEENTS) {
             ArrayList<DataBlockTileEntity> timingTileEnts = TileEntityManager.INSTANCE.getWorses(100);
@@ -121,7 +120,6 @@ public class ServerMessageHandler {
             EntityManager.INSTANCE.teleportPlayer(blockCoord, player);
         } else if (maintype == Message.COMMAND_KILLALL) {
             EntityManager.INSTANCE.killAll(((SerialString) param1).value);
-            //this.handle(Message.LIST_AMOUNT_ENTITIES, null, null, player);
         } else if (maintype == Message.COMMAND_UNREGISTER_SWING) {
             PlayerTracker.INSTANCE.playersSwing.remove(player);
         } else if (maintype == Message.STATUS_TIME_LAST_RUN) {
@@ -157,7 +155,6 @@ public class ServerMessageHandler {
     public void handleOverlayChunkEntities(CoordinatesChunk coord, EntityPlayerMP player) {
 
         HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = EntityManager.INSTANCE.getAllEntitiesPerChunk();
-        //HashMap<CoordinatesChunk, Integer> perChunk = new HashMap<CoordinatesChunk, Integer>();
         ArrayList<DataChunkEntities> perChunk = new ArrayList<DataChunkEntities>();
 
         for (CoordinatesChunk chunk : entities.keySet())

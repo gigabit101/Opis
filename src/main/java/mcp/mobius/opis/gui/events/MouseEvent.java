@@ -31,12 +31,6 @@ public class MouseEvent {
         this.x = (double) Mouse.getEventX() * (double) this.srcwidget.getSize().getX() / (double) this.mc.displayWidth;
         this.y = (double) this.srcwidget.getSize().getY() - (double) Mouse.getEventY() * (double) this.srcwidget.getSize().getY() / (double) this.mc.displayHeight - 1.0;
 
-        //this.x = Mouse.getEventX();
-        //this.y = Mouse.getEventY();
-
-        //System.out.printf("%s %s\n", this.x, this.y);
-
-        //this.z = Mouse.getEventDWheel();
         this.z = Mouse.getDWheel();
 
         for (int i = 0; i < buttonCount; i++)

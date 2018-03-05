@@ -40,9 +40,6 @@ public class ActionDimensions implements ActionListener {
                 PacketManager.sendToServer(new PacketReqData(Message.COMMAND_KILL_STACKS_DIM, new SerialInt(data.dim)));
             if (JOptionPane.showConfirmDialog(null, "Do you want to purge chunks ?", "Warning", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
                 PacketManager.sendToServer(new PacketReqData(Message.COMMAND_PURGE_CHUNKS_DIM, new SerialInt(data.dim)));
-
         }
-
     }
-
 }

@@ -51,7 +51,5 @@ public class ActionTimingEntities implements ActionListener {
             int dim = data.pos.dim;
             PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_PULL_ENTITY, new TargetEntity(eid, dim)));
         }
-
     }
-
 }

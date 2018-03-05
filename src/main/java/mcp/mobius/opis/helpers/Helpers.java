@@ -10,15 +10,6 @@ public class Helpers {
             return Side.SERVER;
         }
 
-        return Side.CLIENT;        
-        
-        /*
-        if ((thr instanceof ThreadMinecraftServer) || (thr instanceof ServerListenThread) || (thr instanceof TcpWriterThread) || (thr instanceof TcpReaderThread))
-        {
-            return Side.SERVER;
-        }
-        
         return Side.CLIENT;
-        */
     }
 }

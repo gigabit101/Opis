@@ -44,16 +44,6 @@ public enum OpisServerTickHandler {
     @SubscribeEvent
     public void tickEnd(TickEvent.ServerTickEvent event) {
 
-			/*
-            if (System.nanoTime() - timer500 >  500000000){
-				timer500 = System.nanoTime();
-				
-				for (Player player : PlayerTracker.instance().playersSwing){
-					PacketDispatcher.sendPacketToPlayer(Packet_DataValue.create(DataReq.VALUE_TIMING_TICK,     TickProfiler.instance().stats), player);					
-				}
-			}
-			*/
-
         StringCache.INSTANCE.syncNewCache();
 
         // One second timer
@@ -114,12 +104,6 @@ public enum OpisServerTickHandler {
 
             ((ProfilerPacket) ProfilerSection.PACKET_OUTBOUND.getProfiler()).startInterval();
             ((ProfilerPacket) ProfilerSection.PACKET_INBOUND.getProfiler()).startInterval();
-				
-				/*
-				for (DataPacket data : ((ProfilerPacket)ProfilerSection.PACKET_OUTBOUND.getProfiler()).jabbaSpec){
-					System.out.printf("[ %d ] %d %d\n", data.id, data.amount, data.size);
-				}
-				*/
         }
 
         profilerUpdateTickCounter++;
@@ -136,8 +120,6 @@ public enum OpisServerTickHandler {
             for (EntityPlayerMP player : PlayerTracker.INSTANCE.playersSwing) {
                 PacketManager.sendFullUpdate(player);
             }
-
-
         }
     }
 
@@ -151,10 +133,8 @@ public enum OpisServerTickHandler {
 
             if (PlayerTracker.INSTANCE.playerOverlayStatus.get(player) == OverlayStatus.MEANTIME) {
                 ArrayList<StatsChunk> timingChunks = ChunkManager.INSTANCE.getTopChunks(100);
-                //OpisPacketHandler.validateAndSend(Packet_DataList.create(DataReq.LIST_TIMING_CHUNK, timingChunks), player);
                 PacketManager.validateAndSend(new NetDataList(Message.LIST_TIMING_CHUNK, timingChunks), player);
             }
         }
     }
-
 }

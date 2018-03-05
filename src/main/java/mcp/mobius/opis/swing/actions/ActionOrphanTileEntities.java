@@ -19,7 +19,5 @@ public class ActionOrphanTileEntities implements ActionListener {
         if (e.getSource() == panel.getBtnRefresh()) {
             PacketManager.sendToServer(new PacketReqData(Message.LIST_ORPHAN_TILEENTS));
         }
-
     }
-
 }

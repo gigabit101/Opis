@@ -17,8 +17,7 @@ import java.util.List;
 
 public class NetDataList extends PacketBase {
 
-    public NetDataList() {
-    }
+    public NetDataList() {}
 
     public NetDataList(Message msg, List<? extends ISerializable> data) {
         this.msg = msg;

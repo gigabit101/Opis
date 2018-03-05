@@ -150,16 +150,5 @@ public enum OpisClientTickHandler {
                 Opis.log.warn(String.format("Error while adding block %s to the list", coord));
             }
         }
-
-		/*
-        Collections.sort(blockData);
-		for (DataBlockRender data : blockData){
-			ItemStack stack = new ItemStack(data.id, 0, data.meta);
-			String    name  = stack.getDisplayName();
-			
-			System.out.printf("%s %s : %s\n", data.pos, name, data.update);
-		}
-		*/
     }
-
 }

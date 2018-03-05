@@ -70,7 +70,6 @@ public class PanelTimingHandlers extends JPanelMsgHandler implements ITabPanel {
                     try {
                         model.addRow(new Object[]{data.mod, data.event.toString().split("\\$")[1], data.update});
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        //System.out.printf("AIOOB : %s %s\n", data.event.index, data.event.toString());
                         model.addRow(new Object[]{data.mod, data.event.toString(), data.update});
                     }
                 }

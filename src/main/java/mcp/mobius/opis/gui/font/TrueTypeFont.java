@@ -235,8 +235,6 @@ public class TrueTypeFont {
 
             fontTextureID = loadImage(imgTemp);
 
-            //.getTexture(font.toString(), imgTemp);
-
         } catch (Exception e) {
             System.err.println("Failed to create font.");
             e.printStackTrace();
@@ -277,7 +275,6 @@ public class TrueTypeFont {
                 lastWidth = intObject.width;
             }
         }
-        //System.out.println("Size: "+totalwidth);
         return (totalwidth);
     }
 
@@ -308,10 +305,6 @@ public class TrueTypeFont {
     }
 
     public void drawString(float x, float y, String whatchars, int startIndex, int endIndex, float scaleX, float scaleY, int format, float... rgba) {
-
-        //GameSettings gameSettings = new GameSettings();
-
-        //gameSettings.setOptionValue(EnumOptions.GUI_SCALE, par2);
 
         GL11.glPushMatrix();
         GL11.glScalef(scaleX, scaleY, 1.0f);
@@ -363,7 +356,6 @@ public class TrueTypeFont {
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder buffer = tess.getBuffer();
         buffer.begin(0x07, DefaultVertexFormats.POSITION_TEX);
-        //	GL11.glBegin(GL11.GL_QUADS);
         if (rgba.length == 4) {
             GlStateManager.color(rgba[0], rgba[1], rgba[2], rgba[3]);
         }
@@ -452,12 +444,6 @@ public class TrueTypeFont {
 
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-            //GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-            //GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_NEAREST);
-
-            //GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-            //GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_LINEAR);
-            //GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST_MIPMAP_NEAREST);
 
             GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
 

@@ -205,22 +205,6 @@ public class PacketManager {
     public static Packet toMcPacket(PacketBase packet) {
         return channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
     }
-    
-    /*
-    public void writeString(ByteArrayDataOutput buffer, String data) throws IOException
-    {
-        byte[] abyte = data.getBytes(Charsets.UTF_8);
-       	buffer.writeShort(abyte.length);
-       	buffer.writeBytes(abyte);
-    }
-    
-    public String readString(ByteArrayDataInput buffer) throws IOException
-    {
-        int j = buffer.readShort();
-        String s = new String(buffer.readBytes(j).array(), Charsets.UTF_8);
-        return s;
-    }    
-    */
 
     public static void validateAndSend(PacketBase capsule, EntityPlayerMP player) {
         if (!capsule.msg.isDisplayActive(PlayerTracker.INSTANCE.getPlayerSelectedTab(player))) return;
@@ -249,14 +233,12 @@ public class PacketManager {
     public static void sendFullUpdate(EntityPlayerMP player) {
         ArrayList<DataEntity> timingEntities = EntityManager.INSTANCE.getWorses(100);
         ArrayList<DataBlockTileEntity> timingTileEnts = TileEntityManager.INSTANCE.getWorses(100);
-        //ArrayList<DataHandler>      timingHandlers = TickHandlerManager.getCumulatedStatsServer();
         ArrayList<StatsChunk> timingChunks = ChunkManager.INSTANCE.getTopChunks(100);
         ArrayList<DataEntityPerClass> timingEntsClass = EntityManager.INSTANCE.getTotalPerClass();
         ArrayList<DataBlockTileEntityPerClass> timingTEsClass = TileEntityManager.INSTANCE.getCumulativeTimingTileEntities();
 
         DataTiming totalTimeTE = TileEntityManager.INSTANCE.getTotalUpdateTime();
         DataTiming totalTimeEnt = EntityManager.INSTANCE.getTotalUpdateTime();
-        //DataTiming    totalTimeHandler = TickHandlerManager.getTotalUpdateTime();
         DataNetworkTick totalNetwork = new DataNetworkTick().fill();
         DataBlockTick totalWorldTick = new DataBlockTick().fill();
 
@@ -283,11 +265,8 @@ public class PacketManager {
         PacketManager.validateAndSend(new NetDataList(Message.LIST_TIMING_ENTITIES_PER_CLASS, timingEntsClass), player);
         PacketManager.validateAndSend(new NetDataValue(Message.VALUE_TIMING_TILEENTS, totalTimeTE), player);
         PacketManager.validateAndSend(new NetDataValue(Message.VALUE_TIMING_ENTITIES, totalTimeEnt), player);
-        //PacketManager.validateAndSend(NetDataValue_OLD.create(Message.VALUE_TIMING_HANDLERS,  totalTimeHandler), player);
         PacketManager.validateAndSend(new NetDataValue(Message.VALUE_TIMING_WORLDTICK, totalWorldTick), player);
         PacketManager.validateAndSend(new NetDataValue(Message.VALUE_TIMING_NETWORK, totalNetwork), player);
-
-        //PacketManager.validateAndSend(NetDataValue_OLD.create(Message.VALUE_AMOUNT_HANDLERS, new SerialInt(timingHandlers.size())), player);
 
         PacketManager.validateAndSend(new NetDataValue(Message.STATUS_TIME_LAST_RUN, new SerialLong(ProfilerSection.timeStampLastRun)), player);
 
@@ -301,8 +280,6 @@ public class PacketManager {
         ArrayList<AmountHolder> amountEntities = EntityManager.INSTANCE.getCumulativeEntities(filtered);
 
         // Here we send a full update to the player
-        //OpisPacketHandler.validateAndSend(Packet_DataList.create(DataReq.LIST_AMOUNT_ENTITIES, amountEntities), player);
         PacketManager.validateAndSend(new NetDataList(Message.LIST_AMOUNT_ENTITIES, amountEntities), player);
-
     }
 }

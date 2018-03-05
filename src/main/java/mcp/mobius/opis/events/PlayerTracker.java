@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import java.util.HashMap;
 import java.util.HashSet;
 
-//public class PlayerTracker implements IPlayerTracker{
 public enum PlayerTracker {
     INSTANCE;
 
@@ -26,7 +25,6 @@ public enum PlayerTracker {
     }
 
     public HashSet<EntityPlayerMP> playersSwing = new HashSet<EntityPlayerMP>();         //This is the list of players who have opened the UI
-    //public HashSet<Player> playersOpis  = new HashSet<Player>();		 //This is the list of players who have opened the UI or used the command line
     public HashMap<String, Boolean> filteredAmount = new HashMap<String, Boolean>(); //Should the entity amount be filtered or not
     public HashMap<EntityPlayerMP, OverlayStatus> playerOverlayStatus = new HashMap<EntityPlayerMP, OverlayStatus>();
     public HashMap<EntityPlayerMP, Integer> playerDimension = new HashMap<EntityPlayerMP, Integer>();
@@ -98,21 +96,12 @@ public enum PlayerTracker {
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         this.playerOverlayStatus.remove(event.player);
         this.playerDimension.remove(event.player);
-        //this.playersOpis.remove(player);
         this.playersSwing.remove(event.player);
     }
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         PacketManager.validateAndSend(new NetDataValue(Message.STATUS_CURRENT_TIME, new SerialLong(System.currentTimeMillis())), (EntityPlayerMP) event.player);
-
-		/*
-		if (manager instanceof MemoryConnection){
-			System.out.printf("Adding SSP player to list of privileged users\n");
-			PlayerTracker.INSTANCE.addPrivilegedPlayer(((EntityPlayer)event.player).getGameProfile().getName(), false);
-		}
-		*/
-
         StringCache.INSTANCE.syncCache((EntityPlayerMP) event.player);
     }
 }

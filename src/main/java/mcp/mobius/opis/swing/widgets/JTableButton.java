@@ -127,9 +127,6 @@ public class JTableButton extends AbstractCellEditor
         return editorValue;
     }
 
-    //
-//  Implement TableCellRenderer interface
-//
     @Override
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -147,7 +144,6 @@ public class JTableButton extends AbstractCellEditor
             renderButton.setBorder(originalBorder);
         }
 
-//		renderButton.setText( (value == null) ? "" : value.toString() );
         if (value == null) {
             renderButton.setText("");
             renderButton.setIcon(null);
@@ -162,9 +158,6 @@ public class JTableButton extends AbstractCellEditor
         return renderButton;
     }
 
-    //
-//  Implement ActionListener interface
-//
     /*
 	 *	The button has been pressed. Stop editing and invoke the custom Action
 	 */
@@ -176,9 +169,6 @@ public class JTableButton extends AbstractCellEditor
         action.actionPerformed(e);
     }
 
-    //
-//  Implement MouseListener interface
-//
 	/*
 	 *  When the mouse is pressed the editor is invoked. If you then then drag
 	 *  the mouse to another cell before releasing it, the editor is still

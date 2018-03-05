@@ -38,12 +38,10 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
     private JLabel lblTimingWorldTick;
     private JLabel lblTimingTileEnts;
     private JLabel lblTimingEntities;
-    //private JLabel lblTimingHandlers;
     private JLabel lblTimingTotal;
     private JLabel lblTickTime;
     private JLabel lblAmountTileEnts;
     private JLabel lblAmountEntities;
-    //private JLabel lblAmountHandlers;
     private JLabel lblAmountUpload;
     private JLabel lblAmountDownload;
     private JLabel lblAmountForced;
@@ -129,15 +127,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
         lblTimingPing = new JLabel("0");
         add(lblTimingPing, "cell 10 4 2 1,alignx right");
 
-        //JLabel lblNewLabel_3 = new JLabel("Handlers");
-        //add(lblNewLabel_3, "cell 1 5");
-
-        //lblTimingHandlers = new JLabel("0");
-        //add(lblTimingHandlers, "cell 3 5 2 1,alignx right");
-
-        //lblAmountHandlers = new JLabel("0");
-        //add(lblAmountHandlers, "cell 6 5,alignx right");
-
         JLabel lblNewLabel_22 = new JLabel("Forced chunks");
         add(lblNewLabel_22, "cell 8 6");
 
@@ -173,17 +162,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
         tabGraphs.addTab("Ping", panelPing);
 
     }
-    //JLabel lblNewLabel_32 = new JLabel("Network");
-    //add(lblNewLabel_32, "cell 1 6");
-
-    //lblTimingNetwork = new JLabel("0");
-    //add(lblTimingNetwork, "cell 3 6 2 1,alignx right");
-
-    //JLabel lblNewLabel_4 = new JLabel("Total");
-    //add(lblNewLabel_4, "cell 1 8");
-
-    //lblTimingTotal = new JLabel("0");
-    //add(lblTimingTotal, "cell 3 8 2 1,alignx right");
 
     public JLabel getLblTimingWorldTick() {
         return lblTimingWorldTick;
@@ -197,7 +175,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
         return lblTimingEntities;
     }
 
-    //public JLabel getLblTimingHandlers()  {return lblTimingHandlers;}
     public JLabel getLblTimingTotal() {
         return lblTimingTotal;
     }
@@ -214,7 +191,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
         return lblAmountEntities;
     }
 
-    //public JLabel getLblAmountHandlers()  {return lblAmountHandlers;}
     public JLabel getLblAmountUpload() {
         return lblAmountUpload;
     }
@@ -260,9 +236,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
     private DataTimingMillisecond timingEntitiesTotal = new DataTimingMillisecond();
     private DataTimingMillisecond timingNetworkTotal = new DataTimingMillisecond();
 
-    public void setTimingEntUpdateTotal(double value) {
-    }
-
     ArrayList<Double> datapointsTick = new ArrayList<Double>();
     ArrayList<Double> datapointsPing = new ArrayList<Double>();
     XYSeries xydataTick = new XYSeries("Update time");
@@ -286,10 +259,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
             xyPlotTick.addRangeMarker(marker);
         }
 
-        //ValueMarker marker = new ValueMarker(50.0);
-        //marker.setPaint(Color.red);
-        //xyPlot.addRangeMarker(marker);
-
         return new ChartPanel(chart);
     }
 
@@ -304,10 +273,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
             marker.setPaint(Color.black);
             xyPlotPing.addRangeMarker(marker);
         }
-
-        //ValueMarker marker = new ValueMarker(50.0);
-        //marker.setPaint(Color.red);
-        //xyPlot.addRangeMarker(marker);
 
         return new ChartPanel(chart);
     }
@@ -336,8 +301,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
     public void setTimingPing(ISerializable pingStat) {
         DataTimingMillisecond pingtime = ((DataTiming) pingStat).asMillisecond();
 
-        //this.getLblTickTime().setText(pingtime.toString());
-
         datapointsPing.add(pingtime.timing / 1000. / 1000.);
         if (datapointsPing.size() > 101)
             datapointsPing.remove(0);
@@ -355,7 +318,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
     }
 
     private DataTimingMillisecond getProfiledTickTotalTime() {
-        //return new DataTimingMillisecond(timingWorldTickTotal.timing + timingTileEntsTotal.timing + timingEntitiesTotal.timing + timingHandlersTotal.timing + timingNetworkTotal.timing);
         return new DataTimingMillisecond(timingWorldTickTotal.timing + timingTileEntsTotal.timing + timingEntitiesTotal.timing + timingHandlersTotal.timing);
     }
 
@@ -370,10 +332,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
                 this.getLblAmountEntities().setText(String.valueOf(((SerialInt) rawdata.value).value));
                 break;
             }
-            //case VALUE_AMOUNT_HANDLERS:{
-            //	this.getLblAmountHandlers().setText(String.valueOf(((SerialInt)rawdata.value).value));
-            //	break;
-            //}
             case VALUE_AMOUNT_UPLOAD: {
                 double uploadKB = (((SerialLong) rawdata.value).value) / 1024.0;
                 this.getLblAmountUpload().setText(String.format("%.3f", uploadKB));
@@ -397,8 +355,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
                 break;
             }
             case VALUE_TIMING_NETWORK: {
-                //this.timingNetworkTotal = ((DataNetworkTick)rawdata.value).update.asMillisecond();
-                //this.getLblTimingNetwork().setText(this.timingNetworkTotal.toString());
                 break;
             }
             case VALUE_TIMING_TILEENTS: {
@@ -413,12 +369,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
                 this.getLblTimingTotal().setText(String.format("%s", this.getProfiledTickTotalTime().toString()));
                 break;
             }
-            //case VALUE_TIMING_HANDLERS:{
-            //	this.timingHandlersTotal = ((DataTiming)rawdata.value).asMillisecond();
-            //	this.getLblTimingHandlers().setText(this.timingHandlersTotal.toString());
-            //	this.getLblTimingTotal().setText(String.format("%s", this.getProfiledTickTotalTime().toString() ));
-            //	break;
-            //}
             case VALUE_TIMING_WORLDTICK: {
                 this.timingWorldTickTotal = ((DataBlockTick) rawdata.value).total.asMillisecond();
                 this.getLblTimingWorldTick().setText(this.timingWorldTickTotal.toString());
@@ -427,7 +377,6 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
                 String tooltip = "<html><font face=\"monospace\"><pre>";
 
                 for (Integer indim : ((DataBlockTick) rawdata.value).perdim.keySet()) {
-                    //System.out.printf("WorldTick [ %4d ] %s\n", indim, ((DataBlockTick)rawdata.value).perdim.get(indim).asMillisecond().toString());
                     tooltip += String.format("[ %4d ] %s<br>", indim, ((DataBlockTick) rawdata.value).perdim.get(indim).asMillisecond().toString());
                 }
 
@@ -478,11 +427,9 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
                 this.pingData.addValue(System.nanoTime() - ((SerialLong) rawdata.value).value);
                 this.nPings += 1;
 
-                //if (this.nPings % 2 == 0){
                 DataTiming timing = new DataTiming(this.pingData.getGeometricMean());
                 this.setTimingPing(timing);
                 this.getLblTimingPing().setText(timing.asMillisecond().toString());
-                //}
                 break;
             }
 

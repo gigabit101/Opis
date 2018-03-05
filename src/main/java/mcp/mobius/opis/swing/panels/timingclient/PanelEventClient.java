@@ -85,7 +85,6 @@ public class PanelEventClient extends JPanel implements ITabPanel, IMessageHandl
 
     @Override
     public boolean handleMessage(Message msg, PacketBase rawdata) {
-        // TODO Auto-generated method stub
         return false;
     }
 

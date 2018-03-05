@@ -14,8 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NetDataValue extends PacketBase {
 
-    public NetDataValue() {
-    }
+    public NetDataValue() {}
 
     public NetDataValue(Message msg, ISerializable data) {
         this.msg = msg;

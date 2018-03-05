@@ -2,6 +2,7 @@ package mcp.mobius.opis.network.packets.server;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import mapwriter.Mw;
 import mapwriter.region.MwChunk;
 import mcp.mobius.opis.network.PacketBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,21 +16,14 @@ public class PacketChunks extends PacketBase {
     public MwChunk[] chunks;
 
     @Override
-    public void encode(ByteArrayDataOutput output) {
-        // TODO Auto-generated method stub
-
-    }
+    public void encode(ByteArrayDataOutput output) {}
 
     @Override
-    public void decode(ByteArrayDataInput input) {
-        // TODO Auto-generated method stub
-
-    }
+    public void decode(ByteArrayDataInput input) {}
 
     @Override
     @SideOnly(Side.CLIENT)
     public void actionClient(World world, EntityPlayer player) {
 //    	Mw.getInstance().chunkManager.forceChunks(this.chunks);
     }
-
 }

@@ -14,8 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-;
-
 /**
  * @author abrarsyed
  * This is the base packet type for tall the SecretRoomsMod network stuff.

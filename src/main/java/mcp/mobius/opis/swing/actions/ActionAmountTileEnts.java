@@ -16,16 +16,8 @@ public class ActionAmountTileEnts implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         PanelAmountTileEnts panel = (PanelAmountTileEnts) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.AMOUNTTES);
 
-		/*
-        JTableStats table       = panel.getTable();
-		if (table == null || table.getSelectedRow() == -1) return;
-		int indexData           = table.convertRowIndexToModel(table.getSelectedRow());
-		DataBlockTileEntityPerClass data       = (DataBlockTileEntityPerClass)table.getTableData().get(indexData);
-		*/
-
         if (e.getSource() == panel.getBtnRefresh()) {
             PacketManager.sendToServer(new PacketReqData(Message.LIST_AMOUNT_TILEENTS));
         }
-
     }
 }

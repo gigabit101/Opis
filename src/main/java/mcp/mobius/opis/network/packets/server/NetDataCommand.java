@@ -12,16 +12,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NetDataCommand extends PacketBase {
 
-    public NetDataCommand() {
-    }
-
-    ;
+    public NetDataCommand(){}
 
     public NetDataCommand(Message msg) {
         this.msg = msg;
     }
-
-    ;
 
     @Override
     public void encode(ByteArrayDataOutput output) {
