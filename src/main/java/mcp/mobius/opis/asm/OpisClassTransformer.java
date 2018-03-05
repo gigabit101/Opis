@@ -26,6 +26,12 @@ public class OpisClassTransformer implements IClassTransformer {
             transformer.add(new MethodInjector(mapping, needle, blocks.get("i_TileEntityTickPre"), true));
             transformer.add(new MethodInjector(mapping, needle, blocks.get("i_TileEntityTickPost"), false));
         }
+        {
+            mapping = new ObfMapping("net/minecraft/world/World", "func_72939_s", "()V");
+            ASMBlock needle = blocks.get("n_UpdateEntity");
+            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_UpdateEntityPre"), true));
+            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_UpdateEntityPost"), false));
+        }
     }
 
     @Override
