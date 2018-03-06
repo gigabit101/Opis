@@ -17,6 +17,7 @@ import mcp.mobius.opis.gui.overlay.entperchunk.OverlayEntityPerChunk;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import mcp.mobius.opis.swing.SwingUI;
 import mcp.mobius.opis.swing.panels.PanelSummary;
 import mcp.mobius.opis.swing.panels.debug.PanelOrphanTileEntities;
@@ -192,7 +193,7 @@ public class ProxyClient extends ProxyServer implements IMessageHandler {
                 Opis.log.log(Level.INFO, "Started profiling");
                 MetaManager.reset();
                 Opis.profilerRun = true;
-                ProfilerSection.activateAll(Side.CLIENT);
+                Profilers.enableProfilers(Side.CLIENT);
                 break;
             }
             case CLIENT_SHOW_RENDER_TICK: {

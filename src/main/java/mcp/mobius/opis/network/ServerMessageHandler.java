@@ -16,6 +16,7 @@ import mcp.mobius.opis.network.packets.server.NetDataCommand;
 import mcp.mobius.opis.network.packets.server.NetDataList;
 import mcp.mobius.opis.network.packets.server.NetDataValue;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import mcp.mobius.opis.swing.SelectedTab;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -101,7 +102,7 @@ public class ServerMessageHandler {
         } else if (maintype == Message.COMMAND_START) {
             MetaManager.reset();
             Opis.profilerRun = true;
-            ProfilerSection.activateAll(Side.SERVER);
+            Profilers.enableProfilers(Side.SERVER);
             PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_START, new SerialInt(Opis.profilerMaxTicks)));
         } else if (maintype == Message.COMMAND_TELEPORT_BLOCK) {
             EntityManager.INSTANCE.teleportPlayer((CoordinatesBlock) param1, player);

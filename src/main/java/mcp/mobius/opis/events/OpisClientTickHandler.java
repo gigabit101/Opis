@@ -18,6 +18,7 @@ import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import mcp.mobius.opis.swing.SelectedTab;
 import mcp.mobius.opis.swing.panels.timingclient.PanelEventClient;
 import mcp.mobius.opis.swing.panels.timingclient.PanelRenderEntities;
@@ -75,7 +76,7 @@ public enum OpisClientTickHandler {
         } else if (profilerRunningTicks >= Opis.profilerMaxTicks && Opis.profilerRunClient) {
             profilerRunningTicks = 0;
             Opis.profilerRunClient = false;
-            ProfilerSection.desactivateAll(Side.CLIENT);
+            Profilers.dissableProfilers(Side.CLIENT);
 
             System.out.printf("Profiling done\n");
 

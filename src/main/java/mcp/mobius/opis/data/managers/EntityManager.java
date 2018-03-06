@@ -7,10 +7,9 @@ import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
 import mcp.mobius.opis.data.holders.newtypes.DataEntity;
 import mcp.mobius.opis.data.holders.newtypes.DataEntityPerClass;
 import mcp.mobius.opis.data.holders.newtypes.DataTiming;
-import mcp.mobius.opis.data.profilers.ProfilerEntityUpdate;
 import mcp.mobius.opis.helpers.TeleportUtils;
 import mcp.mobius.opis.network.PacketManager;
-import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,10 +26,10 @@ public enum EntityManager {
     INSTANCE;
 
     public ArrayList<DataEntity> getWorses(int amount) {
-        ArrayList<DataEntity> sorted = new ArrayList<DataEntity>();
-        ArrayList<DataEntity> topEntities = new ArrayList<DataEntity>();
+        ArrayList<DataEntity> sorted = new ArrayList<>();
+        ArrayList<DataEntity> topEntities = new ArrayList<>();
 
-        for (Entity entity : ((ProfilerEntityUpdate) ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.keySet())
+        for (Entity entity : Profilers.ENTITY_UPDATE.get().data.keySet())
             sorted.add(new DataEntity().fill(entity));
 
         Collections.sort(sorted);
@@ -56,24 +55,23 @@ public enum EntityManager {
 
     /* Returns all the entities in all dimensions (without timing data) */
     public ArrayList<DataEntity> getAllEntities() {
-        ArrayList<DataEntity> entities = new ArrayList<DataEntity>();
+        ArrayList<DataEntity> entities = new ArrayList<>();
         for (int i : DimensionManager.getIDs()) {
-            entities.addAll(this.getEntitiesInDim(i));
+            entities.addAll(getEntitiesInDim(i));
         }
         return entities;
     }
 
     /* Returns all the entities in the given dimension (without timing data) */
     public ArrayList<DataEntity> getEntitiesInDim(int dim) {
-        ArrayList<DataEntity> entities = new ArrayList<DataEntity>();
+        ArrayList<DataEntity> entities = new ArrayList<>();
 
         World world = DimensionManager.getWorld(dim);
         if (world == null) return entities;
 
-        ArrayList copyList = new ArrayList(world.loadedEntityList);
+        ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
-        for (int i = 0; i < copyList.size(); i++) {
-            Entity ent = (Entity) copyList.get(i);
+        for (Entity ent : copyList) {
             entities.add(new DataEntity().fill(ent));
         }
 
@@ -82,27 +80,27 @@ public enum EntityManager {
 
     /* Returns a hashmap of all entities per chunk (not timing) */
     public HashMap<CoordinatesChunk, ArrayList<DataEntity>> getAllEntitiesPerChunk() {
-        HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = new HashMap<CoordinatesChunk, ArrayList<DataEntity>>();
+        HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = new HashMap<>();
         for (int i : DimensionManager.getIDs()) {
-            entities.putAll(this.getEntitiesPerChunkInDim(i));
+            entities.putAll(getEntitiesPerChunkInDim(i));
         }
         return entities;
     }
 
     /* Returns a hashmap of entities in the given dimension (not timing) */
     public HashMap<CoordinatesChunk, ArrayList<DataEntity>> getEntitiesPerChunkInDim(int dim) {
-        HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = new HashMap<CoordinatesChunk, ArrayList<DataEntity>>();
+        HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = new HashMap<>();
         World world = DimensionManager.getWorld(dim);
         if (world == null) return entities;
 
-        ArrayList copyList = new ArrayList(world.loadedEntityList);
+        ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
-        for (int i = 0; i < copyList.size(); i++) {
-            Entity ent = (Entity) copyList.get(i);
+        for (Entity ent : copyList) {
             CoordinatesChunk chunk = new CoordinatesBlock(ent.dimension, (int) ent.posX, (int) ent.posY, (int) ent.posZ).asCoordinatesChunk();
 
-            if (!entities.containsKey(chunk))
-                entities.put(chunk, new ArrayList<DataEntity>());
+            if (!entities.containsKey(chunk)) {
+                entities.put(chunk, new ArrayList<>());
+            }
 
             //entities.get(chunk).add(new EntityStats(ent.entityId, ent.getClass().getName(), ent.dimension, ent.posX, ent.posY, ent.posZ));
             entities.get(chunk).add(new DataEntity().fill(ent));
@@ -113,19 +111,20 @@ public enum EntityManager {
 
     /* Returns an array of all entities in a given chunk */
     public ArrayList<DataEntity> getEntitiesInChunk(CoordinatesChunk coord) {
-        ArrayList<DataEntity> entities = new ArrayList<DataEntity>();
+        ArrayList<DataEntity> entities = new ArrayList<>();
 
         World world = DimensionManager.getWorld(coord.dim);
         if (world == null) return entities;
 
-        ArrayList copyList = new ArrayList(world.loadedEntityList);
+        ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
-        for (int i = 0; i < copyList.size(); i++) {
-            Entity ent = (Entity) copyList.get(i);
+        for (Entity ent : copyList) {
             CoordinatesChunk chunk = new CoordinatesBlock(ent.dimension, (int) ent.posX, (int) ent.posY, (int) ent.posZ).asCoordinatesChunk();
             if (chunk.equals(coord))
-                //entities.add(new EntityStats(ent.entityId, ent.getClass().getName(), ent.dimension, ent.posX, ent.posY, ent.posZ));
+            //entities.add(new EntityStats(ent.entityId, ent.getClass().getName(), ent.dimension, ent.posX, ent.posY, ent.posZ));
+            {
                 entities.add(new DataEntity().fill(ent));
+            }
         }
 
         return entities;
@@ -133,22 +132,22 @@ public enum EntityManager {
 
     /* Returns a hashmap with the entity name and amount of it on the server */
     public ArrayList<AmountHolder> getCumulativeEntities(boolean filtered) {
-        ArrayList<AmountHolder> cumData = new ArrayList<AmountHolder>();
-        HashMap<String, Integer> entities = new HashMap<String, Integer>();
+        ArrayList<AmountHolder> cumData = new ArrayList<>();
+        HashMap<String, Integer> entities = new HashMap<>();
 
         for (int dim : DimensionManager.getIDs()) {
             World world = DimensionManager.getWorld(dim);
             if (world == null) continue;
 
-            ArrayList copyList = new ArrayList(world.loadedEntityList);
+            ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
-            for (int i = 0; i < copyList.size(); i++) {
-                Entity ent = (Entity) copyList.get(i);
+            for (Entity ent : copyList) {
                 //String name = ent.getClass().getName();
                 String name = getEntityName(ent, filtered);
 
-                if (!entities.containsKey(name))
+                if (!entities.containsKey(name)) {
                     entities.put(name, 0);
+                }
 
                 entities.put(name, entities.get(name) + 1);
             }
@@ -210,8 +209,7 @@ public enum EntityManager {
         World world = DimensionManager.getWorld(dim);
         if (world == null) return null;
 
-        Entity entity = world.getEntityByID(eid);
-        return entity;
+        return world.getEntityByID(eid);
     }
 
     public String getEntityName(Entity ent) {
@@ -247,8 +245,8 @@ public enum EntityManager {
 
     public DataTiming getTotalUpdateTime() {
         double updateTime = 0D;
-        for (Entity entity : ((ProfilerEntityUpdate) ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.keySet()) {
-            updateTime += ((ProfilerEntityUpdate) ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.get(entity).getGeometricMean();
+        for (Entity entity : Profilers.ENTITY_UPDATE.get().data.keySet()) {
+            updateTime += Profilers.ENTITY_UPDATE.get().data.get(entity).getGeometricMean();
         }
         return new DataTiming(updateTime);
     }
@@ -265,12 +263,12 @@ public enum EntityManager {
             World world = DimensionManager.getWorld(dim);
             if (world == null) continue;
 
-            ArrayList copyList = new ArrayList(world.loadedEntityList);
+            ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
             for (Object o : copyList) {
                 Entity ent = (Entity) o;
-                String nameFiltered = this.getEntityName(ent, true).toLowerCase();
-                String nameUnfiltered = this.getEntityName(ent, false).toLowerCase();
+                String nameFiltered = getEntityName(ent, true).toLowerCase();
+                String nameUnfiltered = getEntityName(ent, false).toLowerCase();
 
                 if (nameFiltered.equals(entName.toLowerCase()) || nameUnfiltered.equals(entName.toLowerCase())) {
                     ent.setDead();
@@ -288,7 +286,7 @@ public enum EntityManager {
         //List players = MinecraftServer.getServerConfigurationManager(MinecraftServer.getServer()).playerEntityList;
         List<EntityPlayerMP> players = ServerUtils.mc().getPlayerList().getPlayers();
 
-        ArrayList<DataEntity> outList = new ArrayList<DataEntity>();
+        ArrayList<DataEntity> outList = new ArrayList<>();
 
         for (EntityPlayerMP p : players)
             outList.add(new DataEntity().fill(p));
@@ -310,9 +308,9 @@ public enum EntityManager {
 
         int killedEnts = 0;
 
-        ArrayList copyList = new ArrayList(world.loadedEntityList);
+        ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
-        for (Entity entity : (ArrayList<Entity>) copyList) {
+        for (Entity entity : copyList) {
             if (clazz.isInstance(entity)) {
                 entity.setDead();
                 killedEnts += 1;
@@ -322,15 +320,15 @@ public enum EntityManager {
     }
 
     public ArrayList<DataEntityPerClass> getTotalPerClass() {
-        HashMap<String, DataEntityPerClass> data = new HashMap<String, DataEntityPerClass>();
+        HashMap<String, DataEntityPerClass> data = new HashMap<>();
 
-        for (Entity entity : ((ProfilerEntityUpdate) ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.keySet()) {
-            String name = this.getEntityName(entity, true);
+        for (Entity entity : Profilers.ENTITY_UPDATE.get().data.keySet()) {
+            String name = getEntityName(entity, true);
             if (!data.containsKey(name))
                 data.put(name, new DataEntityPerClass(name));
 
-            data.get(name).add(((ProfilerEntityUpdate) ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.get(entity).getGeometricMean());
+            data.get(name).add(Profilers.ENTITY_UPDATE.get().data.get(entity).getGeometricMean());
         }
-        return new ArrayList<DataEntityPerClass>(data.values());
+        return new ArrayList<>(data.values());
     }
 }

@@ -4,6 +4,7 @@ import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.commands.IOpisCommand;
 import mcp.mobius.opis.events.PlayerTracker;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -51,7 +52,7 @@ public class CommandStop extends CommandBase implements IOpisCommand {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         Opis.profilerRun = false;
-        ProfilerSection.desactivateAll(Side.SERVER);
+        Profilers.dissableProfilers(Side.SERVER);
         sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis stopped.")));
     }
 }

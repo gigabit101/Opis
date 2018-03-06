@@ -19,6 +19,7 @@ import mcp.mobius.opis.network.packets.server.NetDataCommand;
 import mcp.mobius.opis.network.packets.server.NetDataList;
 import mcp.mobius.opis.network.packets.server.NetDataValue;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -113,7 +114,7 @@ public enum OpisServerTickHandler {
         } else if (profilerRunningTicks >= Opis.profilerMaxTicks && Opis.profilerRun) {
             profilerRunningTicks = 0;
             Opis.profilerRun = false;
-            ProfilerSection.desactivateAll(Side.SERVER);
+            Profilers.dissableProfilers(Side.SERVER);
 
             PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_STOP, new SerialInt(Opis.profilerMaxTicks)));
 

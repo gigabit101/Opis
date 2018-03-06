@@ -36,7 +36,7 @@ public class OpisClassTransformer implements IClassTransformer {
             mapping = new ObfMapping("net/minecraft/world/WorldServer", "func_72835_b", "()V");
             ASMBlock needle = blocks.get("n_WorldServerTick");
             transformer.add(new MethodInjector(mapping, null, blocks.get("i_WorldServerTickPre"), true));//Top of method.
-            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_WorldServerTickPre"), true));//Before the return statements.
+            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_WorldServerTickPost"), true));//Before the return statements.
         }
     }
 

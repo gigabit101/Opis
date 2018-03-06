@@ -9,8 +9,8 @@ import mcp.mobius.opis.data.holders.newtypes.DataBlockTileEntityPerClass;
 import mcp.mobius.opis.data.holders.newtypes.DataTileEntity;
 import mcp.mobius.opis.data.holders.newtypes.DataTiming;
 import mcp.mobius.opis.data.holders.stats.StatsChunk;
-import mcp.mobius.opis.data.profilers.ProfilerTileEntityUpdate;
-import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
+import mcp.mobius.opis.util.DimBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public enum TileEntityManager {
     INSTANCE;
@@ -31,7 +32,7 @@ public enum TileEntityManager {
     public HashMap<CoordinatesChunk, StatsChunk> getTimes(int dim) {
         HashMap<CoordinatesChunk, StatsChunk> chunks = new HashMap<CoordinatesChunk, StatsChunk>();
 
-        for (CoordinatesBlock coord : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()) {
+        for (CoordinatesBlock coord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             if (coord.dim == dim) {
 
                 CoordinatesChunk coordC = new CoordinatesChunk(coord);
@@ -39,7 +40,7 @@ public enum TileEntityManager {
                     chunks.put(coordC, new StatsChunk());
 
                 chunks.get(coordC).addEntity();
-                chunks.get(coordC).addMeasure(((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.get(coord).getGeometricMean());
+                chunks.get(coordC).addMeasure(Profilers.TILE_UPDATE.get().data.get(coord.toNew()).getGeometricMean());
             }
         }
         return chunks;
@@ -53,7 +54,7 @@ public enum TileEntityManager {
 
         ArrayList<DataBlockTileEntity> returnList = new ArrayList<DataBlockTileEntity>();
 
-        for (CoordinatesBlock tecoord : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()) {
+        for (CoordinatesBlock tecoord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             if (coord.equals(tecoord.asCoordinatesChunk())) {
                 DataBlockTileEntity testats = new DataBlockTileEntity().fill(tecoord);
 
@@ -68,7 +69,7 @@ public enum TileEntityManager {
         ArrayList<DataBlockTileEntity> sorted = new ArrayList<DataBlockTileEntity>();
         ArrayList<DataBlockTileEntity> topEntities = new ArrayList<DataBlockTileEntity>();
 
-        for (CoordinatesBlock coord : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet())
+        for (CoordinatesBlock coord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList()))
             sorted.add(new DataBlockTileEntity().fill(coord));
 
         Collections.sort(sorted);
@@ -82,8 +83,8 @@ public enum TileEntityManager {
 
     public DataTiming getTotalUpdateTime() {
         double updateTime = 0D;
-        for (CoordinatesBlock coords : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()) {
-            updateTime += ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.get(coords).getGeometricMean();
+        for (CoordinatesBlock coords : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
+            updateTime += Profilers.TILE_UPDATE.get().data.get(coords.toNew()).getGeometricMean();
         }
         return new DataTiming(updateTime);
     }
@@ -162,7 +163,7 @@ public enum TileEntityManager {
     public ArrayList<DataBlockTileEntityPerClass> getCumulativeTimingTileEntities() {
         HashBasedTable<Integer, Integer, DataBlockTileEntityPerClass> data = HashBasedTable.create();
 
-        for (CoordinatesBlock coord : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()) {
+        for (CoordinatesBlock coord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             World world = DimensionManager.getWorld(coord.dim);
             //TODO
             IBlockState state = world.getBlockState(new BlockPos(coord.x, coord.y, coord.z));
@@ -172,7 +173,7 @@ public enum TileEntityManager {
             if (!data.contains(id, meta))
                 data.put(id, meta, new DataBlockTileEntityPerClass(id, meta));
 
-            data.get(id, meta).add(((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.get(coord).getGeometricMean());
+            data.get(id, meta).add(Profilers.TILE_UPDATE.get().data.get(coord.toNew()).getGeometricMean());
 
         }
 

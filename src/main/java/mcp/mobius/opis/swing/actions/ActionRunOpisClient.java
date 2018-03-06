@@ -2,6 +2,7 @@ package mcp.mobius.opis.swing.actions;
 
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.awt.event.ActionEvent;
@@ -12,7 +13,7 @@ public class ActionRunOpisClient implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Opis.profilerRunClient = true;
-        ProfilerSection.resetAll(Side.CLIENT);
-        ProfilerSection.activateAll(Side.CLIENT);
+        Profilers.resetProfilers(Side.CLIENT);
+        Profilers.enableProfilers(Side.CLIENT);
     }
 }

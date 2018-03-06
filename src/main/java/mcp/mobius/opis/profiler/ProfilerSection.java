@@ -4,12 +4,13 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.EnumSet;
 
+@Deprecated
 public enum ProfilerSection implements IProfilerBase {
     DIMENSION_TICK(RunType.REALTIME, Side.SERVER),        //Global section around the ticks for each dim (Blocks & ents).
-    DIMENSION_BLOCKTICK(RunType.ONREQUEST, Side.SERVER),        //Subsection for dimension block tick.
-    ENTITY_UPDATETIME(RunType.ONREQUEST, Side.SERVER),        //Profiling of the entity tick time, per entity.
+    //DIMENSION_BLOCKTICK(RunType.ONREQUEST, Side.SERVER),        //Subsection for dimension block tick.
+    //ENTITY_UPDATETIME(RunType.ONREQUEST, Side.SERVER),        //Profiling of the entity tick time, per entity.
     TICK(RunType.REALTIME, Side.SERVER),        //Tick timing profiling
-    TILEENT_UPDATETIME(RunType.ONREQUEST, Side.SERVER),        //Profiling of the TileEntity tick time, per TE.
+    //TILEENT_UPDATETIME(RunType.ONREQUEST, Side.SERVER),        //Profiling of the TileEntity tick time, per TE.
     //HANDLER_TICKSTART  (RunType.ONREQUEST, EnumSet.of(Side.CLIENT, Side.SERVER)), 		//Server handler for ServerTick start.
     //HANDLER_TICKSTOP   (RunType.ONREQUEST, EnumSet.of(Side.CLIENT, Side.SERVER)),  		//Server handler for ServerTick stop.
     PACKET_INBOUND(RunType.REALTIME, Side.SERVER),        //Outbound packet analysis

@@ -8,6 +8,7 @@ import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.server.NetDataValue;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -52,7 +53,7 @@ public class CommandStart extends CommandBase implements IOpisCommand {
 
         MetaManager.reset();
         Opis.profilerRun = true;
-        ProfilerSection.activateAll(Side.SERVER);
+        Profilers.enableProfilers(Side.SERVER);
 
         PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_START, new SerialInt(Opis.profilerMaxTicks)));
         sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis started with a tick delay %s.", Opis.profilerDelay)));

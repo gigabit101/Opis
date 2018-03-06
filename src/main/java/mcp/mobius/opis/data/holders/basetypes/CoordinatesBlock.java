@@ -3,6 +3,7 @@ package mcp.mobius.opis.data.holders.basetypes;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import mcp.mobius.opis.data.holders.ISerializable;
+import mcp.mobius.opis.util.DimBlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
@@ -108,6 +109,10 @@ public final class CoordinatesBlock implements ISerializable {
         //else
         //	return String.format("%s %s %s %s", this.dim, this.x, this.y, this.z).hashCode();
         return this.dim + 31 * this.x + 877 * this.y + 3187 * this.z;
+    }
+
+    public DimBlockPos toNew() {
+        return new DimBlockPos(this);
     }
 
     @Override

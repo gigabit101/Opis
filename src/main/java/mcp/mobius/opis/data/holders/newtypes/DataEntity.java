@@ -5,12 +5,11 @@ import com.google.common.io.ByteArrayDataOutput;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.managers.EntityManager;
-import mcp.mobius.opis.data.profilers.ProfilerEntityUpdate;
-import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.entity.Entity;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import java.util.WeakHashMap;
+import java.util.Map;
 
 public class DataEntity implements ISerializable, Comparable {
 
@@ -26,7 +25,7 @@ public class DataEntity implements ISerializable, Comparable {
         this.name = new CachedString(EntityManager.INSTANCE.getEntityName(entity, false));
         this.pos = new CoordinatesBlock(entity);
 
-        WeakHashMap<Entity, DescriptiveStatistics> data = ((ProfilerEntityUpdate) (ProfilerSection.ENTITY_UPDATETIME.getProfiler())).data;
+        Map<Entity, DescriptiveStatistics> data = Profilers.ENTITY_UPDATE.get().data;
         this.update = new DataTiming(data.containsKey(entity) ? data.get(entity).getGeometricMean() : 0.0D);
         this.npoints = data.containsKey(entity) ? data.get(entity).getN() : 0;
 

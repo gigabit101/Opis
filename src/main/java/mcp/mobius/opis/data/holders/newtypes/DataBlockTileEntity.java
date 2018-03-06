@@ -4,8 +4,8 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
-import mcp.mobius.opis.data.profilers.ProfilerTileEntityUpdate;
-import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
+import mcp.mobius.opis.util.DimBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class DataBlockTileEntity implements ISerializable, Comparable {
 
@@ -30,8 +30,8 @@ public class DataBlockTileEntity implements ISerializable, Comparable {
         IBlockState state = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z));
 		this.meta   = (short) state.getBlock().getMetaFromState(state);
 
-        HashMap<CoordinatesBlock, DescriptiveStatistics> data = ((ProfilerTileEntityUpdate) (ProfilerSection.TILEENT_UPDATETIME.getProfiler())).data;
-        this.update = new DataTiming(data.containsKey(this.pos) ? data.get(this.pos).getGeometricMean() : 0.0D);
+        Map<DimBlockPos, DescriptiveStatistics> data = Profilers.TILE_UPDATE.get().data;
+        this.update = new DataTiming(data.containsKey(this.pos.toNew()) ? data.get(this.pos.toNew()).getGeometricMean() : 0.0D);
 
         return this;
     }

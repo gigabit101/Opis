@@ -3,19 +3,20 @@ package mcp.mobius.opis.data.holders.newtypes;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import mcp.mobius.opis.data.holders.ISerializable;
-import mcp.mobius.opis.data.profilers.ProfilerDimBlockTick;
-import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.util.HashMap;
+import java.util.Map;
 
+//TODO, Rename, WorldServer not BlockTick
 public class DataBlockTick implements ISerializable {
     public HashMap<Integer, DataTiming> perdim = new HashMap<Integer, DataTiming>();
     public DataTiming total;
 
     public DataBlockTick fill() {
         this.total = new DataTiming();
-        HashMap<Integer, DescriptiveStatistics> data = ((ProfilerDimBlockTick) ProfilerSection.DIMENSION_BLOCKTICK.getProfiler()).data;
+        Map<Integer, DescriptiveStatistics> data = Profilers.WORLD_SERVER_TICK.get().data;
 
         for (Integer dim : data.keySet()) {
             this.perdim.put(dim, new DataTiming(data.get(dim).getGeometricMean()));

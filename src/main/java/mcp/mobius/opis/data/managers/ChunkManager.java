@@ -8,11 +8,10 @@ import mcp.mobius.opis.data.holders.basetypes.TicketData;
 import mcp.mobius.opis.data.holders.newtypes.DataBlockTileEntity;
 import mcp.mobius.opis.data.holders.newtypes.DataEntity;
 import mcp.mobius.opis.data.holders.stats.StatsChunk;
-import mcp.mobius.opis.data.profilers.ProfilerEntityUpdate;
-import mcp.mobius.opis.data.profilers.ProfilerTileEntityUpdate;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.enums.Message;
-import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
+import mcp.mobius.opis.util.DimBlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldServer;
@@ -25,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public enum ChunkManager implements IMessageHandler {
     INSTANCE;
@@ -83,7 +83,7 @@ public enum ChunkManager implements IMessageHandler {
     public ArrayList<StatsChunk> getChunksUpdateTime() {
         HashMap<CoordinatesChunk, StatsChunk> chunks = new HashMap<CoordinatesChunk, StatsChunk>();
 
-        for (CoordinatesBlock coords : ((ProfilerTileEntityUpdate) ProfilerSection.TILEENT_UPDATETIME.getProfiler()).data.keySet()) {
+        for (CoordinatesBlock coords : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             DataBlockTileEntity data = new DataBlockTileEntity().fill(coords);
             CoordinatesChunk chunk = data.pos.asCoordinatesChunk();
 
@@ -95,7 +95,7 @@ public enum ChunkManager implements IMessageHandler {
 
         }
 
-        for (Entity entity : ((ProfilerEntityUpdate) ProfilerSection.ENTITY_UPDATETIME.getProfiler()).data.keySet()) {
+        for (Entity entity : Profilers.ENTITY_UPDATE.get().data.keySet()) {
             DataEntity data = new DataEntity().fill(entity);
             CoordinatesChunk chunk = data.pos.asCoordinatesChunk();
 

@@ -1,5 +1,6 @@
 package mcp.mobius.opis.profiler;
 
+@Deprecated
 public interface IProfilerBase {
     public void reset();
 
