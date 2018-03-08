@@ -104,7 +104,9 @@ public class PacketManager {
 
         @Override
         public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, PacketBase packet) {
-            ByteArrayDataInput input = ByteStreams.newDataInput(source.array());
+            byte[] arr = new byte[source.readableBytes()];
+            source.readBytes(arr);
+            ByteArrayDataInput input = ByteStreams.newDataInput(arr);
             input.skipBytes(1); // skip the packet identifier byte
             packet.decode(input);
 
