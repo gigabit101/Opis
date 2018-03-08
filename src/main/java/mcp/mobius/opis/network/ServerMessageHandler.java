@@ -124,7 +124,7 @@ public class ServerMessageHandler {
         } else if (maintype == Message.COMMAND_UNREGISTER_SWING) {
             PlayerTracker.INSTANCE.playersSwing.remove(player);
         } else if (maintype == Message.STATUS_TIME_LAST_RUN) {
-            PacketManager.validateAndSend(new NetDataValue(Message.STATUS_TIME_LAST_RUN, new SerialLong(ProfilerSection.timeStampLastRun)), player);
+            PacketManager.validateAndSend(new NetDataValue(Message.STATUS_TIME_LAST_RUN, new SerialLong(Profilers.lastRun)), player);
         } else if (maintype == Message.COMMAND_KILL_HOSTILES_ALL) {
             for (int dim : DimensionManager.getIDs())
                 EntityManager.INSTANCE.killAllPerClass(dim, EntityMob.class);

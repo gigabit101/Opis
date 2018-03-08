@@ -1,3 +1,7 @@
+### Generic needles.
+list n_ReturnV
+RETURN
+
 ### TileEntity updates.
 list n_TileEntityTick
 ALOAD 2
@@ -31,21 +35,32 @@ ALOAD 2
 INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.stop (Ljava/lang/Object;)V
 
 ### WorldServer ticks.
-list n_WorldServerTick
-RETURN
-
 list i_WorldServerTickPre
 INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getWorldServerTickProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
 ALOAD 0
-GETFIELD net/minecraft/world/World.field_73011_w : Lnet/minecraft/world/WorldProvider;
-INVOKEVIRTUAL net/minecraft/world/WorldProvider.getDimension ()I
-INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
 INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.start (Ljava/lang/Object;)V
 
 list i_WorldServerTickPost
 INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getWorldServerTickProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
 ALOAD 0
-GETFIELD net/minecraft/world/World.field_73011_w : Lnet/minecraft/world/WorldProvider;
-INVOKEVIRTUAL net/minecraft/world/WorldProvider.getDimension ()I
-INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
 INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.stop (Ljava/lang/Object;)V
+
+### Dimension Ticks.
+list i_FMLCH_PreWorldTick
+INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getDimensionTickProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
+ALOAD 1
+INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.start (Ljava/lang/Object;)V
+
+list i_FMLCH_PostWorldTick
+INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getDimensionTickProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
+ALOAD 1
+INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.stop (Ljava/lang/Object;)V
+
+### ServerTicks
+list i_FMLCH_PreServerTick
+INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getServerTickProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
+INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.start ()V
+
+list i_FMLCH_PostServerTick
+INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getServerTickProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
+INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.stop ()V

@@ -30,6 +30,7 @@ import mcp.mobius.opis.network.packets.server.NetDataList;
 import mcp.mobius.opis.network.packets.server.NetDataValue;
 import mcp.mobius.opis.network.packets.server.PacketChunks;
 import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -268,7 +269,7 @@ public class PacketManager {
         PacketManager.validateAndSend(new NetDataValue(Message.VALUE_TIMING_WORLDTICK, totalWorldTick), player);
         PacketManager.validateAndSend(new NetDataValue(Message.VALUE_TIMING_NETWORK, totalNetwork), player);
 
-        PacketManager.validateAndSend(new NetDataValue(Message.STATUS_TIME_LAST_RUN, new SerialLong(ProfilerSection.timeStampLastRun)), player);
+        PacketManager.validateAndSend(new NetDataValue(Message.STATUS_TIME_LAST_RUN, new SerialLong(Profilers.lastRun)), player);
 
         PacketManager.validateAndSend(new NetDataValue(Message.STATUS_ACCESS_LEVEL, new SerialInt(PlayerTracker.INSTANCE.getPlayerAccessLevel(player).ordinal())), player);
 

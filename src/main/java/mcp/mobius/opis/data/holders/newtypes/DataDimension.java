@@ -3,8 +3,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import mcp.mobius.opis.data.holders.ISerializable;
-import mcp.mobius.opis.data.profilers.ProfilerDimTick;
-import mcp.mobius.opis.profiler.ProfilerSection;
+import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -14,7 +13,7 @@ import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 
 /* Data holder for infos about dimensions */
@@ -41,7 +40,7 @@ public class DataDimension implements ISerializable {
         this.forced = world.getPersistentChunks().size();
         this.loaded = world.getChunkProvider().getLoadedChunkCount();
 
-        HashMap<Integer, DescriptiveStatistics> data = ((ProfilerDimTick) (ProfilerSection.DIMENSION_TICK.getProfiler())).data;
+        Map<Integer, DescriptiveStatistics> data = Profilers.DIMENSION_TICK.get().data;
         this.update = new DataTiming(data.containsKey(dim) ? data.get(dim).getGeometricMean() : 0.0D);
 
         this.mobs = 0;

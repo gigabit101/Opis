@@ -1,8 +1,6 @@
 package mcp.mobius.opis.profiler;
 
-import mcp.mobius.opis.profiler.impl.ProfilerWorldServerTick;
-import mcp.mobius.opis.profiler.impl.ProfilerEntityUpdate;
-import mcp.mobius.opis.profiler.impl.ProfilerTileUpdate;
+import mcp.mobius.opis.profiler.impl.*;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
@@ -20,6 +18,8 @@ public class Profilers {
     public static final ProfilerState<ProfilerTileUpdate> TILE_UPDATE = addProfiler(new ProfilerTileUpdate(), ProfilerType.ON_REQUEST, Side.SERVER);
     public static final ProfilerState<ProfilerEntityUpdate> ENTITY_UPDATE = addProfiler(new ProfilerEntityUpdate(), ProfilerType.ON_REQUEST, Side.SERVER);
     public static final ProfilerState<ProfilerWorldServerTick> WORLD_SERVER_TICK = addProfiler(new ProfilerWorldServerTick(), ProfilerType.ON_REQUEST, Side.SERVER);
+    public static final ProfilerState<ProfilerDimensionTick> DIMENSION_TICK = addProfiler(new ProfilerDimensionTick(), ProfilerType.REAL_TIME, Side.SERVER);
+    public static final ProfilerState<ProfilerServerTick> SERVER_TICK = addProfiler(new ProfilerServerTick(), ProfilerType.REAL_TIME, Side.SERVER);
 
     public static <A extends IProfiler> ProfilerState<A> addProfiler(A profiler, ProfilerType type, Side... runSides) {
         ProfilerState<A> state = new ProfilerState<>(profiler, type, runSides);
@@ -47,12 +47,13 @@ public class Profilers {
         REAL_TIME
     }
 
-
     //These are called via ASM, so we can dummy the profiler instance.
     //@formatter:off
     public static IProfiler getTileUpdateProfiler() { return getProfiler(TILE_UPDATE); }
     public static IProfiler getEntityUpdateProfiler() { return getProfiler(ENTITY_UPDATE); }
     public static IProfiler getWorldServerTickProfiler() { return getProfiler(WORLD_SERVER_TICK); }
+    public static IProfiler getDimensionTickProfiler() { return getProfiler(DIMENSION_TICK); }
+    public static IProfiler getServerTickProfiler() { return getProfiler(SERVER_TICK); }
     public static IProfiler getProfiler(ProfilerState<?> state) {
         if (state.isEnabled()) {
             return state.get();

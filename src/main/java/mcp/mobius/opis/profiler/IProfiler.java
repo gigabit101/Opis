@@ -47,6 +47,15 @@ public interface IProfiler<A, B, C, D> {
         throw new RuntimeException("This method is not supported by this profiler.");
     }
 
+    interface IProfilerNone extends IProfiler<Object, Object, Object, Object> {
+
+        @Override
+        void start();
+
+        @Override
+        void stop();
+    }
+
     interface IProfilerSingle<A> extends IProfiler<A, Object, Object, Object> {
 
         @Override

@@ -19,6 +19,7 @@ public class OpisClassTransformer implements IClassTransformer {
     public OpisClassTransformer() {
         transformer = new ModularASMTransformer("opis");
         Map<String, ASMBlock> blocks = ASMReader.loadResource("/assets/opis/asm/blocks.asm");
+        ASMBlock voidReturnNeedle = blocks.get("n_ReturnV");
         ObfMapping mapping;
         {
             mapping = new ObfMapping("net/minecraft/world/World", "func_72939_s", "()V");
@@ -34,9 +35,20 @@ public class OpisClassTransformer implements IClassTransformer {
         }
         {
             mapping = new ObfMapping("net/minecraft/world/WorldServer", "func_72835_b", "()V");
-            ASMBlock needle = blocks.get("n_WorldServerTick");
             transformer.add(new MethodInjector(mapping, null, blocks.get("i_WorldServerTickPre"), true));//Top of method.
-            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_WorldServerTickPost"), true));//Before the return statements.
+            transformer.add(new MethodInjector(mapping, voidReturnNeedle, blocks.get("i_WorldServerTickPost"), true));//Before the return statements.
+        }
+        {
+            mapping = new ObfMapping("net/minecraftforge/fml/common/FMLCommonHandler", "onPreWorldTick", "(Lnet/minecraft/world/World;)V");
+            transformer.add(new MethodInjector(mapping, null, blocks.get("i_FMLCH_PreWorldTick"), true));
+            mapping = new ObfMapping("net/minecraftforge/fml/common/FMLCommonHandler", "onPostWorldTick", "(Lnet/minecraft/world/World;)V");
+            transformer.add(new MethodInjector(mapping, voidReturnNeedle, blocks.get("i_FMLCH_PostWorldTick"), true));
+        }
+        {
+            mapping = new ObfMapping("net/minecraftforge/fml/common/FMLCommonHandler", "onPreServerTick", "()V");
+            transformer.add(new MethodInjector(mapping, null, blocks.get("i_FMLCH_PreServerTick"), true));
+            mapping = new ObfMapping("net/minecraftforge/fml/common/FMLCommonHandler", "onPostServerTick", "()V");
+            transformer.add(new MethodInjector(mapping, voidReturnNeedle, blocks.get("i_FMLCH_PostServerTick"), true));
         }
     }
 
