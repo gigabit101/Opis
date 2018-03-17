@@ -1,6 +1,7 @@
 package mcp.mobius.opis.data.holders.stats;
 
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
@@ -95,6 +96,6 @@ public abstract class StatAbstract implements Comparable, ISerializable {
     }
 
 
-    public abstract void writeToStream(ByteArrayDataOutput stream);
+    public abstract void writeToStream(ByteBuf stream);
 
 }

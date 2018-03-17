@@ -97,18 +97,14 @@ public class PacketManager {
     private static final class Codec extends FMLIndexedMessageToMessageCodec<PacketBase> {
         @Override
         public void encodeInto(ChannelHandlerContext ctx, PacketBase packet, ByteBuf target) throws Exception {
-            ByteArrayDataOutput output = ByteStreams.newDataOutput();
-            packet.encode(output);
-            target.writeBytes(output.toByteArray());
+            packet.encode(target);
         }
 
         @Override
         public void decodeInto(ChannelHandlerContext ctx, ByteBuf source, PacketBase packet) {
-            byte[] arr = new byte[source.readableBytes()];
-            source.readBytes(arr);
-            ByteArrayDataInput input = ByteStreams.newDataInput(arr);
-            input.skipBytes(1); // skip the packet identifier byte
-            packet.decode(input);
+            System.out.println(source.capacity());
+            //source.readByte();
+            packet.decode(source.slice());
 
             if (ctx.channel().attr(NetworkRegistry.CHANNEL_SOURCE).get().isClient()) {
                 Minecraft.getMinecraft().addScheduledTask(() -> actionClient(packet));

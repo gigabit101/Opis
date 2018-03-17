@@ -39,7 +39,7 @@ public enum OpisServerTickHandler {
     public EventTimer timer5000 = new EventTimer(5000);
     public EventTimer timer10000 = new EventTimer(10000);
 
-    public HashMap<EntityPlayerMP, AccessLevel> cachedAccess = new HashMap<EntityPlayerMP, AccessLevel>();
+    public HashMap<EntityPlayerMP, AccessLevel> cachedAccess = new HashMap<>();
 
     @SubscribeEvent
     public void tickEnd(TickEvent.ServerTickEvent event) {
@@ -49,8 +49,8 @@ public enum OpisServerTickHandler {
         // One second timer
         if (timer1000.isDone()) {
 
-            PacketManager.sendPacketToAllSwing(new NetDataValue(Message.VALUE_AMOUNT_UPLOAD, new SerialLong(((ProfilerPacket) ProfilerSection.PACKET_OUTBOUND.getProfiler()).dataAmount)));
-            PacketManager.sendPacketToAllSwing(new NetDataValue(Message.VALUE_AMOUNT_DOWNLOAD, new SerialLong(((ProfilerPacket) ProfilerSection.PACKET_INBOUND.getProfiler()).dataAmount)));
+            PacketManager.sendPacketToAllSwing(new NetDataValue(Message.VALUE_AMOUNT_UPLOAD, new SerialLong(Profilers.OUTBOUND_PACKET.get().dataAmount + Profilers.OUTBOUND_FML_PACKET.get().dataAmount)));
+            PacketManager.sendPacketToAllSwing(new NetDataValue(Message.VALUE_AMOUNT_DOWNLOAD, new SerialLong(Profilers.INBOUND_PACKET.get().dataAmount + Profilers.INBOUND_FML_PACKET.get().dataAmount)));
             PacketManager.sendPacketToAllSwing(new NetDataValue(Message.VALUE_CHUNK_FORCED, new SerialInt(ChunkManager.INSTANCE.getForcedChunkAmount())));
             PacketManager.sendPacketToAllSwing(new NetDataValue(Message.VALUE_CHUNK_LOADED, new SerialInt(ChunkManager.INSTANCE.getLoadedChunkAmount())));
             PacketManager.sendPacketToAllSwing(new NetDataValue(Message.VALUE_TIMING_TICK, new DataTiming(Profilers.SERVER_TICK.get().data.getGeometricMean())));
@@ -64,14 +64,14 @@ public enum OpisServerTickHandler {
                 }
             }
 
-            ArrayList<DataThread> threads = new ArrayList<DataThread>();
+            ArrayList<DataThread> threads = new ArrayList<>();
             for (Thread t : Thread.getAllStackTraces().keySet()) {
                 threads.add(new DataThread().fill(t));
             }
             PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_THREADS, threads));
 
             // Dimension data update.
-            ArrayList<DataDimension> dimData = new ArrayList<DataDimension>();
+            ArrayList<DataDimension> dimData = new ArrayList<>();
             for (int dim : DimensionManager.getIDs()) {
                 dimData.add(new DataDimension().fill(dim));
             }
@@ -82,9 +82,10 @@ public enum OpisServerTickHandler {
                 PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_RUNNING, new SerialInt(Opis.profilerMaxTicks)));
                 PacketManager.sendPacketToAllSwing(new NetDataValue(Message.STATUS_RUN_UPDATE, new SerialInt(profilerRunningTicks)));
             }
-
-            ((ProfilerPacket) ProfilerSection.PACKET_INBOUND.getProfiler()).dataAmount = 0L;
-            ((ProfilerPacket) ProfilerSection.PACKET_OUTBOUND.getProfiler()).dataAmount = 0L;
+            Profilers.INBOUND_PACKET.get().reset();
+            Profilers.OUTBOUND_PACKET.get().reset();
+            Profilers.INBOUND_FML_PACKET.get().reset();
+            Profilers.OUTBOUND_FML_PACKET.get().reset();
         }
 
         // Two second timer
@@ -96,14 +97,17 @@ public enum OpisServerTickHandler {
         if (timer5000.isDone()) {
             updatePlayers();
 
-            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_OUTBOUND, new ArrayList<DataPacket>(((ProfilerPacket) ProfilerSection.PACKET_OUTBOUND.getProfiler()).data.values())));
-            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_INBOUND, new ArrayList<DataPacket>(((ProfilerPacket) ProfilerSection.PACKET_INBOUND.getProfiler()).data.values())));
+            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_OUTBOUND, new ArrayList<>(Profilers.OUTBOUND_PACKET.get().data.values())));
+            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_INBOUND, new ArrayList<>(Profilers.INBOUND_PACKET.get().data.values())));
 
-            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_OUTBOUND_250, new ArrayList<DataPacket250>(((ProfilerPacket) ProfilerSection.PACKET_OUTBOUND.getProfiler()).data250.values())));
-            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_INBOUND_250, new ArrayList<DataPacket250>(((ProfilerPacket) ProfilerSection.PACKET_INBOUND.getProfiler()).data250.values())));
+            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_OUTBOUND_250, new ArrayList<>(Profilers.OUTBOUND_FML_PACKET.get().data.values())));
+            PacketManager.sendPacketToAllSwing(new NetDataList(Message.LIST_PACKETS_INBOUND_250, new ArrayList<>(Profilers.INBOUND_FML_PACKET.get().data.values())));
 
-            ((ProfilerPacket) ProfilerSection.PACKET_OUTBOUND.getProfiler()).startInterval();
-            ((ProfilerPacket) ProfilerSection.PACKET_INBOUND.getProfiler()).startInterval();
+            Profilers.INBOUND_PACKET.get().start();
+            Profilers.OUTBOUND_PACKET.get().start();
+            Profilers.INBOUND_FML_PACKET.get().start();
+            Profilers.OUTBOUND_FML_PACKET.get().start();
+
         }
 
         profilerUpdateTickCounter++;

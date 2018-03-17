@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.profiler.Profilers;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -27,7 +28,7 @@ public class DataBlockTick implements ISerializable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeShort(this.perdim.size());
         for (Integer key : this.perdim.keySet()) {
             stream.writeInt(key);
@@ -36,7 +37,7 @@ public class DataBlockTick implements ISerializable {
         this.total.writeToStream(stream);
     }
 
-    public static DataBlockTick readFromStream(ByteArrayDataInput stream) {
+    public static DataBlockTick readFromStream(ByteBuf stream) {
         DataBlockTick retVal = new DataBlockTick();
         int nkeys = stream.readShort();
         for (int i = 0; i < nkeys; i++)

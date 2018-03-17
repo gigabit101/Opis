@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.basetypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
 public class SerialDouble implements ISerializable {
@@ -14,11 +15,11 @@ public class SerialDouble implements ISerializable {
 
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeDouble(this.value);
     }
 
-    public static SerialDouble readFromStream(ByteArrayDataInput stream) {
+    public static SerialDouble readFromStream(ByteBuf stream) {
         return new SerialDouble(stream.readDouble());
     }
 

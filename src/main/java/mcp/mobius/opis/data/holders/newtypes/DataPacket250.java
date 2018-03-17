@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
@@ -28,20 +29,20 @@ public class DataPacket250 implements ISerializable {
         return this;
     }
 
-    public void startInterval() {
+    public void start() {
         this.rate.reset();
         this.amount.reset();
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         this.channel.writeToStream(stream);
         this.size.writeToStream(stream);
         this.rate.writeToStream(stream);
         this.amount.writeToStream(stream);
     }
 
-    public static DataPacket250 readFromStream(ByteArrayDataInput stream) {
+    public static DataPacket250 readFromStream(ByteBuf stream) {
         DataPacket250 retVal = new DataPacket250();
         retVal.channel = CachedString.readFromStream(stream);
         retVal.size = DataByteSize.readFromStream(stream);

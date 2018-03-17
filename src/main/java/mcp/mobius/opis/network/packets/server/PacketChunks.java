@@ -2,6 +2,7 @@ package mcp.mobius.opis.network.packets.server;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mapwriter.Mw;
 import mapwriter.region.MwChunk;
 import mapwriter.tasks.UpdateSurfaceChunksTask;
@@ -17,10 +18,10 @@ public class PacketChunks extends PacketBase {
     public MwChunk[] chunks;
 
     @Override
-    public void encode(ByteArrayDataOutput output) {}
+    public void encode(ByteBuf output) {}
 
     @Override
-    public void decode(ByteArrayDataInput input) {}
+    public void decode(ByteBuf input) {}
 
     @Override
     @SideOnly(Side.CLIENT)

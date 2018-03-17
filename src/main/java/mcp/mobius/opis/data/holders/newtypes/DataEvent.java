@@ -3,6 +3,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 import com.google.common.collect.Table.Cell;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -42,7 +43,7 @@ public class DataEvent implements ISerializable, Comparable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         this.event.writeToStream(stream);
         this.package_.writeToStream(stream);
         this.handler.writeToStream(stream);
@@ -51,7 +52,7 @@ public class DataEvent implements ISerializable, Comparable {
         stream.writeLong(this.nCalls);
     }
 
-    public static DataEvent readFromStream(ByteArrayDataInput stream) {
+    public static DataEvent readFromStream(ByteBuf stream) {
         DataEvent retVal = new DataEvent();
         retVal.event = CachedString.readFromStream(stream);
         retVal.package_ = CachedString.readFromStream(stream);

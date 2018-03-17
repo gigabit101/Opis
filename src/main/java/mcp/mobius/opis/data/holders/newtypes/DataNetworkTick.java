@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.profilers.ProfilerNetworkTick;
 import mcp.mobius.opis.profiler.ProfilerSection;
@@ -19,11 +20,11 @@ public class DataNetworkTick implements ISerializable, Comparable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         this.update.writeToStream(stream);
     }
 
-    public static DataNetworkTick readFromStream(ByteArrayDataInput stream) {
+    public static DataNetworkTick readFromStream(ByteBuf stream) {
         DataNetworkTick retVal = new DataNetworkTick();
         retVal.update = DataTiming.readFromStream(stream);
         return retVal;

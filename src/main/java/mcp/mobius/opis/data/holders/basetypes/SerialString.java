@@ -2,7 +2,9 @@ package mcp.mobius.opis.data.holders.basetypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class SerialString implements ISerializable {
 
@@ -13,11 +15,11 @@ public class SerialString implements ISerializable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
-        stream.writeUTF(this.value);
+    public void writeToStream(ByteBuf stream) {
+        ByteBufUtils.writeUTF8String(stream, value);
     }
 
-    public static SerialString readFromStream(ByteArrayDataInput stream) {
-        return new SerialString(stream.readUTF());
+    public static SerialString readFromStream(ByteBuf stream) {
+        return new SerialString(ByteBufUtils.readUTF8String(stream));
     }
 }

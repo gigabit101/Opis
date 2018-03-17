@@ -2,9 +2,11 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.managers.StringCache;
 import mcp.mobius.opis.helpers.Helpers;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 
@@ -24,7 +26,7 @@ public class CachedString implements Comparable, ISerializable {
     public CachedString(String str) {
 
         //if(FMLCommonHandler.instance().getSide() == Side.SERVER){
-        if (Helpers.getEffectiveSide() == Side.SERVER) {
+        if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
             this.index = StringCache.INSTANCE.getIndex(str);
             this.str = str;
         } else {
@@ -50,11 +52,11 @@ public class CachedString implements Comparable, ISerializable {
 
     }
 
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeInt(this.index);
     }
 
-    public static CachedString readFromStream(ByteArrayDataInput stream) {
+    public static CachedString readFromStream(ByteBuf stream) {
         return new CachedString(stream.readInt());
     }
 

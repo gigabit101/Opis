@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraft.network.Packet;
 
@@ -45,14 +46,14 @@ public class DataPacket implements ISerializable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         this.size.writeToStream(stream);
         this.rate.writeToStream(stream);
         this.amount.writeToStream(stream);
         this.type.writeToStream(stream);
     }
 
-    public static DataPacket readFromStream(ByteArrayDataInput stream) {
+    public static DataPacket readFromStream(ByteBuf stream) {
         DataPacket retVal = new DataPacket();
         retVal.size = DataByteSize.readFromStream(stream);
         retVal.rate = DataByteRate.readFromStream(stream);

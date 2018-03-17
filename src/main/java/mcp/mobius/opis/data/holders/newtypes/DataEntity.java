@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.managers.EntityManager;
@@ -33,7 +34,7 @@ public class DataEntity implements ISerializable, Comparable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeInt(this.eid);
         this.name.writeToStream(stream);
         this.pos.writeToStream(stream);
@@ -41,7 +42,7 @@ public class DataEntity implements ISerializable, Comparable {
         stream.writeLong(this.npoints);
     }
 
-    public static DataEntity readFromStream(ByteArrayDataInput stream) {
+    public static DataEntity readFromStream(ByteBuf stream) {
         DataEntity retVal = new DataEntity();
         retVal.eid = stream.readInt();
         retVal.name = CachedString.readFromStream(stream);

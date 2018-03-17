@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.basetypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.util.DimBlockPos;
 import net.minecraft.entity.Entity;
@@ -116,14 +117,14 @@ public final class CoordinatesBlock implements ISerializable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeInt(this.dim);
         stream.writeInt(this.x);
         stream.writeInt(this.y);
         stream.writeInt(this.z);
     }
 
-    public static CoordinatesBlock readFromStream(ByteArrayDataInput stream) {
+    public static CoordinatesBlock readFromStream(ByteBuf stream) {
         return new CoordinatesBlock(stream.readInt(), stream.readInt(), stream.readInt(), stream.readInt());
     }
 

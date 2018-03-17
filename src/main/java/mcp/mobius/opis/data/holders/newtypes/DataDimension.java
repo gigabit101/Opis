@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.entity.Entity;
@@ -60,7 +61,7 @@ public class DataDimension implements ISerializable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeInt(dim);
         stream.writeInt(players);
         stream.writeInt(forced);
@@ -73,7 +74,7 @@ public class DataDimension implements ISerializable {
         this.name.writeToStream(stream);
     }
 
-    public static DataDimension readFromStream(ByteArrayDataInput stream) {
+    public static DataDimension readFromStream(ByteBuf stream) {
         DataDimension retVal = new DataDimension();
         retVal.dim = stream.readInt();
         retVal.players = stream.readInt();

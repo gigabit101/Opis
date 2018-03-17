@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.profiler.Profilers;
@@ -37,14 +38,14 @@ public class DataBlockTileEntity implements ISerializable, Comparable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeShort(this.id);
         stream.writeShort(this.meta);
         this.pos.writeToStream(stream);
         this.update.writeToStream(stream);
     }
 
-    public static DataBlockTileEntity readFromStream(ByteArrayDataInput stream) {
+    public static DataBlockTileEntity readFromStream(ByteBuf stream) {
         DataBlockTileEntity retVal = new DataBlockTileEntity();
         retVal.id = stream.readShort();
         retVal.meta = stream.readShort();

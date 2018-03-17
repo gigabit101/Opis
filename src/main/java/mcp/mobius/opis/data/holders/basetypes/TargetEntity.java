@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.basetypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
 public class TargetEntity implements ISerializable {
@@ -15,12 +16,12 @@ public class TargetEntity implements ISerializable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeInt(this.entityID);
         stream.writeInt(this.dim);
     }
 
-    public static TargetEntity readFromStream(ByteArrayDataInput stream) {
+    public static TargetEntity readFromStream(ByteBuf stream) {
         return new TargetEntity(stream.readInt(), stream.readInt());
     }
 }

@@ -13,8 +13,8 @@ public enum ProfilerSection implements IProfilerBase {
     //TILEENT_UPDATETIME(RunType.ONREQUEST, Side.SERVER),        //Profiling of the TileEntity tick time, per TE.
     //HANDLER_TICKSTART  (RunType.ONREQUEST, EnumSet.of(Side.CLIENT, Side.SERVER)), 		//Server handler for ServerTick start.
     //HANDLER_TICKSTOP   (RunType.ONREQUEST, EnumSet.of(Side.CLIENT, Side.SERVER)),  		//Server handler for ServerTick stop.
-    PACKET_INBOUND(RunType.REALTIME, Side.SERVER),        //Outbound packet analysis
-    PACKET_OUTBOUND(RunType.REALTIME, Side.SERVER),        //Inbound packet analysis
+    //PACKET_INBOUND(RunType.REALTIME, Side.SERVER),        //Outbound packet analysis
+    //PACKET_OUTBOUND(RunType.REALTIME, Side.SERVER),        //Inbound packet analysis
     //PACKETFML_INBOUND  (RunType.REALTIME,  Side.SERVER),		//Outbound packet analysis
     //PACKETFML_OUTBOUND (RunType.REALTIME,  Side.SERVER),		//Inbound packet analysis
 

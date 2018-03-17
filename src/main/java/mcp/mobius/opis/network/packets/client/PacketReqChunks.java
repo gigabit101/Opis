@@ -2,6 +2,7 @@ package mcp.mobius.opis.network.packets.client;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
 import mcp.mobius.opis.events.PlayerTracker;
 import mcp.mobius.opis.network.PacketBase;
@@ -26,7 +27,7 @@ public class PacketReqChunks extends PacketBase {
     }
 
     @Override
-    public void encode(ByteArrayDataOutput output) {
+    public void encode(ByteBuf output) {
         output.writeInt(dim);
         output.writeInt(chunks.size());
         for (CoordinatesChunk coord : chunks)
@@ -34,7 +35,7 @@ public class PacketReqChunks extends PacketBase {
     }
 
     @Override
-    public void decode(ByteArrayDataInput input) {
+    public void decode(ByteBuf input) {
         dim = input.readInt();
         int nchunks = input.readInt();
         for (int i = 0; i < nchunks; i++)

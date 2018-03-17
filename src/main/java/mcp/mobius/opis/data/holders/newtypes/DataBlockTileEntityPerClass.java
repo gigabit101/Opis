@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
 public class DataBlockTileEntityPerClass implements ISerializable, Comparable {
@@ -41,14 +42,14 @@ public class DataBlockTileEntityPerClass implements ISerializable, Comparable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeInt(this.id);
         stream.writeInt(this.meta);
         stream.writeInt(this.amount);
         this.update.writeToStream(stream);
     }
 
-    public static DataBlockTileEntityPerClass readFromStream(ByteArrayDataInput stream) {
+    public static DataBlockTileEntityPerClass readFromStream(ByteBuf stream) {
         DataBlockTileEntityPerClass retVal = new DataBlockTileEntityPerClass();
         retVal.id = stream.readInt();
         retVal.meta = stream.readInt();

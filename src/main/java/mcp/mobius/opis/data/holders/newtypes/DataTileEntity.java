@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +35,7 @@ public class DataTileEntity implements ISerializable {
 	*/
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         this.clazz.writeToStream(stream);
         this.pos.writeToStream(stream);
         this.cause.writeToStream(stream);
@@ -43,7 +44,7 @@ public class DataTileEntity implements ISerializable {
 
     }
 
-    public static DataTileEntity readFromStream(ByteArrayDataInput stream) {
+    public static DataTileEntity readFromStream(ByteBuf stream) {
         DataTileEntity retVal = new DataTileEntity();
         retVal.clazz = CachedString.readFromStream(stream);
         retVal.pos = CoordinatesBlock.readFromStream(stream);

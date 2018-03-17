@@ -50,6 +50,22 @@ public class OpisClassTransformer implements IClassTransformer {
             mapping = new ObfMapping("net/minecraftforge/fml/common/FMLCommonHandler", "onPostServerTick", "()V");
             transformer.add(new MethodInjector(mapping, voidReturnNeedle, blocks.get("i_FMLCH_PostServerTick"), true));
         }
+        {
+            mapping = new ObfMapping("net/minecraft/network/NettyPacketDecoder", "decode", "(Lio/netty/channel/ChannelHandlerContext;Lio/netty/buffer/ByteBuf;Ljava/util/List;)V");
+            transformer.add(new MethodInjector(mapping, blocks.get("n_NPD_decode"), blocks.get("i_NPD_decode"), true));
+        }
+        {
+            mapping = new ObfMapping("net/minecraft/network/NettyPacketEncoder", "encode", "(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;Lio/netty/buffer/ByteBuf;)V");
+            transformer.add(new MethodInjector(mapping, blocks.get("n_NPE_encode"), blocks.get("i_NPE_encode"), false));
+        }
+        {
+            mapping = new ObfMapping("net/minecraftforge/fml/common/network/internal/FMLProxyPacket", "func_148833_a", "(Lnet/minecraft/network/INetHandler;)V");
+            transformer.add(new MethodInjector(mapping, null, blocks.get("i_FMLPP_processPacket"), true));
+        }
+        {
+            mapping = new ObfMapping("net/minecraftforge/fml/common/network/FMLOutboundHandler", "write", "(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Object;Lio/netty/channel/ChannelPromise;)V");
+            transformer.add(new MethodInjector(mapping, blocks.get("n_FMLOH_write"), blocks.get("i_FMLOH_write"), false));
+        }
     }
 
     @Override

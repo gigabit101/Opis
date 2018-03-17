@@ -2,6 +2,7 @@ package mcp.mobius.opis.network;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.newtypes.DataError;
 import mcp.mobius.opis.network.enums.Message;
@@ -27,9 +28,9 @@ public abstract class PacketBase {
     public ArrayList<ISerializable> array = null;
     public ISerializable value = null;
 
-    public abstract void encode(ByteArrayDataOutput output);
+    public abstract void encode(ByteBuf output);
 
-    public abstract void decode(ByteArrayDataInput input);
+    public abstract void decode(ByteBuf input);
 
     @SideOnly(Side.CLIENT)
     public void actionClient(World world, EntityPlayer player) {
@@ -40,11 +41,11 @@ public abstract class PacketBase {
         throw new RuntimeException("Packet is not going the right way ! Client side packet seen server side.");
     }
 
-    protected ISerializable dataRead(Class datatype, ByteArrayDataInput istream) {
+    protected ISerializable dataRead(Class datatype, ByteBuf istream) {
         if (datatype == null) return new DataError();
 
         try {
-            Method readFromStream = datatype.getMethod("readFromStream", ByteArrayDataInput.class);
+            Method readFromStream = datatype.getMethod("readFromStream", ByteBuf.class);
 
             return (ISerializable) readFromStream.invoke(null, istream);
 

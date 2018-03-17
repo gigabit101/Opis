@@ -23,7 +23,7 @@ public class ProfilerPacket extends ProfilerAbstract {
             packet.startInterval();
 
         for (DataPacket250 packet : data250.values())
-            packet.startInterval();
+            packet.start();
     }
 
     @Override

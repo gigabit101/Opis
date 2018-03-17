@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
 public class DataByteSize implements Comparable, ISerializable {
@@ -33,11 +34,11 @@ public class DataByteSize implements Comparable, ISerializable {
         return String.format("%4d   B", this.size);
     }
 
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeLong(this.size);
     }
 
-    public static DataByteSize readFromStream(ByteArrayDataInput stream) {
+    public static DataByteSize readFromStream(ByteBuf stream) {
         return new DataByteSize(stream.readLong());
     }
 }

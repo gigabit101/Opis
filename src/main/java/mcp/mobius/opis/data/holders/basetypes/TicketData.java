@@ -3,9 +3,11 @@ package mcp.mobius.opis.data.holders.basetypes;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public final class TicketData implements ISerializable {
     public final CoordinatesChunk coord;
@@ -39,14 +41,14 @@ public final class TicketData implements ISerializable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         this.coord.writeToStream(stream);
         stream.writeInt(this.nchunks);
-        stream.writeUTF(this.modID);
+        ByteBufUtils.writeUTF8String(stream, modID);
     }
 
-    public static TicketData readFromStream(ByteArrayDataInput stream) {
-        return new TicketData(CoordinatesChunk.readFromStream(stream), stream.readInt(), stream.readUTF());
+    public static TicketData readFromStream(ByteBuf stream) {
+        return new TicketData(CoordinatesChunk.readFromStream(stream), stream.readInt(), ByteBufUtils.readUTF8String(stream));
     }
 
     public boolean equals(Object o) {

@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
 public class DataAmountRate implements Comparable, ISerializable {
@@ -27,12 +28,12 @@ public class DataAmountRate implements Comparable, ISerializable {
         return String.format("%.2f packet/s", (double) this.size / (double) this.interval);
     }
 
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeLong(this.size);
         stream.writeInt(this.interval);
     }
 
-    public static DataAmountRate readFromStream(ByteArrayDataInput stream) {
+    public static DataAmountRate readFromStream(ByteBuf stream) {
         return new DataAmountRate(stream.readLong(), stream.readInt());
     }
 }

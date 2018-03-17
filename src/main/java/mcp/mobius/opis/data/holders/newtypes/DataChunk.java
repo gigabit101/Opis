@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.newtypes;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
 import mcp.mobius.opis.data.managers.EntityManager;
@@ -34,14 +35,14 @@ public class DataChunk implements ISerializable, Comparable {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         stream.writeInt(this.nentities);
         stream.writeInt(this.ntileents);
         this.update.writeToStream(stream);
         this.chunk.writeToStream(stream);
     }
 
-    public static DataChunk readFromStream(ByteArrayDataInput stream) {
+    public static DataChunk readFromStream(ByteBuf stream) {
         DataChunk retVal = new DataChunk();
         retVal.nentities = stream.readInt();
         retVal.ntileents = stream.readInt();

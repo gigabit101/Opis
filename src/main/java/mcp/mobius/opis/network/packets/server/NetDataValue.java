@@ -2,6 +2,7 @@ package mcp.mobius.opis.network.packets.server;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.api.MessageHandlerRegistrar;
 import mcp.mobius.opis.data.holders.DataType;
 import mcp.mobius.opis.data.holders.ISerializable;
@@ -22,14 +23,14 @@ public class NetDataValue extends PacketBase {
     }
 
     @Override
-    public void encode(ByteArrayDataOutput output) {
+    public void encode(ByteBuf output) {
         output.writeInt(this.msg.ordinal());
         output.writeInt(DataType.getForClass(this.value.getClass()).ordinal());
         this.value.writeToStream(output);
     }
 
     @Override
-    public void decode(ByteArrayDataInput input) {
+    public void decode(ByteBuf input) {
         this.msg = Message.values()[input.readInt()];
         this.clazz = DataType.getForOrdinal(input.readInt());
         this.value = dataRead(this.clazz, input);

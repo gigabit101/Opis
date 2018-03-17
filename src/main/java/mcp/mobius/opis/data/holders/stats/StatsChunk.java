@@ -2,6 +2,7 @@ package mcp.mobius.opis.data.holders.stats;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
 
 public class StatsChunk extends StatAbstract {
@@ -40,14 +41,14 @@ public class StatsChunk extends StatAbstract {
     }
 
     @Override
-    public void writeToStream(ByteArrayDataOutput stream) {
+    public void writeToStream(ByteBuf stream) {
         this.chunk.writeToStream(stream);
         stream.writeInt(this.tileEntities);
         stream.writeInt(this.entities);
         stream.writeDouble(this.getDataSum());
     }
 
-    public static StatsChunk readFromStream(ByteArrayDataInput stream) {
+    public static StatsChunk readFromStream(ByteBuf stream) {
         CoordinatesChunk chunk = CoordinatesChunk.readFromStream(stream);
         StatsChunk chunkStats = new StatsChunk(chunk, stream.readInt(), stream.readInt());
         chunkStats.setDataSum(stream.readDouble());

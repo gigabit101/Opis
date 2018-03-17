@@ -20,6 +20,10 @@ public class Profilers {
     public static final ProfilerState<ProfilerWorldServerTick> WORLD_SERVER_TICK = addProfiler(new ProfilerWorldServerTick(), ProfilerType.ON_REQUEST, Side.SERVER);
     public static final ProfilerState<ProfilerDimensionTick> DIMENSION_TICK = addProfiler(new ProfilerDimensionTick(), ProfilerType.REAL_TIME, Side.SERVER);
     public static final ProfilerState<ProfilerServerTick> SERVER_TICK = addProfiler(new ProfilerServerTick(), ProfilerType.REAL_TIME, Side.SERVER);
+    public static final ProfilerState<ProfilerVanillaPacket> INBOUND_PACKET = addProfiler(new ProfilerVanillaPacket(), ProfilerType.REAL_TIME, Side.SERVER);
+    public static final ProfilerState<ProfilerVanillaPacket> OUTBOUND_PACKET = addProfiler(new ProfilerVanillaPacket(), ProfilerType.REAL_TIME, Side.SERVER);
+    public static final ProfilerState<ProfilerFMLProxyPacket> INBOUND_FML_PACKET = addProfiler(new ProfilerFMLProxyPacket(), ProfilerType.REAL_TIME, Side.SERVER);
+    public static final ProfilerState<ProfilerFMLProxyPacket> OUTBOUND_FML_PACKET = addProfiler(new ProfilerFMLProxyPacket(), ProfilerType.REAL_TIME, Side.SERVER);
 
     public static <A extends IProfiler> ProfilerState<A> addProfiler(A profiler, ProfilerType type, Side... runSides) {
         ProfilerState<A> state = new ProfilerState<>(profiler, type, runSides);
@@ -54,6 +58,10 @@ public class Profilers {
     public static IProfiler getWorldServerTickProfiler() { return getProfiler(WORLD_SERVER_TICK); }
     public static IProfiler getDimensionTickProfiler() { return getProfiler(DIMENSION_TICK); }
     public static IProfiler getServerTickProfiler() { return getProfiler(SERVER_TICK); }
+    public static IProfiler getInboundPacketProfiler() { return getProfiler(INBOUND_PACKET); }
+    public static IProfiler getOutboundPacketProfiler() { return getProfiler(OUTBOUND_PACKET); }
+    public static IProfiler getInboundFMLPacketProfiler() { return getProfiler(INBOUND_FML_PACKET); }
+    public static IProfiler getOutboundFMLPacketProfiler() { return getProfiler(OUTBOUND_FML_PACKET); }
     public static IProfiler getProfiler(ProfilerState<?> state) {
         if (state.isEnabled()) {
             return state.get();
