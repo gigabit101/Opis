@@ -30,11 +30,7 @@ public class PanelOrphanTileEntities extends JPanelMsgHandler implements ITabPan
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 2 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Class", "Hash", "Type", "Dimension", "Coordinates"},
-                new Class[]{CachedString.class, String.class, CachedString.class, Integer.class, String.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER}
-        );
+        table = new JTableStats(new String[] { "Class", "Hash", "Type", "Dimension", "Coordinates" }, new Class[] { CachedString.class, String.class, CachedString.class, Integer.class, String.class }, new int[] { SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER });
         scrollPane.setViewportView(table);
     }
 
@@ -44,32 +40,26 @@ public class PanelOrphanTileEntities extends JPanelMsgHandler implements ITabPan
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_ORPHAN_TILEENTS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().addTableData(rawdata.array);
-                DefaultTableModel model = this.getTable().getModel();
+                getTable().addTableData(rawdata.array);
+                DefaultTableModel model = getTable().getModel();
                 //int               row   = this.updateData(table, model, DataTileEntity.class);
 
                 for (Object o : rawdata.array) {
                     DataTileEntity data = (DataTileEntity) o;
-                    model.addRow(new Object[]{
-                            data.clazz,
-                            String.format("0x%x", data.hashCode),
-                            data.cause,
-                            data.pos.dim,
-                            String.format("[ %4d %4d %4d ]", data.pos.x, data.pos.y, data.pos.z),
-                    });
+                    model.addRow(new Object[] { data.clazz, String.format("0x%x", data.hashCode), data.cause, data.pos.dim, String.format("[ %4d %4d %4d ]", data.pos.x, data.pos.y, data.pos.z), });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
 
             case LIST_ORPHAN_TILEENTS_CLEAR: {
-                this.getTable().clearTableData();
-                DefaultTableModel model = this.getTable().getModel();
-                row = this.getTable().clearTable(DataTileEntity.class);
+                getTable().clearTableData();
+                DefaultTableModel model = getTable().getModel();
+                row = getTable().clearTable(DataTileEntity.class);
             }
 
             default:

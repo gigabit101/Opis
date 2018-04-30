@@ -38,6 +38,7 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
     public static OverlayMeanTime INSTANCE = new OverlayMeanTime();
 
     public class EntitiesTable extends ViewTable {
+
         IMapView mapView;
         IMapMode mapMode;
         OverlayMeanTime overlay;
@@ -54,15 +55,13 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
 
         @Override
         public void onMouseClick(MouseEvent event) {
-            TableRow row = this.getRow(event.x, event.y);
+            TableRow row = getRow(event.x, event.y);
             if (row != null) {
                 CoordinatesBlock coord = ((DataBlockTileEntity) row.getObject()).pos;
 
-                if (this.mapView.getX() != coord.x || this.mapView.getZ() != coord.z) {
-                    this.mapView.setViewCentre(coord.x, coord.z);
-                    this.overlay.requestChunkUpdate(this.mapView.getDimension(),
-                            MathHelper.ceil(this.mapView.getX()) >> 4,
-                            MathHelper.ceil(this.mapView.getZ()) >> 4);
+                if (mapView.getX() != coord.x || mapView.getZ() != coord.z) {
+                    mapView.setViewCentre(coord.x, coord.z);
+                    overlay.requestChunkUpdate(mapView.getDimension(), MathHelper.ceil(mapView.getX()) >> 4, MathHelper.ceil(mapView.getZ()) >> 4);
                 } else {
                     PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_BLOCK, coord));
                     Minecraft.getMinecraft().setIngameFocus();
@@ -81,28 +80,28 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
         boolean selected;
 
         public ChunkOverlay(int x, int z, int nentities, double time, double mintime, double maxtime, boolean selected) {
-            this.coord = new Point(x, z);
+            coord = new Point(x, z);
             this.nentities = nentities;
             this.time = time;
-            this.minTime = mintime;
-            this.maxTime = maxtime;
+            minTime = mintime;
+            maxTime = maxtime;
             this.selected = selected;
         }
 
         @Override
         public Point getCoordinates() {
-            return this.coord;
+            return coord;
         }
 
         @Override
         public int getColor() {
             //System.out.printf("%s\n", this.maxTime);
-            double scaledTime = this.time / this.maxTime;
+            double scaledTime = time / maxTime;
             int red = MathHelper.ceil(scaledTime * 255.0);
             int blue = 255 - MathHelper.ceil(scaledTime * 255.0);
             //System.out.printf("%s\n", red);
 
-            return (200 << 24) + (red << 16) + (blue);
+            return (200 << 24) + (red << 16) + blue;
         }
 
         @Override
@@ -122,7 +121,7 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
 
         @Override
         public int getBorderColor() {
-            return this.selected ? 0xffffffff : 0xff000000;
+            return selected ? 0xffffffff : 0xff000000;
         }
 
     }
@@ -133,7 +132,7 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
 
     @Override
     public ArrayList<IMwChunkOverlay> getChunksOverlay(int dim, double centerX, double centerZ, double minX, double minZ, double maxX, double maxZ) {
-        ArrayList<IMwChunkOverlay> overlays = new ArrayList<IMwChunkOverlay>();
+        ArrayList<IMwChunkOverlay> overlays = new ArrayList<>();
 
         double minTime = 9999;
         double maxTime = 0;
@@ -144,10 +143,11 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
         }
 
         for (CoordinatesChunk chunk : ChunkManager.INSTANCE.getChunkMeanTime().keySet()) {
-            if (this.selectedChunk != null)
-                overlays.add(new ChunkOverlay(chunk.chunkX, chunk.chunkZ, ChunkManager.INSTANCE.getChunkMeanTime().get(chunk).tileEntities, ChunkManager.INSTANCE.getChunkMeanTime().get(chunk).getDataSum(), minTime, maxTime, chunk.equals(this.selectedChunk)));
-            else
+            if (selectedChunk != null) {
+                overlays.add(new ChunkOverlay(chunk.chunkX, chunk.chunkZ, ChunkManager.INSTANCE.getChunkMeanTime().get(chunk).tileEntities, ChunkManager.INSTANCE.getChunkMeanTime().get(chunk).getDataSum(), minTime, maxTime, chunk.equals(selectedChunk)));
+            } else {
                 overlays.add(new ChunkOverlay(chunk.chunkX, chunk.chunkZ, ChunkManager.INSTANCE.getChunkMeanTime().get(chunk).tileEntities, ChunkManager.INSTANCE.getChunkMeanTime().get(chunk).getDataSum(), minTime, maxTime, false));
+            }
         }
         return overlays;
     }
@@ -163,37 +163,40 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
         int zChunk = bZ >> 4;
         CoordinatesChunk chunkCoord = new CoordinatesChunk(dim, xChunk, zChunk);
 
-        if (ChunkManager.INSTANCE.getChunkMeanTime().containsKey(chunkCoord))
-            if (Opis.microseconds)
+        if (ChunkManager.INSTANCE.getChunkMeanTime().containsKey(chunkCoord)) {
+            if (Opis.microseconds) {
                 return String.format("%.3f \u00B5s", ChunkManager.INSTANCE.getChunkMeanTime().get(chunkCoord).getDataSum());
-            else
+            } else {
                 return String.format(", %.5f ms", ChunkManager.INSTANCE.getChunkMeanTime().get(chunkCoord).getDataSum() / 1000.0);
-
-        else
+            }
+        } else {
             return "";
+        }
     }
 
     @Override
     public void onMiddleClick(int dim, int bX, int bZ, IMapView mapview) {
-        this.showList = false;
+        showList = false;
 
         int chunkX = bX >> 4;
         int chunkZ = bZ >> 4;
         CoordinatesChunk clickedChunk = new CoordinatesChunk(dim, chunkX, chunkZ);
 
         if (ChunkManager.INSTANCE.getChunkMeanTime().containsKey(clickedChunk)) {
-            if (this.selectedChunk == null)
-                this.selectedChunk = clickedChunk;
-            else if (this.selectedChunk.equals(clickedChunk))
-                this.selectedChunk = null;
-            else
-                this.selectedChunk = clickedChunk;
+            if (selectedChunk == null) {
+                selectedChunk = clickedChunk;
+            } else if (selectedChunk.equals(clickedChunk)) {
+                selectedChunk = null;
+            } else {
+                selectedChunk = clickedChunk;
+            }
         } else {
-            this.selectedChunk = null;
+            selectedChunk = null;
         }
 
-        if (this.selectedChunk != null)
-            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_TILEENTS, this.selectedChunk));
+        if (selectedChunk != null) {
+            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_TILEENTS, selectedChunk));
+        }
 
         //ArrayList<CoordinatesChunk> chunks = new ArrayList<CoordinatesChunk>();
         //for (int x = -5; x <= 5; x++)
@@ -204,10 +207,11 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
     }
 
     public void setSelectedChunk(int dim, int chunkX, int chunkZ) {
-        this.selectedChunk = new CoordinatesChunk(dim, chunkX, chunkZ);
+        selectedChunk = new CoordinatesChunk(dim, chunkX, chunkZ);
 
-        if (this.selectedChunk != null)
-            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_TILEENTS, this.selectedChunk));
+        if (selectedChunk != null) {
+            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_TILEENTS, selectedChunk));
+        }
     }
 
     @Override
@@ -225,43 +229,45 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
 
     @Override
     public void onOverlayActivated(IMapView mapview) {
-        this.selectedChunk = null;
+        selectedChunk = null;
         PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_TIMING, new SerialInt(mapview.getDimension())));
     }
 
     @Override
     public void onOverlayDeactivated(IMapView mapview) {
-        this.showList = false;
-        this.selectedChunk = null;
+        showList = false;
+        selectedChunk = null;
         PacketManager.sendToServer(new PacketReqData(Message.COMMAND_UNREGISTER));
     }
 
     @Override
     public void onDraw(IMapView mapview, IMapMode mapmode) {
-        if (this.canvas == null)
-            this.canvas = new LayoutCanvas();
+        if (canvas == null) {
+            canvas = new LayoutCanvas();
+        }
         //TODO: Investigate why margins were removed, and if there is another way we can detect this.
         //TODO: Also in OverlayEntityPerChunk
-//		if (mapmode.marginLeft() != 0){
-//			this.canvas.hide();
-//			return;
-//		}
+        //		if (mapmode.marginLeft() != 0){
+        //			this.canvas.hide();
+        //			return;
+        //		}
 
-        if (!this.showList)
-            this.canvas.hide();
-        else {
-            this.canvas.show();
-            this.canvas.draw();
+        if (!showList) {
+            canvas.hide();
+        } else {
+            canvas.show();
+            canvas.draw();
         }
 
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void setupTable(ArrayList<ISerializable> entities) {
-        if (this.canvas == null)
-            this.canvas = new LayoutCanvas();
+        if (canvas == null) {
+            canvas = new LayoutCanvas();
+        }
 
-        LayoutBase layout = (LayoutBase) this.canvas.addWidget("Table", new LayoutBase(null));
+        LayoutBase layout = (LayoutBase) canvas.addWidget("Table", new LayoutBase(null));
         //layout.setGeometry(new WidgetGeometry(100.0,0.0,300.0,100.0,CType.RELXY, CType.REL_Y, WAlign.RIGHT, WAlign.TOP));
         layout.setGeometry(new WidgetGeometry(100.0, 0.0, 30.0, 100.0, CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));
         layout.setBackgroundColors(0x90202020, 0x90202020);
@@ -271,10 +277,7 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
         table.setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
         table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER, WAlign.CENTER)
                 //.setColumnsTitle("\u00a7a\u00a7oType", "\u00a7a\u00a7oPos", "\u00a7a\u00a7oUpdate Time")
-                .setColumnsTitle("Type", "Pos", "Update Time")
-                .setColumnsWidth(50, 25, 25)
-                .setRowColors(0xff808080, 0xff505050)
-                .setFontSize(1.0f);
+                .setColumnsTitle("Type", "Pos", "Update Time").setColumnsWidth(50, 25, 25).setRowColors(0xff808080, 0xff505050).setFontSize(1.0f);
 
         for (ISerializable uncasted : entities) {
 
@@ -296,27 +299,28 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
         		name = data.getType();	
         	*/
 
-            if (Opis.microseconds)
+            if (Opis.microseconds) {
                 table.addRow(data, name, String.format("[ %s %s %s ]", data.pos.x, data.pos.y, data.pos.z), data.update.asMillisecond().toString());
-            else
+            } else {
                 table.addRow(data, name, String.format("[ %s %s %s ]", data.pos.x, data.pos.y, data.pos.z), data.update.toString());
+            }
         }
 
-        this.showList = true;
+        showList = true;
     }
 
     @Override
     public boolean onMouseInput(IMapView mapview, IMapMode mapmode) {
-        if (this.canvas != null && this.canvas.shouldRender() && ((LayoutCanvas) this.canvas).hasWidgetAtCursor()) {
-            ((EntitiesTable) this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
-            this.canvas.handleMouseInput();
+        if (canvas != null && canvas.shouldRender() && canvas.hasWidgetAtCursor()) {
+            ((EntitiesTable) canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
+            canvas.handleMouseInput();
             return true;
         }
         return false;
     }
 
     private void requestChunkUpdate(int dim, int chunkX, int chunkZ) {
-        ArrayList<CoordinatesChunk> chunks = new ArrayList<CoordinatesChunk>();
+        ArrayList<CoordinatesChunk> chunks = new ArrayList<>();
 
         for (int x = -5; x <= 5; x++) {
             for (int z = -5; z <= 5; z++) {
@@ -328,21 +332,21 @@ public class OverlayMeanTime implements IMwDataProvider, IMessageHandler {
             }
         }
 
-        if (chunks.size() > 0)
+        if (chunks.size() > 0) {
             PacketManager.sendToServer(new PacketReqChunks(dim, chunks));
+        }
     }
 
     @Override
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_CHUNK_TILEENTS: {
-                this.setupTable(rawdata.array);
+                setupTable(rawdata.array);
                 break;
             }
             default:
                 return false;
         }
-
 
         return true;
     }

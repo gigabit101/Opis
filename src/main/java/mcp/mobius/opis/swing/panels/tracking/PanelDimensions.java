@@ -19,6 +19,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelDimensions extends JPanelMsgHandler implements IMessageHandler, ITabPanel {
+
     private JButtonAccess btnPurgeAll;
 
     public PanelDimensions() {
@@ -31,12 +32,8 @@ public class PanelDimensions extends JPanelMsgHandler implements IMessageHandler
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Dim", "Name", "Players", "Forced chunks", "Loaded chunks", "Monsters", "Animals", "Stacks", "Update time", "Purge"},
-                new Class[]{Integer.class, String.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, DataTimingMillisecond.class, JTableButton.class},
-                new boolean[]{false, false, false, false, false, false, false, false, false, true}
-        );
-        table.setBackground(this.getBackground());
+        table = new JTableStats(new String[] { "Dim", "Name", "Players", "Forced chunks", "Loaded chunks", "Monsters", "Animals", "Stacks", "Update time", "Purge" }, new Class[] { Integer.class, String.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, DataTimingMillisecond.class, JTableButton.class }, new boolean[] { false, false, false, false, false, false, false, false, false, true });
+        table.setBackground(getBackground());
         table.setAutoCreateRowSorter(true);
         table.setShowGrid(false);
         scrollPane.setViewportView(table);
@@ -48,29 +45,18 @@ public class PanelDimensions extends JPanelMsgHandler implements IMessageHandler
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_DIMENSION_DATA: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
-                DefaultTableModel model = this.getTable().getModel();
-                int row = this.getTable().clearTable(DataDimension.class);
+                DefaultTableModel model = getTable().getModel();
+                int row = getTable().clearTable(DataDimension.class);
 
                 for (Object o : rawdata.array) {
                     DataDimension data = (DataDimension) o;
-                    model.addRow(new Object[]{
-                            data.dim,
-                            data.name,
-                            data.players,
-                            data.forced,
-                            data.loaded,
-                            data.mobs,
-                            data.neutral,
-                            data.itemstacks,
-                            data.update.asMillisecond(),
-                            "Purge"
-                    });
+                    model.addRow(new Object[] { data.dim, data.name, data.players, data.forced, data.loaded, data.mobs, data.neutral, data.itemstacks, data.update.asMillisecond(), "Purge" });
                 }
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
                 break;
             }
             default:

@@ -21,82 +21,84 @@ import java.util.HashSet;
 public enum PlayerTracker {
     INSTANCE;
 
-    private PlayerTracker() {
+    PlayerTracker() {
     }
 
-    public HashSet<EntityPlayerMP> playersSwing = new HashSet<EntityPlayerMP>();         //This is the list of players who have opened the UI
-    public HashMap<String, Boolean> filteredAmount = new HashMap<String, Boolean>(); //Should the entity amount be filtered or not
-    public HashMap<EntityPlayerMP, OverlayStatus> playerOverlayStatus = new HashMap<EntityPlayerMP, OverlayStatus>();
-    public HashMap<EntityPlayerMP, Integer> playerDimension = new HashMap<EntityPlayerMP, Integer>();
-    public HashMap<EntityPlayerMP, SelectedTab> playerTab = new HashMap<EntityPlayerMP, SelectedTab>();
-    private HashSet<String> playerPrivileged = new HashSet<String>();
+    public HashSet<EntityPlayerMP> playersSwing = new HashSet<>();         //This is the list of players who have opened the UI
+    public HashMap<String, Boolean> filteredAmount = new HashMap<>(); //Should the entity amount be filtered or not
+    public HashMap<EntityPlayerMP, OverlayStatus> playerOverlayStatus = new HashMap<>();
+    public HashMap<EntityPlayerMP, Integer> playerDimension = new HashMap<>();
+    public HashMap<EntityPlayerMP, SelectedTab> playerTab = new HashMap<>();
+    private HashSet<String> playerPrivileged = new HashSet<>();
 
     public SelectedTab getPlayerSelectedTab(EntityPlayerMP player) {
-        return this.playerTab.get(player);
+        return playerTab.get(player);
     }
 
     public AccessLevel getPlayerAccessLevel(EntityPlayerMP player) {
-        return this.getPlayerAccessLevel(player.getGameProfile().getName());
+        return getPlayerAccessLevel(player.getGameProfile().getName());
     }
 
     public AccessLevel getPlayerAccessLevel(String name) {
         GameProfile profile = ServerUtils.mc().getPlayerList().getPlayerByUsername(name).getGameProfile();
 
-        if (ServerUtils.mc().getPlayerList().canSendCommands(profile) || ServerUtils.mc().isSinglePlayer())
+        if (ServerUtils.mc().getPlayerList().canSendCommands(profile) || ServerUtils.mc().isSinglePlayer()) {
             return AccessLevel.ADMIN;
-        else if (playerPrivileged.contains(name))
+        } else if (playerPrivileged.contains(name)) {
             return AccessLevel.PRIVILEGED;
-        else
+        } else {
             return AccessLevel.NONE;
+        }
     }
 
     public void addPrivilegedPlayer(String name, boolean save) {
-        this.playerPrivileged.add(name);
+        playerPrivileged.add(name);
         if (save) {
-            Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, Opis.commentPrivileged).set(playerPrivileged.toArray(new String[]{}));
+            Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[] {}, Opis.commentPrivileged).set(playerPrivileged.toArray(new String[] {}));
             Opis.instance.config.save();
         }
     }
 
     public void addPrivilegedPlayer(String name) {
-        this.addPrivilegedPlayer(name, true);
+        addPrivilegedPlayer(name, true);
     }
 
     public void rmPrivilegedPlayer(String name) {
-        this.playerPrivileged.remove(name);
-        Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, Opis.commentPrivileged).set(playerPrivileged.toArray(new String[]{}));
+        playerPrivileged.remove(name);
+        Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[] {}, Opis.commentPrivileged).set(playerPrivileged.toArray(new String[] {}));
         Opis.instance.config.save();
     }
 
     public void reloeadPriviligedPlayers() {
-        String[] users = Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[]{}, Opis.commentPrivileged).getStringList();
-        for (String s : users)
+        String[] users = Opis.instance.config.get("ACCESS_RIGHTS", "privileged", new String[] {}, Opis.commentPrivileged).getStringList();
+        for (String s : users) {
             PlayerTracker.INSTANCE.addPrivilegedPlayer(s, false);
+        }
     }
 
     public boolean isAdmin(EntityPlayerMP player) {
-        return this.getPlayerAccessLevel(player).ordinal() >= AccessLevel.ADMIN.ordinal();
+        return getPlayerAccessLevel(player).ordinal() >= AccessLevel.ADMIN.ordinal();
     }
 
     public boolean isAdmin(String name) {
-        return this.getPlayerAccessLevel(name).ordinal() >= AccessLevel.ADMIN.ordinal();
+        return getPlayerAccessLevel(name).ordinal() >= AccessLevel.ADMIN.ordinal();
     }
 
     public boolean isPrivileged(EntityPlayerMP player) {
-        return this.getPlayerAccessLevel(player).ordinal() >= AccessLevel.PRIVILEGED.ordinal();
+        return getPlayerAccessLevel(player).ordinal() >= AccessLevel.PRIVILEGED.ordinal();
     }
 
     public boolean isPrivileged(String name) {
-        return this.getPlayerAccessLevel(name).ordinal() >= AccessLevel.PRIVILEGED.ordinal();
+        return getPlayerAccessLevel(name).ordinal() >= AccessLevel.PRIVILEGED.ordinal();
     }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        this.playerOverlayStatus.remove(event.player);
-        this.playerDimension.remove(event.player);
-        this.playersSwing.remove(event.player);
+        playerOverlayStatus.remove(event.player);
+        playerDimension.remove(event.player);
+        playersSwing.remove(event.player);
     }
 
     @SubscribeEvent

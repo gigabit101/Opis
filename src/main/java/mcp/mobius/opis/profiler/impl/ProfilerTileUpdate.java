@@ -1,6 +1,7 @@
 package mcp.mobius.opis.profiler.impl;
 
 import mcp.mobius.opis.profiler.Clock;
+import mcp.mobius.opis.profiler.IClock;
 import mcp.mobius.opis.profiler.IProfiler.IProfilerSingle;
 import mcp.mobius.opis.util.DimBlockPos;
 import net.minecraft.tileentity.TileEntity;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public class ProfilerTileUpdate implements IProfilerSingle<TileEntity> {
 
-    private Clock clock = Clock.createClock();
+    private IClock clock = Clock.createClock();
     public Map<DimBlockPos, DescriptiveStatistics> data = new HashMap<>();
     public Map<DimBlockPos, Class> refs = new HashMap<>();
 

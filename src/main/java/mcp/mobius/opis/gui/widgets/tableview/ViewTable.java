@@ -24,10 +24,10 @@ public class ViewTable extends WidgetBase {
 
     public ViewTable(IWidget parent) {
         super(parent);
-        this.addWidget("Titles", new TableRow(null, this.fontSize)).setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 16.0, CType.REL_X, CType.REL_X, WAlign.LEFT, WAlign.TOP));
-        ((TableRow) this.getWidget("Titles")).setColors(0x00000000, 0x00000000);
-        this.addWidget("Viewport", new ViewportScrollable(null)).setGeometry(new WidgetGeometry(0.0, 16.0, 100.0, 90.0, CType.REL_X, CType.RELXY, WAlign.LEFT, WAlign.TOP));
-        ((ViewportScrollable) (this.getWidget("Viewport"))).attachWidget(new LayoutBase(null)).setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 0.0, CType.RELXY, CType.REL_X, WAlign.LEFT, WAlign.TOP));
+        addWidget("Titles", new TableRow(null, fontSize)).setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 16.0, CType.REL_X, CType.REL_X, WAlign.LEFT, WAlign.TOP));
+        ((TableRow) getWidget("Titles")).setColors(0x00000000, 0x00000000);
+        addWidget("Viewport", new ViewportScrollable(null)).setGeometry(new WidgetGeometry(0.0, 16.0, 100.0, 90.0, CType.REL_X, CType.RELXY, WAlign.LEFT, WAlign.TOP));
+        ((ViewportScrollable) getWidget("Viewport")).attachWidget(new LayoutBase(null)).setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 0.0, CType.RELXY, CType.REL_X, WAlign.LEFT, WAlign.TOP));
 
     }
 
@@ -36,78 +36,79 @@ public class ViewTable extends WidgetBase {
     }
 
     public ViewTable setColumnsWidth(double... widths) {
-        if (this.ncolumns == -1)
-            this.ncolumns = widths.length;
-        else if (this.ncolumns != widths.length) {
-            throw new UIException(String.format("Number of columns mismatch. Expecting %d, got %d", this.ncolumns, widths.length));
+        if (ncolumns == -1) {
+            ncolumns = widths.length;
+        } else if (ncolumns != widths.length) {
+            throw new UIException(String.format("Number of columns mismatch. Expecting %d, got %d", ncolumns, widths.length));
         }
 
         this.widths = widths;
-        ((TableRow) this.getWidget("Titles")).setColumnsWidth(widths);
+        ((TableRow) getWidget("Titles")).setColumnsWidth(widths);
         return this;
     }
 
     public ViewTable setRowColors(int even, int odd) {
-        this.rowColorEven = even;
-        this.rowColorOdd = odd;
+        rowColorEven = even;
+        rowColorOdd = odd;
         return this;
     }
 
     public ViewTable setColumnsTitle(String... strings) {
-        if (this.ncolumns == -1)
-            this.ncolumns = strings.length;
-        else if (this.ncolumns != strings.length) {
-            throw new UIException(String.format("Number of columns mismatch. Expecting %d, got %d", this.ncolumns, strings.length));
+        if (ncolumns == -1) {
+            ncolumns = strings.length;
+        } else if (ncolumns != strings.length) {
+            throw new UIException(String.format("Number of columns mismatch. Expecting %d, got %d", ncolumns, strings.length));
         }
 
-        this.texts = strings;
-        ((TableRow) this.getWidget("Titles")).setColumnsText(strings);
+        texts = strings;
+        ((TableRow) getWidget("Titles")).setColumnsText(strings);
 
         return this;
     }
 
     public ViewTable setColumnsAlign(WAlign... aligns) {
-        if (this.ncolumns == -1)
-            this.ncolumns = aligns.length;
-        else if (this.ncolumns != aligns.length) {
-            throw new UIException(String.format("Number of columns mismatch. Expecting %d, got %d", this.ncolumns, aligns.length));
+        if (ncolumns == -1) {
+            ncolumns = aligns.length;
+        } else if (ncolumns != aligns.length) {
+            throw new UIException(String.format("Number of columns mismatch. Expecting %d, got %d", ncolumns, aligns.length));
         }
 
         this.aligns = aligns;
-        ((TableRow) this.getWidget("Titles")).setColumnsAlign(aligns);
+        ((TableRow) getWidget("Titles")).setColumnsAlign(aligns);
 
         return this;
     }
 
     public ViewTable addRow(String... strings) {
-        this.addRow(null, strings);
+        addRow(null, strings);
         return this;
     }
 
     public ViewTable addRow(Object obj, String... strings) {
-        IWidget tableLayout = ((ViewportScrollable) (this.getWidget("Viewport"))).getAttachedWidget();
-        tableLayout.setSize(100.0, (this.nrows + 1) * 16);
+        IWidget tableLayout = ((ViewportScrollable) getWidget("Viewport")).getAttachedWidget();
+        tableLayout.setSize(100.0, (nrows + 1) * 16);
 
-        TableRow newRow = (TableRow) new TableRow(null, this.fontSize);
-        newRow.setColumnsWidth(this.widths);
+        TableRow newRow = new TableRow(null, fontSize);
+        newRow.setColumnsWidth(widths);
         newRow.setColumnsText(strings);
-        newRow.setColumnsAlign(this.aligns);
-        if (this.nrows % 2 == 1)
-            newRow.setColors(this.rowColorOdd, this.rowColorOdd);
-        else
-            newRow.setColors(this.rowColorEven, this.rowColorEven);
-        newRow.setGeometry(new WidgetGeometry(0.0, 16 * this.nrows, 100.0, 16, CType.REL_X, CType.REL_X, WAlign.LEFT, WAlign.TOP));
+        newRow.setColumnsAlign(aligns);
+        if (nrows % 2 == 1) {
+            newRow.setColors(rowColorOdd, rowColorOdd);
+        } else {
+            newRow.setColors(rowColorEven, rowColorEven);
+        }
+        newRow.setGeometry(new WidgetGeometry(0.0, 16 * nrows, 100.0, 16, CType.REL_X, CType.REL_X, WAlign.LEFT, WAlign.TOP));
         newRow.attachObject(obj);
 
-        tableLayout.addWidget(String.format("Row_%03d", this.nrows), newRow);
+        tableLayout.addWidget(String.format("Row_%03d", nrows), newRow);
 
-        this.nrows += 1;
+        nrows += 1;
 
         return this;
     }
 
     public TableRow getRow(double x, double y) {
-        ViewportScrollable viewport = (ViewportScrollable) this.getWidget("Viewport");
+        ViewportScrollable viewport = (ViewportScrollable) getWidget("Viewport");
         IWidget layout = viewport.getAttachedWidget();
         TableRow row = (TableRow) layout.getWidgetAtLayer(x, y - viewport.getOffset(), 1);
 
@@ -115,7 +116,7 @@ public class ViewTable extends WidgetBase {
     }
 
     public void setFontSize(float size) {
-        this.fontSize = size;
+        fontSize = size;
     }
 
 }

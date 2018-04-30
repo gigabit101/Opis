@@ -18,84 +18,91 @@ public enum ProfilerSection implements IProfilerBase {
     //PACKETFML_INBOUND  (RunType.REALTIME,  Side.SERVER),		//Outbound packet analysis
     //PACKETFML_OUTBOUND (RunType.REALTIME,  Side.SERVER),		//Inbound packet analysis
 
-
-    NETWORK_TICK(RunType.ONREQUEST, Side.SERVER),        //The time it takes for the server to handle the packets during a tick.
-    EVENT_INVOKE(RunType.ONREQUEST, EnumSet.of(Side.CLIENT, Side.SERVER)),        //Timing of the event invokation
-
-    RENDER_TILEENTITY(RunType.ONREQUEST, Side.CLIENT),        //Profiler for TileEnt rendering
-    RENDER_ENTITY(RunType.ONREQUEST, Side.CLIENT),        //Profiler for Entity rendering
-    RENDER_BLOCK(RunType.ONREQUEST, Side.CLIENT);        //Profiler for Block rendering
+    //Was Unimplemented.
+    //NETWORK_TICK(RunType.ONREQUEST, Side.SERVER),        //The time it takes for the server to handle the packets during a tick.
+    //EVENT_INVOKE(RunType.ONREQUEST, EnumSet.of(Side.CLIENT, Side.SERVER)),//Timing of the event invocation
+    RENDER_TILEENTITY(RunType.ONREQUEST, Side.CLIENT),
+    //Profiler for TileEnt rendering
+    RENDER_ENTITY(RunType.ONREQUEST, Side.CLIENT),
+    //Profiler for Entity rendering
+    RENDER_BLOCK(RunType.ONREQUEST, Side.CLIENT);//Profiler for Block rendering
 
     public enum RunType {
         REALTIME,
-        ONREQUEST;
+        ONREQUEST
     }
 
     private EnumSet<Side> sides;
     private RunType runType;
     private IProfilerBase profiler = new DummyProfiler();
-    ;
     private IProfilerBase profilerSuspended = new DummyProfiler();
-    ;
 
     public static long timeStampLastRun;
 
-    private ProfilerSection(RunType runType, Side side) {
+    ProfilerSection(RunType runType, Side side) {
         this.runType = runType;
-        this.profiler = new DummyProfiler();
-        this.sides = EnumSet.of(side);
+        profiler = new DummyProfiler();
+        sides = EnumSet.of(side);
     }
 
-    private ProfilerSection(RunType runType, EnumSet<Side> sides) {
+    ProfilerSection(RunType runType, EnumSet<Side> sides) {
         this.runType = runType;
-        this.profiler = new DummyProfiler();
+        profiler = new DummyProfiler();
         this.sides = sides;
     }
 
     public RunType getRunType() {
-        return this.runType;
+        return runType;
     }
 
     public EnumSet<Side> getSide() {
-        return this.sides;
+        return sides;
     }
 
     public IProfilerBase getProfiler() {
-        return this.profilerSuspended;
+        return profilerSuspended;
     }
 
     public void setProfiler(IProfilerBase profiler) {
-        this.profilerSuspended = profiler;
-        if (this.runType == RunType.REALTIME)
+        profilerSuspended = profiler;
+        if (runType == RunType.REALTIME) {
             this.profiler = profiler;
+        }
     }
 
     public void activate() {
-        this.profiler = profilerSuspended;
-        this.timeStampLastRun = System.currentTimeMillis();
+        profiler = profilerSuspended;
+        timeStampLastRun = System.currentTimeMillis();
     }
 
     public void desactivate() {
-        if (this.runType == RunType.ONREQUEST)
-            this.profiler = new DummyProfiler();
+        if (runType == RunType.ONREQUEST) {
+            profiler = new DummyProfiler();
+        }
     }
 
     public static void activateAll(Side trgside) {
-        for (ProfilerSection section : ProfilerSection.values())
-            if (section.sides.contains(trgside))
+        for (ProfilerSection section : ProfilerSection.values()) {
+            if (section.sides.contains(trgside)) {
                 section.activate();
+            }
+        }
     }
 
     public static void desactivateAll(Side trgside) {
-        for (ProfilerSection section : ProfilerSection.values())
-            if (section.sides.contains(trgside))
+        for (ProfilerSection section : ProfilerSection.values()) {
+            if (section.sides.contains(trgside)) {
                 section.desactivate();
+            }
+        }
     }
 
     public static void resetAll(Side trgside) {
-        for (ProfilerSection section : ProfilerSection.values())
-            if (section.sides.contains(trgside))
+        for (ProfilerSection section : ProfilerSection.values()) {
+            if (section.sides.contains(trgside)) {
                 section.reset();
+            }
+        }
     }
 
     public static String getClassName() {
@@ -108,57 +115,57 @@ public enum ProfilerSection implements IProfilerBase {
 
     @Override
     public void reset() {
-        this.profiler.reset();
-        this.profilerSuspended.reset();
+        profiler.reset();
+        profilerSuspended.reset();
     }
 
     @Override
     public void start() {
-        this.profiler.start();
+        profiler.start();
     }
 
     @Override
     public void stop() {
-        this.profiler.stop();
+        profiler.stop();
     }
 
     @Override
     public void start(Object key) {
-        this.profiler.start(key);
+        profiler.start(key);
     }
 
     @Override
     public void stop(Object key) {
-        this.profiler.stop(key);
+        profiler.stop(key);
     }
 
     @Override
     public void start(Object key1, Object key2) {
-        this.profiler.start(key1, key2);
+        profiler.start(key1, key2);
     }
 
     @Override
     public void stop(Object key1, Object key2) {
-        this.profiler.stop(key1, key2);
+        profiler.stop(key1, key2);
     }
 
     @Override
     public void start(Object key1, Object key2, Object key3) {
-        this.profiler.start(key1, key2, key3);
+        profiler.start(key1, key2, key3);
     }
 
     @Override
     public void stop(Object key1, Object key2, Object key3) {
-        this.profiler.stop(key1, key2, key3);
+        profiler.stop(key1, key2, key3);
     }
 
     @Override
     public void start(Object key1, Object key2, Object key3, Object key4) {
-        this.profiler.start(key1, key2, key3, key4);
+        profiler.start(key1, key2, key3, key4);
     }
 
     @Override
     public void stop(Object key1, Object key2, Object key3, Object key4) {
-        this.profiler.stop(key1, key2, key3, key4);
+        profiler.stop(key1, key2, key3, key4);
     }
 }

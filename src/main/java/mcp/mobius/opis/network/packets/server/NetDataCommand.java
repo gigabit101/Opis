@@ -1,7 +1,5 @@
 package mcp.mobius.opis.network.packets.server;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.api.MessageHandlerRegistrar;
 import mcp.mobius.opis.network.PacketBase;
@@ -13,7 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NetDataCommand extends PacketBase {
 
-    public NetDataCommand(){}
+    public NetDataCommand() {
+    }
 
     public NetDataCommand(Message msg) {
         this.msg = msg;
@@ -21,18 +20,18 @@ public class NetDataCommand extends PacketBase {
 
     @Override
     public void encode(ByteBuf output) {
-        output.writeInt(this.msg.ordinal());
+        output.writeInt(msg.ordinal());
     }
 
     @Override
     public void decode(ByteBuf input) {
-        this.msg = Message.values()[input.readInt()];
+        msg = Message.values()[input.readInt()];
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void actionClient(World world, EntityPlayer player) {
-        MessageHandlerRegistrar.INSTANCE.routeMessage(this.msg, this);
+        MessageHandlerRegistrar.INSTANCE.routeMessage(msg, this);
     }
 
 }

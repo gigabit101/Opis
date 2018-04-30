@@ -23,10 +23,10 @@ public class LabelScalable extends LabelFixedFont {
 
     @Override
     public void draw(Point pos) {
-        this.saveGLState();
-        GL11.glScalef(this.scale, this.scale, 1.0f);
-        this.mc.fontRenderer.drawString(this.text, (int) (pos.getX() / this.scale), (int) (pos.getY() / this.scale), this.color);
-        this.loadGLState();
+        saveGLState();
+        GL11.glScalef(scale, scale, 1.0f);
+        mc.fontRenderer.drawString(text, (int) (pos.getX() / scale), (int) (pos.getY() / scale), color);
+        loadGLState();
     }
 
 }

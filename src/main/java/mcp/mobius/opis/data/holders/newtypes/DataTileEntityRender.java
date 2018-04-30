@@ -15,15 +15,15 @@ import java.util.WeakHashMap;
 public class DataTileEntityRender extends DataBlockTileEntity {
 
     public DataTileEntityRender fill(TileEntity ent) {
-        this.pos = new CoordinatesBlock(ent.getWorld().provider.getDimension(), ent.getPos().getX(), ent.getPos().getY(), ent.getPos().getZ());
+        pos = new CoordinatesBlock(ent.getWorld().provider.getDimension(), ent.getPos().getX(), ent.getPos().getY(), ent.getPos().getZ());
         World world = Minecraft.getMinecraft().world; //DimensionManager.getWorld(this.pos.dim);
 
-        this.id = (short) Block.getIdFromBlock(world.getBlockState(new BlockPos(this.pos.x, this.pos.y, this.pos.z)).getBlock());
+        id = (short) Block.getIdFromBlock(world.getBlockState(new BlockPos(pos.x, pos.y, pos.z)).getBlock());
         //TODO
-//		this.meta   = (short) world.getBlockMetadata(this.pos.x, this.pos.y, this.pos.z);
+        //		this.meta   = (short) world.getBlockMetadata(this.pos.x, this.pos.y, this.pos.z);
 
-        WeakHashMap<TileEntity, DescriptiveStatistics> data = ((ProfilerRenderTileEntity) (ProfilerSection.RENDER_TILEENTITY.getProfiler())).data;
-        this.update = new DataTiming(data.containsKey(ent) ? data.get(ent).getGeometricMean() : 0.0D);
+        WeakHashMap<TileEntity, DescriptiveStatistics> data = ((ProfilerRenderTileEntity) ProfilerSection.RENDER_TILEENTITY.getProfiler()).data;
+        update = new DataTiming(data.containsKey(ent) ? data.get(ent).getGeometricMean() : 0.0D);
 
         return this;
     }

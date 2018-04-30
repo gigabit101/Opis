@@ -11,6 +11,7 @@ import mcp.mobius.opis.proxy.ProxyClient;
 import org.lwjgl.util.Point;
 
 class TableCell extends WidgetBase {
+
     float fontSize = 1.0f;
 
     public TableCell(IWidget parent, String text, WAlign align, float fontSize) {
@@ -46,7 +47,7 @@ class TableCell extends WidgetBase {
 		*/
 
         //LabelTTF label = (LabelTTF)this.addWidget("Text", new LabelTTF(null, text, ProxyClient.fontMC16));
-        LabelTTF label = (LabelTTF) this.addWidget("Text", new LabelTTF(null, text, ProxyClient.fontMC8));
+        LabelTTF label = (LabelTTF) addWidget("Text", new LabelTTF(null, text, ProxyClient.fontMC8));
         switch (align) {
             case CENTER:
                 label.setGeometry(new WidgetGeometry(50.0, 50.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.CENTER, WAlign.CENTER));
@@ -70,9 +71,8 @@ class TableCell extends WidgetBase {
     public void draw(Point pos) {
     }
 
-
     public void setFontSize(float size) {
-        this.fontSize = size;
+        fontSize = size;
     }
 
 }

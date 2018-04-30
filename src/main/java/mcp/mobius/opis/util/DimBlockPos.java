@@ -31,7 +31,6 @@ public class DimBlockPos {
         pos = tile.getPos();
     }
 
-
     public DimBlockPos(MCDataInput packet) {
         dim = packet.readVarInt();
         pos = packet.readPos();

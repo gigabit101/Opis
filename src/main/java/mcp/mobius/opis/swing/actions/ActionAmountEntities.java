@@ -21,9 +21,10 @@ public class ActionAmountEntities implements ActionListener, ItemListener {
     public void actionPerformed(ActionEvent e) {
         PanelAmountEntities panel = (PanelAmountEntities) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.AMOUNTENTS);
 
-
         JTableStats table = panel.getTable();
-        if (table == null || table.getSelectedRow() == -1) return;
+        if (table == null || table.getSelectedRow() == -1) {
+            return;
+        }
         int indexData = table.convertRowIndexToModel(table.getSelectedRow());
         AmountHolder data = (AmountHolder) table.getTableData().get(indexData);
 

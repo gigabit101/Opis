@@ -49,8 +49,12 @@ public class CommandRmPrivileged extends CommandBase implements IOpisCommand {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (sender instanceof DedicatedServer) return true;
-        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+        if (sender instanceof DedicatedServer) {
+            return true;
+        }
+        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) {
+            return true;
+        }
         return PlayerTracker.INSTANCE.isAdmin(((EntityPlayerMP) sender).getGameProfile().getName());
     }
 }

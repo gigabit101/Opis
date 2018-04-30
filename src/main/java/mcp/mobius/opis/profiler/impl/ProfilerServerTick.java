@@ -1,6 +1,7 @@
 package mcp.mobius.opis.profiler.impl;
 
 import mcp.mobius.opis.profiler.Clock;
+import mcp.mobius.opis.profiler.IClock;
 import mcp.mobius.opis.profiler.IProfiler.IProfilerNone;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
@@ -9,7 +10,7 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
  */
 public class ProfilerServerTick implements IProfilerNone {
 
-    private Clock clock = Clock.createClock();
+    private IClock clock = Clock.createClock();
     public DescriptiveStatistics data = new DescriptiveStatistics(20);
 
     @Override

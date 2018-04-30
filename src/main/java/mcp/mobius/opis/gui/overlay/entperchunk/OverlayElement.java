@@ -14,7 +14,7 @@ public class OverlayElement implements IMwChunkOverlay {
     boolean selected;
 
     public OverlayElement(int x, int z, int minEnts, int maxEnts, int ents, boolean selected) {
-        this.coord = new Point(x, z);
+        coord = new Point(x, z);
         this.minEnts = minEnts;
         this.maxEnts = maxEnts;
         this.ents = ents;
@@ -23,16 +23,16 @@ public class OverlayElement implements IMwChunkOverlay {
 
     @Override
     public Point getCoordinates() {
-        return this.coord;
+        return coord;
     }
 
     @Override
     public int getColor() {
-        double scaledAmount = (double) this.ents / (double) this.maxEnts;
+        double scaledAmount = (double) ents / (double) maxEnts;
         int red = MathHelper.ceil(scaledAmount * 255.0);
         int blue = 255 - MathHelper.ceil(scaledAmount * 255.0);
 
-        return (200 << 24) + (red << 16) + (blue);
+        return (200 << 24) + (red << 16) + blue;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class OverlayElement implements IMwChunkOverlay {
 
     @Override
     public int getBorderColor() {
-        return this.selected ? 0xffffffff : 0xff000000;
+        return selected ? 0xffffffff : 0xff000000;
     }
 
 }

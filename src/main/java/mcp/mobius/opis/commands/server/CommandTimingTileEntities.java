@@ -11,19 +11,19 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CommandTimingTileEntities extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
 
     @Override
     public int getRequiredPermissionLevel() {
         return 0;
     }
-
 
     @Override
     public String getDescription() {
@@ -47,7 +47,7 @@ public class CommandTimingTileEntities extends CommandBase implements IOpisComma
             return;
         }
 
-        ArrayList<DataBlockTileEntity> tes = new ArrayList<DataBlockTileEntity>();
+        List<DataBlockTileEntity> tes = new ArrayList<>();
         if (args.length == 0) {
             tes = TileEntityManager.INSTANCE.getWorses(20);
         } else {

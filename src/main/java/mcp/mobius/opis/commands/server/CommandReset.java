@@ -18,9 +18,8 @@ public class CommandReset extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
-
 
     @Override
     public int getRequiredPermissionLevel() {
@@ -48,14 +47,19 @@ public class CommandReset extends CommandBase implements IOpisCommand {
 
         sender.sendMessage(new TextComponentString(String.format("\u00A7oInternal data reseted.")));
 
-        if (sender instanceof EntityPlayerMP)
+        if (sender instanceof EntityPlayerMP) {
             PacketManager.validateAndSend(new NetDataCommand(Message.CLIENT_CLEAR_SELECTION), (EntityPlayerMP) sender);
+        }
     }
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (sender instanceof DedicatedServer) return true;
-        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+        if (sender instanceof DedicatedServer) {
+            return true;
+        }
+        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) {
+            return true;
+        }
         return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP) sender).getGameProfile().getName());
     }
 }

@@ -21,6 +21,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelTimingTileEnts extends JPanelMsgHandler implements ITabPanel {
+
     private JButtonAccess btnCenter;
     private JButtonAccess btnTeleport;
     private JButtonAccess btnReset;
@@ -53,10 +54,7 @@ public class PanelTimingTileEnts extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 5 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Type", "Mod", "Dim", "Pos", "Update Time"},
-                new Class[]{String.class, String.class, Integer.class, Object.class, DataTiming.class}
-        );
+        table = new JTableStats(new String[] { "Type", "Mod", "Dim", "Pos", "Update Time" }, new Class[] { String.class, String.class, Integer.class, Object.class, DataTiming.class });
         scrollPane.setViewportView(table);
 
         lblSummary = new JLabel("New label");
@@ -87,48 +85,43 @@ public class PanelTimingTileEnts extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_TIMING_TILEENTS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(DataBlockTileEntity.class);
+                int row = getTable().clearTable(DataBlockTileEntity.class);
 
                 for (Object o : rawdata.array) {
                     DataBlockTileEntity data = (DataBlockTileEntity) o;
                     String name = ModIdentification.getStackName(data.id, data.meta);
                     String modID = ModIdentification.getModStackName(data.id, data.meta);
-                    model.addRow(new Object[]{
-                            name,
-                            modID,
-                            data.pos.dim,
-                            String.format("[ %4d %4d %4d ]", data.pos.x, data.pos.y, data.pos.z),
-                            data.update});
+                    model.addRow(new Object[] { name, modID, data.pos.dim, String.format("[ %4d %4d %4d ]", data.pos.x, data.pos.y, data.pos.z), data.update });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
             case VALUE_TIMING_TILEENTS: {
-                this.getLblSummary().setText(String.format("Total update time : %s", ((DataTiming) rawdata.value).toString()));
+                getLblSummary().setText(String.format("Total update time : %s", rawdata.value.toString()));
                 break;
             }
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
+                getBtnRun().setText("Run Opis");
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case CLIENT_HIGHLIGHT_BLOCK: {
                 Opis.selectedBlock = (CoordinatesBlock) rawdata.value;
-                this.getBtnReset().setEnabled(true);
+                getBtnReset().setEnabled(true);
                 break;
             }
             default:

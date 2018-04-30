@@ -7,7 +7,6 @@ import mcp.mobius.opis.data.managers.MetaManager;
 import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.server.NetDataValue;
-import mcp.mobius.opis.profiler.ProfilerSection;
 import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -21,7 +20,7 @@ public class CommandStart extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
 
     @Override

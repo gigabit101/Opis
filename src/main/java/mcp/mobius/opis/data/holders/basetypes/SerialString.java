@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.basetypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraftforge.fml.common.network.ByteBufUtils;

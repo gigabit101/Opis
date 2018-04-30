@@ -14,17 +14,18 @@ public class ButtonScreenChange extends ButtonBase {
 
     public ButtonScreenChange(IWidget parent, String text, GuiScreen linkedscreen) {
         super(parent);
-        this.linkedScreen = linkedscreen;
+        linkedScreen = linkedscreen;
 
-        this.addWidget("Label", new LabelFixedFont(this, text));
-        this.getWidget("Label").setGeometry(new WidgetGeometry(50.0D, 50.0D, 100.0D, 20.0D, CType.RELXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
+        addWidget("Label", new LabelFixedFont(this, text));
+        getWidget("Label").setGeometry(new WidgetGeometry(50.0D, 50.0D, 100.0D, 20.0D, CType.RELXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
     }
 
     @Override
     public void onMouseClick(MouseEvent event) {
         super.onMouseClick(event);
 
-        if (event.button == 0)
-            this.mc.displayGuiScreen(this.linkedScreen);
+        if (event.button == 0) {
+            mc.displayGuiScreen(linkedScreen);
+        }
     }
 }

@@ -31,9 +31,11 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
+
     public static OverlayLoadedChunks INSTANCE = new OverlayLoadedChunks();
 
     public class TicketTable extends ViewTable {
+
         IMapView mapView;
         IMapMode mapMode;
         OverlayLoadedChunks overlay;
@@ -50,16 +52,14 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 
         @Override
         public void onMouseClick(MouseEvent event) {
-            TableRow row = this.getRow(event.x, event.y);
+            TableRow row = getRow(event.x, event.y);
             if (row != null) {
                 CoordinatesChunk coord = ((TicketData) row.getObject()).coord;
 
-                if (this.mapView.getX() != coord.x || this.mapView.getZ() != coord.z || this.mapView.getDimension() != coord.dim) {
-                    this.mapView.setDimension(coord.dim);
-                    this.mapView.setViewCentre(coord.x, coord.z);
-                    this.overlay.requestChunkUpdate(this.mapView.getDimension(),
-                            MathHelper.ceil(this.mapView.getX()) >> 4,
-                            MathHelper.ceil(this.mapView.getZ()) >> 4);
+                if (mapView.getX() != coord.x || mapView.getZ() != coord.z || mapView.getDimension() != coord.dim) {
+                    mapView.setDimension(coord.dim);
+                    mapView.setViewCentre(coord.x, coord.z);
+                    overlay.requestChunkUpdate(mapView.getDimension(), MathHelper.ceil(mapView.getX()) >> 4, MathHelper.ceil(mapView.getZ()) >> 4);
                 } else {
                     PacketManager.sendToServer(new PacketReqData(Message.COMMAND_TELEPORT_BLOCK, new CoordinatesBlock(coord)));
                     Minecraft.getMinecraft().setIngameFocus();
@@ -69,22 +69,23 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
     }
 
     public class ChunkOverlay implements IMwChunkOverlay {
+
         Point coord;
         boolean forced;
 
         public ChunkOverlay(int x, int z, boolean forced) {
-            this.coord = new Point(x, z);
+            coord = new Point(x, z);
             this.forced = forced;
         }
 
         @Override
         public Point getCoordinates() {
-            return this.coord;
+            return coord;
         }
 
         @Override
         public int getColor() {
-            return this.forced ? 0x500000ff : 0x5000ff00;
+            return forced ? 0x500000ff : 0x5000ff00;
         }
 
         @Override
@@ -115,7 +116,7 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 
     @Override
     public ArrayList<IMwChunkOverlay> getChunksOverlay(int dim, double centerX, double centerZ, double minX, double minZ, double maxX, double maxZ) {
-        ArrayList<IMwChunkOverlay> overlays = new ArrayList<IMwChunkOverlay>();
+        ArrayList<IMwChunkOverlay> overlays = new ArrayList<>();
 
         for (CoordinatesChunk chunk : ChunkManager.INSTANCE.getLoadedChunks()) {
             overlays.add(new ChunkOverlay(chunk.chunkX, chunk.chunkZ, chunk.metadata != 0));
@@ -134,11 +135,11 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
         int zChunk = bZ >> 4;
 
         for (CoordinatesChunk chunk : ChunkManager.INSTANCE.getLoadedChunks()) {
-            if (chunk.chunkX == xChunk && chunk.chunkZ == zChunk && chunk.metadata == 0)
+            if (chunk.chunkX == xChunk && chunk.chunkZ == zChunk && chunk.metadata == 0) {
                 return ", Game loaded";
-
-            else if (chunk.chunkX == xChunk && chunk.chunkZ == zChunk && chunk.metadata == 1)
+            } else if (chunk.chunkX == xChunk && chunk.chunkZ == zChunk && chunk.metadata == 1) {
                 return ", Force loaded";
+            }
         }
 
         return "";
@@ -148,11 +149,11 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
     public void onMiddleClick(int dim, int bX, int bZ, IMapView mapview) {
         int chunkX = bX >> 4;
         int chunkZ = bZ >> 4;
-        this.requestChunkUpdate(dim, chunkX, chunkZ);
+        requestChunkUpdate(dim, chunkX, chunkZ);
     }
 
     private void requestChunkUpdate(int dim, int chunkX, int chunkZ) {
-        ArrayList<CoordinatesChunk> chunks = new ArrayList<CoordinatesChunk>();
+        ArrayList<CoordinatesChunk> chunks = new ArrayList<>();
         for (int x = -5; x <= 5; x++) {
             for (int z = -5; z <= 5; z++) {
                 chunks.add(new CoordinatesChunk(dim, chunkX + x, chunkZ + z));
@@ -163,8 +164,9 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
             }
         }
 
-        if (chunks.size() > 0)
+        if (chunks.size() > 0) {
             PacketManager.sendToServer(new PacketReqChunks(dim, chunks));
+        }
     }
 
     @Override
@@ -182,15 +184,15 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
 
     @Override
     public void onOverlayActivated(IMapView mapview) {
-        this.selectedChunk = null;
+        selectedChunk = null;
         PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_LOADED, new SerialInt(mapview.getDimension())));
         PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_TICKETS));
     }
 
     @Override
     public void onOverlayDeactivated(IMapView mapview) {
-        this.showList = false;
-        this.selectedChunk = null;
+        showList = false;
+        selectedChunk = null;
         PacketManager.sendToServer(new PacketReqData(Message.COMMAND_UNREGISTER));
     }
 
@@ -198,38 +200,33 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
     public void onDraw(IMapView mapview, IMapMode mapmode) {
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void setupTable(ArrayList<TicketData> tickets) {
-        if (this.canvas == null) {
-            this.canvas = new LayoutCanvas();
+        if (canvas == null) {
+            canvas = new LayoutCanvas();
         }
 
-        LayoutBase layout = (LayoutBase) this.canvas.addWidget("Table", new LayoutBase(null));
+        LayoutBase layout = (LayoutBase) canvas.addWidget("Table", new LayoutBase(null));
         layout.setGeometry(new WidgetGeometry(100.0, 0.0, 30.0, 100.0, CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));
         layout.setBackgroundColors(0x90202020, 0x90202020);
 
         TicketTable table = (TicketTable) layout.addWidget("Table_", new TicketTable(null, this));
 
         table.setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
-        table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER, WAlign.CENTER)
-                .setColumnsTitle("Pos", "Mod", "Chunks")
-                .setColumnsWidth(50, 25, 25)
-                .setRowColors(0xff808080, 0xff505050)
-                .setFontSize(1.0f);
-
+        table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER, WAlign.CENTER).setColumnsTitle("Pos", "Mod", "Chunks").setColumnsWidth(50, 25, 25).setRowColors(0xff808080, 0xff505050).setFontSize(1.0f);
 
         for (TicketData data : tickets) {
             table.addRow(data, String.format("[%s %s %s]", data.coord.dim, data.coord.chunkX, data.coord.chunkZ), data.modID, String.valueOf(data.nchunks));
         }
 
-        this.showList = true;
+        showList = true;
     }
 
     @Override
     public boolean onMouseInput(IMapView mapview, IMapMode mapmode) {
-        if (this.canvas != null && this.canvas.shouldRender() && ((LayoutCanvas) this.canvas).hasWidgetAtCursor()) {
-            ((TicketTable) this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
-            this.canvas.handleMouseInput();
+        if (canvas != null && canvas.shouldRender() && canvas.hasWidgetAtCursor()) {
+            ((TicketTable) canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
+            canvas.handleMouseInput();
             return true;
         }
         return false;
@@ -239,10 +236,11 @@ public class OverlayLoadedChunks implements IMwDataProvider, IMessageHandler {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_CHUNK_TICKETS: {
-                ArrayList<TicketData> arr = new ArrayList<TicketData>();
-                for (ISerializable s : rawdata.array)
+                ArrayList<TicketData> arr = new ArrayList<>();
+                for (ISerializable s : rawdata.array) {
                     arr.add((TicketData) s);
-                this.setupTable(arr);
+                }
+                setupTable(arr);
                 break;
             }
             default:

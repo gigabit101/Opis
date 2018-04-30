@@ -1,8 +1,6 @@
 package mcp.mobius.opis.data.holders.basetypes;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraft.util.math.ChunkPos;
@@ -10,6 +8,7 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public final class TicketData implements ISerializable {
+
     public final CoordinatesChunk coord;
     public final int nchunks;
     public final String modID;
@@ -27,23 +26,23 @@ public final class TicketData implements ISerializable {
             minChunkZ = Math.min(minChunkZ, chunk.getZStart());
         }
 
-        this.coord = new CoordinatesChunk(ticket.world.provider.getDimension(), (minChunkX + maxChunkX) / 2, (minChunkZ + maxChunkZ) / 2);
-        this.nchunks = requestedChunks.size();
-        this.modID = ticket.getModId();
+        coord = new CoordinatesChunk(ticket.world.provider.getDimension(), (minChunkX + maxChunkX) / 2, (minChunkZ + maxChunkZ) / 2);
+        nchunks = requestedChunks.size();
+        modID = ticket.getModId();
         this.ticket = ticket;
     }
 
     public TicketData(CoordinatesChunk coord, int nchunks, String modid) {
         this.coord = coord;
         this.nchunks = nchunks;
-        this.modID = modid;
-        this.ticket = null;
+        modID = modid;
+        ticket = null;
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        this.coord.writeToStream(stream);
-        stream.writeInt(this.nchunks);
+        coord.writeToStream(stream);
+        stream.writeInt(nchunks);
         ByteBufUtils.writeUTF8String(stream, modID);
     }
 
@@ -54,25 +53,22 @@ public final class TicketData implements ISerializable {
     public boolean equals(Object o) {
         TicketData c = (TicketData) o;
 
-        if (this.ticket != null && c.ticket != null)
-            return this.ticket.equals(c.ticket);
+        if (ticket != null && c.ticket != null) {
+            return ticket.equals(c.ticket);
+        }
 
-        return (this.coord.dim == c.coord.dim) &&
-                (this.coord.chunkX == c.coord.chunkX) &&
-                (this.coord.chunkZ == c.coord.chunkZ) &&
-                (this.nchunks == c.nchunks);
+        return (coord.dim == c.coord.dim) && (coord.chunkX == c.coord.chunkX) && (coord.chunkZ == c.coord.chunkZ) && (nchunks == c.nchunks);
     }
 
-    ;
-
     public int hashCode() {
-        if (this.ticket != null)
-            return this.ticket.hashCode();
-        return String.format("%s %s %s %s", this.coord.dim, this.coord.chunkX, this.coord.chunkZ, this.nchunks).hashCode();
+        if (ticket != null) {
+            return ticket.hashCode();
+        }
+        return String.format("%s %s %s %s", coord.dim, coord.chunkX, coord.chunkZ, nchunks).hashCode();
     }
 
     public String toString() {
-        return String.format("Ticket %s [%d %d %d] %d", this.modID, this.coord.dim, this.coord.chunkX, this.coord.chunkZ, this.nchunks);
+        return String.format("Ticket %s [%d %d %d] %d", modID, coord.dim, coord.chunkX, coord.chunkZ, nchunks);
     }
 
 }

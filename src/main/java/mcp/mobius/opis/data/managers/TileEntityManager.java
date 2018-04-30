@@ -1,6 +1,7 @@
 package mcp.mobius.opis.data.managers;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
@@ -20,24 +21,23 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public enum TileEntityManager {
-    INSTANCE;
+public class TileEntityManager {
 
-    public HashMap<CoordinatesChunk, StatsChunk> getTimes(int dim) {
-        HashMap<CoordinatesChunk, StatsChunk> chunks = new HashMap<CoordinatesChunk, StatsChunk>();
+    public static final TileEntityManager INSTANCE = new TileEntityManager();
+
+    public Map<CoordinatesChunk, StatsChunk> getTimes(int dim) {
+        Map<CoordinatesChunk, StatsChunk> chunks = new HashMap<>();
 
         for (CoordinatesBlock coord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             if (coord.dim == dim) {
 
                 CoordinatesChunk coordC = new CoordinatesChunk(coord);
-                if (!(chunks.containsKey(coordC)))
+                if (!chunks.containsKey(coordC)) {
                     chunks.put(coordC, new StatsChunk());
+                }
 
                 chunks.get(coordC).addEntity();
                 chunks.get(coordC).addMeasure(Profilers.TILE_UPDATE.get().data.get(coord.toNew()).getGeometricMean());
@@ -49,10 +49,10 @@ public enum TileEntityManager {
     private void cleanUpStats() {
     }
 
-    public ArrayList<DataBlockTileEntity> getTileEntitiesInChunk(CoordinatesChunk coord) {
+    public List<DataBlockTileEntity> getTileEntitiesInChunk(CoordinatesChunk coord) {
         cleanUpStats();
 
-        ArrayList<DataBlockTileEntity> returnList = new ArrayList<DataBlockTileEntity>();
+        List<DataBlockTileEntity> returnList = new ArrayList<>();
 
         for (CoordinatesBlock tecoord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             if (coord.equals(tecoord.asCoordinatesChunk())) {
@@ -65,18 +65,19 @@ public enum TileEntityManager {
         return returnList;
     }
 
-    public ArrayList<DataBlockTileEntity> getWorses(int amount) {
-        ArrayList<DataBlockTileEntity> sorted = new ArrayList<DataBlockTileEntity>();
-        ArrayList<DataBlockTileEntity> topEntities = new ArrayList<DataBlockTileEntity>();
+    public List<DataBlockTileEntity> getWorses(int amount) {
+        List<DataBlockTileEntity> sorted = new ArrayList<>();
+        List<DataBlockTileEntity> topEntities = new ArrayList<>();
 
-        for (CoordinatesBlock coord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList()))
+        for (CoordinatesBlock coord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             sorted.add(new DataBlockTileEntity().fill(coord));
+        }
 
-        Collections.sort(sorted);
+        sorted.sort(null);
 
-        for (int i = 0; i < Math.min(amount, sorted.size()); i++)
+        for (int i = 0; i < Math.min(amount, sorted.size()); i++) {
             topEntities.add(sorted.get(i));
-
+        }
 
         return topEntities;
     }
@@ -97,10 +98,10 @@ public enum TileEntityManager {
         return amountTileEntities;
     }
 
-    public ArrayList<DataTileEntity> getOrphans() {
-        ArrayList<DataTileEntity> orphans = new ArrayList<DataTileEntity>();
-        HashMap<CoordinatesBlock, DataTileEntity> coordHashset = new HashMap<CoordinatesBlock, DataTileEntity>();
-        HashSet<Integer> registeredEntities = new HashSet<Integer>();
+    public List<DataTileEntity> getOrphans() {
+        List<DataTileEntity> orphans = new ArrayList<>();
+        Map<CoordinatesBlock, DataTileEntity> coordMap = new HashMap<>();
+        Set<Integer> registeredEntities = new HashSet<>();
 
         for (WorldServer world : DimensionManager.getWorlds()) {
             for (Object o : world.loadedTileEntityList) {
@@ -108,28 +109,29 @@ public enum TileEntityManager {
                 CoordinatesBlock coord = new CoordinatesBlock(world.provider.getDimension(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ());
                 int hash = System.identityHashCode(tileEntity);
 
-                if (registeredEntities.contains(hash)) continue;    //This entitie has already been seen;
+                if (registeredEntities.contains(hash)) {
+                    continue;    //This entity has already been seen;
+                }
 
                 Block block = world.getBlockState(tileEntity.getPos()).getBlock();
-                if (block == Blocks.AIR || block == null
-                        || !block.hasTileEntity()
-                        || world.getTileEntity(tileEntity.getPos()) == null
-                        || world.getTileEntity(tileEntity.getPos()).getClass() != tileEntity.getClass()) {
+                if (block == Blocks.AIR || block == null || !block.hasTileEntity() || world.getTileEntity(tileEntity.getPos()) == null || world.getTileEntity(tileEntity.getPos()).getClass() != tileEntity.getClass()) {
 
                     orphans.add(new DataTileEntity().fill(tileEntity, "Orphan"));
                     registeredEntities.add(hash);
                 }
 
-                if (coordHashset.containsKey(coord)) {
-                    if (!registeredEntities.contains(hash))
+                if (coordMap.containsKey(coord)) {
+                    if (!registeredEntities.contains(hash)) {
                         orphans.add(new DataTileEntity().fill(tileEntity, "Duplicate"));
+                    }
 
-                    if (!registeredEntities.contains(coordHashset.get(coord).hashCode))
-                        orphans.add(coordHashset.get(coord));
+                    if (!registeredEntities.contains(coordMap.get(coord).hashCode)) {
+                        orphans.add(coordMap.get(coord));
+                    }
                 }
 
-                if (!coordHashset.containsKey(coord)) {
-                    coordHashset.put(coord, new DataTileEntity().fill(tileEntity, "Duplicate"));
+                if (!coordMap.containsKey(coord)) {
+                    coordMap.put(coord, new DataTileEntity().fill(tileEntity, "Duplicate"));
                 }
             }
         }
@@ -139,8 +141,8 @@ public enum TileEntityManager {
         return orphans;
     }
 
-    public ArrayList<DataBlockTileEntityPerClass> getCumulativeAmountTileEntities() {
-        HashBasedTable<Integer, Integer, DataBlockTileEntityPerClass> data = HashBasedTable.create();
+    public List<DataBlockTileEntityPerClass> getCumulativeAmountTileEntities() {
+        Table<Integer, Integer, DataBlockTileEntityPerClass> data = HashBasedTable.create();
 
         for (WorldServer world : DimensionManager.getWorlds()) {
             for (Object o : world.loadedTileEntityList) {
@@ -150,18 +152,19 @@ public enum TileEntityManager {
                 int id = Block.getIdFromBlock(state.getBlock());
                 int meta = state.getBlock().getMetaFromState(state);
 
-                if (!data.contains(id, meta))
+                if (!data.contains(id, meta)) {
                     data.put(id, meta, new DataBlockTileEntityPerClass(id, meta));
+                }
 
                 data.get(id, meta).add();
             }
         }
 
-        return new ArrayList<DataBlockTileEntityPerClass>(data.values());
+        return new ArrayList<>(data.values());
     }
 
-    public ArrayList<DataBlockTileEntityPerClass> getCumulativeTimingTileEntities() {
-        HashBasedTable<Integer, Integer, DataBlockTileEntityPerClass> data = HashBasedTable.create();
+    public List<DataBlockTileEntityPerClass> getCumulativeTimingTileEntities() {
+        Table<Integer, Integer, DataBlockTileEntityPerClass> data = HashBasedTable.create();
 
         for (CoordinatesBlock coord : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             World world = DimensionManager.getWorld(coord.dim);
@@ -170,13 +173,14 @@ public enum TileEntityManager {
             int id = Block.getIdFromBlock(state.getBlock());
             int meta = state.getBlock().getMetaFromState(state);
 
-            if (!data.contains(id, meta))
+            if (!data.contains(id, meta)) {
                 data.put(id, meta, new DataBlockTileEntityPerClass(id, meta));
+            }
 
             data.get(id, meta).add(Profilers.TILE_UPDATE.get().data.get(coord.toNew()).getGeometricMean());
 
         }
 
-        return new ArrayList<DataBlockTileEntityPerClass>(data.values());
+        return new ArrayList<>(data.values());
     }
 }

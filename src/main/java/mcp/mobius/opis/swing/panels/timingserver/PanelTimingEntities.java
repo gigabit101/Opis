@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelTimingEntities extends JPanelMsgHandler implements ITabPanel {
+
     private JButtonAccess btnRun;
     private JButtonAccess btnPull;
     private JButtonAccess btnTeleport;
@@ -49,10 +50,7 @@ public class PanelTimingEntities extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 5 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Type", "ID", "Dim", "Pos", "Update Time", "Data"},
-                new Class[]{String.class, Integer.class, Integer.class, Object.class, DataTiming.class, Integer.class}
-        );
+        table = new JTableStats(new String[] { "Type", "ID", "Dim", "Pos", "Update Time", "Data" }, new Class[] { String.class, Integer.class, Integer.class, Object.class, DataTiming.class, Integer.class });
         scrollPane.setViewportView(table);
 
         lblSummary = new JLabel("New label");
@@ -83,41 +81,36 @@ public class PanelTimingEntities extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_TIMING_ENTITIES: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(DataEntity.class);
+                int row = getTable().clearTable(DataEntity.class);
 
                 for (Object o : rawdata.array) {
                     DataEntity data = (DataEntity) o;
-                    model.addRow(new Object[]{data.name,
-                            data.eid,
-                            data.pos.dim,
-                            String.format("[ %4d %4d %4d ]", data.pos.x, data.pos.y, data.pos.z),
-                            data.update,
-                            data.npoints});
+                    model.addRow(new Object[] { data.name, data.eid, data.pos.dim, String.format("[ %4d %4d %4d ]", data.pos.x, data.pos.y, data.pos.z), data.update, data.npoints });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
             case VALUE_TIMING_ENTITIES: {
-                this.getLblSummary().setText(String.format("Total update time : %s", ((DataTiming) rawdata.value).toString()));
+                getLblSummary().setText(String.format("Total update time : %s", rawdata.value.toString()));
                 break;
             }
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
+                getBtnRun().setText("Run Opis");
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             default:

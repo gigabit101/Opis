@@ -1,7 +1,5 @@
 package mcp.mobius.opis.network;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.newtypes.DataError;
@@ -21,6 +19,7 @@ import java.util.ArrayList;
  * Any class that extends this should have an empty constructor, otherwise the network system will fail.
  */
 public abstract class PacketBase {
+
     public byte header;
     public Message msg;
     public String clazzStr;
@@ -32,7 +31,7 @@ public abstract class PacketBase {
 
     public abstract void decode(ByteBuf input);
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void actionClient(World world, EntityPlayer player) {
         throw new RuntimeException("Packet is not going the right way ! Server side packet seen client side.");
     }
@@ -42,7 +41,9 @@ public abstract class PacketBase {
     }
 
     protected ISerializable dataRead(Class datatype, ByteBuf istream) {
-        if (datatype == null) return new DataError();
+        if (datatype == null) {
+            return new DataError();
+        }
 
         try {
             Method readFromStream = datatype.getMethod("readFromStream", ByteBuf.class);

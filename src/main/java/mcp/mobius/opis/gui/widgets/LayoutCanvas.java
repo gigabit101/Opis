@@ -16,15 +16,15 @@ public class LayoutCanvas extends LayoutBase {
 
     public LayoutCanvas() {
         super(null);
-        this.setGeometry(0, 0, this.rez.getScaledWidth(), this.rez.getScaledHeight(), CType.ABSXY, CType.ABSXY);
+        setGeometry(0, 0, rez.getScaledWidth(), rez.getScaledHeight(), CType.ABSXY, CType.ABSXY);
         Mouse.getDWheel();    // This is to "calibrate" the DWheel
-        this.lastMouseEvent = new MouseEvent(this);
+        lastMouseEvent = new MouseEvent(this);
     }
 
     @Override
     public void draw() {
-        this.rez = new ScaledResolution(mc);
-        this.setGeometry(0, 0, this.rez.getScaledWidth(), this.rez.getScaledHeight(), CType.ABSXY, CType.ABSXY);
+        rez = new ScaledResolution(mc);
+        setGeometry(0, 0, rez.getScaledWidth(), rez.getScaledHeight(), CType.ABSXY, CType.ABSXY);
 
 		/*
 		this.draw(this.getPos());
@@ -36,7 +36,7 @@ public class LayoutCanvas extends LayoutBase {
 
         super.draw();
 
-        this.handleMouseInput();
+        handleMouseInput();
     }
 
     @Override
@@ -51,41 +51,47 @@ public class LayoutCanvas extends LayoutBase {
         // attached to a canvas like this one, or any inheriting one.
 
         MouseEvent event = new MouseEvent(this);
-        EventType type = event.getEventType(this.lastMouseEvent);
-        IWidget targetWidget = this.getWidgetAtCoordinates(event.x, event.y);
+        EventType type = event.getEventType(lastMouseEvent);
+        IWidget targetWidget = getWidgetAtCoordinates(event.x, event.y);
 
         switch (type) {
             case CLICK:
-                if (targetWidget != null)
+                if (targetWidget != null) {
                     targetWidget.onMouseClick(event);
+                }
                 //this.onMouseClick(event);
                 break;
             case DRAG:
-                if (targetWidget != null)
+                if (targetWidget != null) {
                     targetWidget.onMouseDrag(event);
+                }
                 //this.onMouseDrag(event);
                 break;
             case MOVE:
-                if (targetWidget != null)
+                if (targetWidget != null) {
                     targetWidget.onMouseMove(event);
+                }
                 //this.onMouseMove(event);
                 break;
             case RELEASED:
-                if (targetWidget != null)
+                if (targetWidget != null) {
                     targetWidget.onMouseRelease(event);
+                }
                 //this.onMouseRelease(event);
                 break;
             case WHEEL:
-                if (targetWidget != null)
+                if (targetWidget != null) {
                     targetWidget.onMouseWheel(event);
+                }
                 //this.onMouseWheel(event);
                 break;
             case ENTER:
-                if (event.trgwidget != null)
+                if (event.trgwidget != null) {
                     event.trgwidget.onMouseEnter(event);
-                if (this.lastMouseEvent.trgwidget != null) {
+                }
+                if (lastMouseEvent.trgwidget != null) {
                     event.type = EventType.LEAVE;
-                    this.lastMouseEvent.trgwidget.onMouseLeave(event);
+                    lastMouseEvent.trgwidget.onMouseLeave(event);
                 }
                 break;
             case NONE:
@@ -94,39 +100,39 @@ public class LayoutCanvas extends LayoutBase {
                 break;
         }
 
-        this.lastMouseEvent = event;
+        lastMouseEvent = event;
     }
 
     @Override
     public void onWidgetEvent(IWidget srcwidget, Signal signal, Object... params) {
-        if (signal == Signal.DRAGGED)
-            this.draggedWidget = srcwidget;
-        else
+        if (signal == Signal.DRAGGED) {
+            draggedWidget = srcwidget;
+        } else {
             super.onWidgetEvent(srcwidget, signal, params);
+        }
     }
 
     @Override
     public void onMouseRelease(MouseEvent event) {
-        if (event.button == 0)
-            this.draggedWidget = null;
+        if (event.button == 0) {
+            draggedWidget = null;
+        }
         super.onMouseRelease(event);
     }
 
     @Override
     public void onMouseDrag(MouseEvent event) {
-        if (this.draggedWidget != null)
-            this.draggedWidget.onMouseDrag(event);
-        else
+        if (draggedWidget != null) {
+            draggedWidget.onMouseDrag(event);
+        } else {
             super.onMouseDrag(event);
+        }
     }
 
     public boolean hasWidgetAtCursor() {
-        double x = (double) Mouse.getEventX() * (double) this.getSize().getX() / (double) this.mc.displayWidth;
-        double y = (double) this.getSize().getY() - (double) Mouse.getEventY() * (double) this.getSize().getY() / (double) this.mc.displayHeight - 1.0;
-        IWidget widget = this.getWidgetAtCoordinates(x, y);
-        if (widget != null && !widget.equals(this)) {
-            return true;
-        }
-        return false;
+        double x = (double) Mouse.getEventX() * (double) getSize().getX() / (double) mc.displayWidth;
+        double y = (double) getSize().getY() - (double) Mouse.getEventY() * (double) getSize().getY() / (double) mc.displayHeight - 1.0;
+        IWidget widget = getWidgetAtCoordinates(x, y);
+        return widget != null && !widget.equals(this);
     }
 }

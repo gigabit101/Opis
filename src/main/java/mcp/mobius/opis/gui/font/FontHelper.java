@@ -8,7 +8,6 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import java.nio.FloatBuffer;
 
-
 public class FontHelper {
 
     public static void drawString(String s, int x, int y, TrueTypeFont font, float scaleX, float scaleY, float... rgba) {
@@ -28,7 +27,7 @@ public class FontHelper {
         matrix.load(matrixData);
 
         FontHelper.set2DMode();
-        y = mc.displayHeight - (y * sr.getScaleFactor()) - (((font.getLineHeight() / amt)));
+        y = mc.displayHeight - (y * sr.getScaleFactor()) - (font.getLineHeight() / amt);
         GL11.glEnable(GL11.GL_BLEND);
 
         font.drawString(x * sr.getScaleFactor(), y - matrix.m31 * sr.getScaleFactor(), s, scaleX / amt, scaleY / amt, rgba);

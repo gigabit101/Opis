@@ -11,12 +11,13 @@ import java.util.HashMap;
 public class JTableStats extends JTable {
 
     public class OpisTableModel extends DefaultTableModel {
+
         String[] headers;
         Class[] columnTypes;
         boolean[] columnEditables;
 
         public OpisTableModel(String[] headers, Class[] columnTypes, boolean[] columnEditables) {
-            super(new Object[][]{}, headers);
+            super(new Object[][] {}, headers);
             this.headers = headers;
             this.columnTypes = columnTypes;
             this.columnEditables = columnEditables;
@@ -37,34 +38,26 @@ public class JTableStats extends JTable {
     protected int[] alignList;
 
     public JTableStats(String[] headers, Class[] columnTypes) {
-        this(headers, columnTypes,
-                new int[]{SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER},
-                new boolean[]{false, false, false, false, false, false, false, false, false, false}
-        );
+        this(headers, columnTypes, new int[] { SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER }, new boolean[] { false, false, false, false, false, false, false, false, false, false });
     }
 
     public JTableStats(String[] headers, Class[] columnTypes, boolean[] editable) {
-        this(headers, columnTypes,
-                new int[]{SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER},
-                editable
-        );
+        this(headers, columnTypes, new int[] { SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER }, editable);
     }
 
     public JTableStats(String[] headers, Class[] columnTypes, int[] align) {
-        this(headers, columnTypes, align,
-                new boolean[]{false, false, false, false, false, false, false, false, false, false}
-        );
+        this(headers, columnTypes, align, new boolean[] { false, false, false, false, false, false, false, false, false, false });
     }
 
     public JTableStats(String[] headers, Class[] columnTypes, int[] align, boolean[] editable) {
 
         super();
-        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.setAutoCreateRowSorter(true);
-        this.alignList = align;
-        this.setModel(new OpisTableModel(headers, columnTypes, editable));
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        setAutoCreateRowSorter(true);
+        alignList = align;
+        setModel(new OpisTableModel(headers, columnTypes, editable));
 
-        HashMap<Integer, DefaultTableCellRenderer> hashAlign = new HashMap<Integer, DefaultTableCellRenderer>();
+        HashMap<Integer, DefaultTableCellRenderer> hashAlign = new HashMap<>();
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -78,12 +71,13 @@ public class JTableStats extends JTable {
         rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
         hashAlign.put(SwingConstants.RIGHT, rightRenderer);
 
-        for (int i = 0; i < this.getColumnCount(); i++)
-            this.getColumnModel().getColumn(i).setCellRenderer(hashAlign.get(align[i]));
+        for (int i = 0; i < getColumnCount(); i++) {
+            getColumnModel().getColumn(i).setCellRenderer(hashAlign.get(align[i]));
+        }
     }
 
     public ArrayList<ISerializable> getTableData() {
-        return this.statistics;
+        return statistics;
     }
 
     public void setTableData(ArrayList<ISerializable> statistics) {
@@ -91,7 +85,7 @@ public class JTableStats extends JTable {
     }
 
     public void clearTableData() {
-        this.statistics = new ArrayList<ISerializable>();
+        statistics = new ArrayList<>();
     }
 
     public void addTableData(ArrayList<ISerializable> statistics) {
@@ -104,19 +98,19 @@ public class JTableStats extends JTable {
     }
 
     public <U> int clearTable(Class<U> datatype) {
-        int row = this.getSelectedRow();
+        int row = getSelectedRow();
         try {
-            this.getModel().setRowCount(0);
+            getModel().setRowCount(0);
         } catch (NullPointerException e) {
         }
         return row;
     }
 
     public void dataUpdated(int row) {
-        this.getModel().fireTableDataChanged();
+        getModel().fireTableDataChanged();
 
         try {
-            this.setRowSelectionInterval(row, row);
+            setRowSelectionInterval(row, row);
         } catch (IllegalArgumentException e) {
 
         }

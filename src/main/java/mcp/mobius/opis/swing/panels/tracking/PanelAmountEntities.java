@@ -16,6 +16,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelAmountEntities extends JPanelMsgHandler implements ITabPanel {
+
     private JCheckBox chckbxFilter;
     private JButtonAccess btnKillAll;
     private JButtonAccess btnRefresh;
@@ -42,10 +43,7 @@ public class PanelAmountEntities extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 4 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Type", "Amount"},
-                new Class[]{String.class, Integer.class}
-        );
+        table = new JTableStats(new String[] { "Type", "Amount" }, new Class[] { String.class, Integer.class });
         scrollPane.setViewportView(table);
 
         lblSummary = new JLabel("New label");
@@ -72,22 +70,22 @@ public class PanelAmountEntities extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_AMOUNT_ENTITIES: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
-                DefaultTableModel model = this.getTable().getModel();
-                int row = this.getTable().clearTable(AmountHolder.class);
+                DefaultTableModel model = getTable().getModel();
+                int row = getTable().clearTable(AmountHolder.class);
                 int totalEntities = 0;
 
                 for (Object o : rawdata.array) {
                     AmountHolder entity = (AmountHolder) o;
-                    model.addRow(new Object[]{entity.key, entity.value});
+                    model.addRow(new Object[] { entity.key, entity.value });
                     totalEntities += entity.value;
                 }
 
-                this.getLblSummary().setText("Total : " + String.valueOf(totalEntities));
-                this.getTable().dataUpdated(row);
+                getLblSummary().setText("Total : " + String.valueOf(totalEntities));
+                getTable().dataUpdated(row);
                 break;
             }
             default:

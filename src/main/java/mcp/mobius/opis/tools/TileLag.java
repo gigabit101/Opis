@@ -7,7 +7,9 @@ public class TileLag extends TileEntity implements ITickable {
 
     @Override
     public void update() {
-        if (this.world.isRemote) return;
+        if (world.isRemote) {
+            return;
+        }
 
         try {
             Thread.sleep(5);

@@ -1,16 +1,12 @@
 package mcp.mobius.opis.events;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table.Cell;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.api.TabPanelRegistrar;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.SerialLong;
 import mcp.mobius.opis.data.holders.newtypes.DataBlockRender;
 import mcp.mobius.opis.data.holders.newtypes.DataEntityRender;
-import mcp.mobius.opis.data.holders.newtypes.DataEvent;
 import mcp.mobius.opis.data.holders.newtypes.DataTileEntityRender;
-import mcp.mobius.opis.data.profilers.ProfilerEvent;
 import mcp.mobius.opis.data.profilers.ProfilerRenderBlock;
 import mcp.mobius.opis.data.profilers.ProfilerRenderEntity;
 import mcp.mobius.opis.data.profilers.ProfilerRenderTileEntity;
@@ -30,7 +26,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,26 +42,26 @@ public enum OpisClientTickHandler {
     public EventTimer timer10000 = new EventTimer(10000);
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void tickEnd(TickEvent.ClientTickEvent event) {
 
         // One second timer
         if (timer1000.isDone()) {
-            if (Opis.swingOpen)
+            if (Opis.swingOpen) {
                 PacketManager.sendToServer(new PacketReqData(Message.STATUS_PING, new SerialLong(System.nanoTime())));
+            }
         }
 
-
         if (Opis.profilerRunClient) {
-            ((PanelRenderTileEnts) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS))).getBtnRunRender().setText("Running...");
-            ((PanelRenderEntities) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES))).getBtnRunRender().setText("Running...");
-            ((PanelRenderHandlers) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERHANDLERS))).getBtnRunRender().setText("Running...");
-            ((PanelEventClient) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.CLIENTEVENTS))).getBtnRunRender().setText("Running...");
+            ((PanelRenderTileEnts) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS)).getBtnRunRender().setText("Running...");
+            ((PanelRenderEntities) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES)).getBtnRunRender().setText("Running...");
+            ((PanelRenderHandlers) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERHANDLERS)).getBtnRunRender().setText("Running...");
+            ((PanelEventClient) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.CLIENTEVENTS)).getBtnRunRender().setText("Running...");
         } else {
-            ((PanelRenderTileEnts) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS))).getBtnRunRender().setText("Run Render");
-            ((PanelRenderEntities) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES))).getBtnRunRender().setText("Run Render");
-            ((PanelRenderHandlers) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERHANDLERS))).getBtnRunRender().setText("Run Render");
-            ((PanelEventClient) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.CLIENTEVENTS))).getBtnRunRender().setText("Run Render");
+            ((PanelRenderTileEnts) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS)).getBtnRunRender().setText("Run Render");
+            ((PanelRenderEntities) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES)).getBtnRunRender().setText("Run Render");
+            ((PanelRenderHandlers) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERHANDLERS)).getBtnRunRender().setText("Run Render");
+            ((PanelEventClient) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.CLIENTEVENTS)).getBtnRunRender().setText("Run Render");
         }
 
         profilerUpdateTickCounter++;
@@ -80,7 +75,7 @@ public enum OpisClientTickHandler {
 
             System.out.printf("Profiling done\n");
 
-            this.updateTabs();
+            updateTabs();
 
         }
     }
@@ -88,7 +83,7 @@ public enum OpisClientTickHandler {
     private void updateTabs() {
         //====================================================================================
 
-        ArrayList<DataTileEntityRender> tileEntData = new ArrayList<DataTileEntityRender>();
+        ArrayList<DataTileEntityRender> tileEntData = new ArrayList<>();
         double tileEntTotal = 0.0D;
         for (TileEntity te : ((ProfilerRenderTileEntity) ProfilerSection.RENDER_TILEENTITY.getProfiler()).data.keySet()) {
             try {
@@ -103,12 +98,12 @@ public enum OpisClientTickHandler {
         System.out.printf("Rendered %d TileEntities\n", tileEntData.size());
 
         Collections.sort(tileEntData);
-        ((PanelRenderTileEnts) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS))).setTable(tileEntData);
-        ((PanelRenderTileEnts) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS))).getLblTotal().setText(String.format("Total : %.3f µs", tileEntTotal / 1000.0));
+        ((PanelRenderTileEnts) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS)).setTable(tileEntData);
+        ((PanelRenderTileEnts) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERTILEENTS)).getLblTotal().setText(String.format("Total : %.3f µs", tileEntTotal / 1000.0));
 
         //====================================================================================
 
-        ArrayList<DataEntityRender> entData = new ArrayList<DataEntityRender>();
+        ArrayList<DataEntityRender> entData = new ArrayList<>();
         double entTotal = 0.0D;
         for (Entity ent : ((ProfilerRenderEntity) ProfilerSection.RENDER_ENTITY.getProfiler()).data.keySet()) {
             try {
@@ -123,8 +118,8 @@ public enum OpisClientTickHandler {
         System.out.printf("Rendered %d Entities\n", entData.size());
 
         Collections.sort(entData);
-        ((PanelRenderEntities) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES))).setTable(entData);
-        ((PanelRenderEntities) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES))).getLblTotal().setText(String.format("Total : %.3f µs", entTotal / 1000.0));
+        ((PanelRenderEntities) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES)).setTable(entData);
+        ((PanelRenderEntities) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.RENDERENTITIES)).getLblTotal().setText(String.format("Total : %.3f µs", entTotal / 1000.0));
 
         //====================================================================================
 
@@ -132,17 +127,11 @@ public enum OpisClientTickHandler {
 
         //====================================================================================
 
-        ArrayList<DataEvent> timingEvents = new ArrayList<DataEvent>();
-        HashBasedTable<Class, String, DescriptiveStatistics> eventData = ((ProfilerEvent) ProfilerSection.EVENT_INVOKE.getProfiler()).data;
-        HashBasedTable<Class, String, String> eventMod = ((ProfilerEvent) ProfilerSection.EVENT_INVOKE.getProfiler()).dataMod;
-        for (Cell<Class, String, DescriptiveStatistics> cell : eventData.cellSet()) {
-            timingEvents.add(new DataEvent().fill(cell, eventMod.get(cell.getRowKey(), cell.getColumnKey())));
-        }
-        ((PanelEventClient) (TabPanelRegistrar.INSTANCE.getTab(SelectedTab.CLIENTEVENTS))).setTable(timingEvents);
+        ((PanelEventClient) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.CLIENTEVENTS)).setTable(Profilers.ASM_EVENT_HANDLER.get().getData());
 
         //====================================================================================
 
-        ArrayList<DataBlockRender> blockData = new ArrayList<DataBlockRender>();
+        ArrayList<DataBlockRender> blockData = new ArrayList<>();
         for (CoordinatesBlock coord : ((ProfilerRenderBlock) ProfilerSection.RENDER_BLOCK.getProfiler()).data.keySet()) {
             try {
                 DataBlockRender dataBlock = new DataBlockRender().fill(coord);

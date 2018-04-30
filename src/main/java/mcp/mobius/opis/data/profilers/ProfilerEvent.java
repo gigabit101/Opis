@@ -32,10 +32,10 @@ public class ProfilerEvent extends ProfilerAbstract {
         if (eventName.contains("TickEvent")) {
 
             try {
-                String name = (String) pkg + "|" + handler.getClass().getSimpleName();
+                String name = pkg + "|" + handler.getClass().getSimpleName();
                 dataTick.get(event.getClass(), name).addValue(clock.getDelta());
             } catch (Exception e) {
-                String name = (String) pkg + "|" + handler.getClass().getSimpleName();
+                String name = pkg + "|" + handler.getClass().getSimpleName();
                 dataTick.put(event.getClass(), name, new DescriptiveStatistics(250));
                 dataModTick.put(event.getClass(), name, ((ModContainer) mod).getName());
                 dataTick.get(event.getClass(), name).addValue(clock.getDelta());
@@ -44,10 +44,10 @@ public class ProfilerEvent extends ProfilerAbstract {
         } else {
 
             try {
-                String name = (String) pkg + "|" + handler.getClass().getSimpleName();
+                String name = pkg + "|" + handler.getClass().getSimpleName();
                 data.get(event.getClass(), name).addValue(clock.getDelta());
             } catch (Exception e) {
-                String name = (String) pkg + "|" + handler.getClass().getSimpleName();
+                String name = pkg + "|" + handler.getClass().getSimpleName();
                 data.put(event.getClass(), name, new DescriptiveStatistics(250));
                 dataMod.put(event.getClass(), name, ((ModContainer) mod).getName());
                 data.get(event.getClass(), name).addValue(clock.getDelta());

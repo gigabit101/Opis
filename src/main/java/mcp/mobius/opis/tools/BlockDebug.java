@@ -13,7 +13,7 @@ public class BlockDebug extends BlockContainer {
     public BlockDebug(Material par2Material) {
         super(par2Material);
         setCreativeTab(CreativeTabs.MISC);
-        this.setUnlocalizedName("debug_companion_cube");
+        setUnlocalizedName("debug_companion_cube");
     }
 
     @Override

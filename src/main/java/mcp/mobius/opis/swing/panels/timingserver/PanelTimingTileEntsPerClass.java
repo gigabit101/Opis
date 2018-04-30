@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.HashMap;
 
 public class PanelTimingTileEntsPerClass extends JPanelMsgHandler implements ITabPanel {
+
     private JButtonAccess btnRun;
 
     public PanelTimingTileEntsPerClass() {
@@ -31,11 +32,7 @@ public class PanelTimingTileEntsPerClass extends JPanelMsgHandler implements ITa
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 2 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Name", "Mod", "Amount", "Timing", "Mean value"},
-                new Class[]{String.class, String.class, Integer.class, DataTiming.class, DataTiming.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER}
-        );
+        table = new JTableStats(new String[] { "Name", "Mod", "Amount", "Timing", "Mean value" }, new Class[] { String.class, String.class, Integer.class, DataTiming.class, DataTiming.class }, new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER });
         scrollPane.setViewportView(table);
     }
 
@@ -44,21 +41,22 @@ public class PanelTimingTileEntsPerClass extends JPanelMsgHandler implements ITa
         switch (msg) {
 
             case LIST_TIMING_TILEENTS_PER_CLASS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(DataBlockTileEntityPerClass.class);
+                int row = getTable().clearTable(DataBlockTileEntityPerClass.class);
 
-                HashMap<String, DataBlockTileEntityPerClass> cumData = new HashMap<String, DataBlockTileEntityPerClass>();
+                HashMap<String, DataBlockTileEntityPerClass> cumData = new HashMap<>();
 
                 for (Object o : rawdata.array) {
                     DataBlockTileEntityPerClass data = (DataBlockTileEntityPerClass) o;
                     String name = ModIdentification.getStackName(data.id, data.meta);
 
-                    if (!cumData.containsKey(name))
+                    if (!cumData.containsKey(name)) {
                         cumData.put(name, new DataBlockTileEntityPerClass(data.id, data.meta));
+                    }
 
                     cumData.get(name).add(data.amount, data.update.timing);
                 }
@@ -66,24 +64,24 @@ public class PanelTimingTileEntsPerClass extends JPanelMsgHandler implements ITa
                 for (String s : cumData.keySet()) {
                     String name = s;
                     String modID = ModIdentification.getModStackName(cumData.get(s).id, cumData.get(s).meta);
-                    model.addRow(new Object[]{name, modID, cumData.get(s).amount, cumData.get(s).update, new DataTiming(cumData.get(s).update.timing / cumData.get(s).amount)});
+                    model.addRow(new Object[] { name, modID, cumData.get(s).amount, cumData.get(s).update, new DataTiming(cumData.get(s).update.timing / cumData.get(s).amount) });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
 
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
+                getBtnRun().setText("Run Opis");
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             default:

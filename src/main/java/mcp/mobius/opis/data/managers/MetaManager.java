@@ -2,7 +2,6 @@ package mcp.mobius.opis.data.managers;
 
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.events.OpisServerTickHandler;
-import mcp.mobius.opis.profiler.ProfilerSection;
 import mcp.mobius.opis.profiler.Profilers;
 import net.minecraftforge.fml.relauncher.Side;
 

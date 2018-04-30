@@ -34,7 +34,7 @@ public enum DataType {
     DATAENTITYPERCLASS(DataEntityPerClass.class),
     DATAENTITYRENDER(DataEntityRender.class),
     DATAEVENT(DataEvent.class),
-    DATANETWORKTICK(DataNetworkTick.class),
+    //DATANETWORKTICK(DataNetworkTick.class),
     DATAPACKET(DataPacket.class),
     DATAPACKET250(DataPacket250.class),
     DATASTRINGUPD(DataStringUpdate.class),
@@ -50,11 +50,12 @@ public enum DataType {
     private static HashBiMap<DataType, Class> bimap = HashBiMap.create(50);
 
     static {
-        for (DataType type : DataType.values())
+        for (DataType type : DataType.values()) {
             bimap.put(type, type.clazz);
+        }
     }
 
-    private DataType(Class clazz) {
+    DataType(Class clazz) {
         this.clazz = clazz;
     }
 

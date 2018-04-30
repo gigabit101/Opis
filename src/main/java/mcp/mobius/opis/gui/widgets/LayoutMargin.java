@@ -14,7 +14,7 @@ public class LayoutMargin extends LayoutBase {
 
     public LayoutMargin(IWidget parent) {
         super(parent);
-        this.setGeometry(new WidgetGeometry(0, 0, 0, 0, CType.ABSXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
+        setGeometry(new WidgetGeometry(0, 0, 0, 0, CType.ABSXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
     }
 
     public void setMargins(int left, int right, int top, int bottom) {
@@ -26,13 +26,13 @@ public class LayoutMargin extends LayoutBase {
 
     @Override
     public Point getSize() {
-        Point parentSize = this.parent.getSize();
+        Point parentSize = parent.getSize();
         return new Point(parentSize.getX() - left - right, parentSize.getY() - top - bottom);
     }
 
     @Override
     public Point getPos() {
-        Point parentPos = this.parent.getPos();
+        Point parentPos = parent.getPos();
         return new Point(parentPos.getX() + left, parentPos.getY() + top);
     }
 

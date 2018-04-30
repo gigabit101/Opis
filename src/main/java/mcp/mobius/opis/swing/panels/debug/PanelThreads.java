@@ -21,11 +21,7 @@ public class PanelThreads extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");
 
-        table = new JTableStats(
-                new String[]{"Name", "Class"},
-                new Class[]{CachedString.class, CachedString.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.LEFT}
-        );
+        table = new JTableStats(new String[] { "Name", "Class" }, new Class[] { CachedString.class, CachedString.class }, new int[] { SwingConstants.LEFT, SwingConstants.LEFT });
         scrollPane.setViewportView(table);
     }
 
@@ -33,19 +29,19 @@ public class PanelThreads extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_THREADS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
-                DefaultTableModel model = this.getTable().getModel();
-                int row = this.getTable().clearTable(DataThread.class);
+                DefaultTableModel model = getTable().getModel();
+                int row = getTable().clearTable(DataThread.class);
 
                 for (Object o : rawdata.array) {
                     DataThread data = (DataThread) o;
-                    model.addRow(new Object[]{data.name, data.clzz});
+                    model.addRow(new Object[] { data.name, data.clzz });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }

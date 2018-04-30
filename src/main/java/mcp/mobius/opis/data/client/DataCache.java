@@ -19,23 +19,23 @@ public class DataCache implements IMessageHandler {
     private AccessLevel clientAccess = AccessLevel.NONE;
 
     public AccessLevel getAccessLevel() {
-        return this.clientAccess;
+        return clientAccess;
     }
 
     public long getClockScrew() {
-        return this.clockScrew;
+        return clockScrew;
     }
 
     @Override
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case STATUS_ACCESS_LEVEL: {
-                this.clientAccess = AccessLevel.values()[((SerialInt) rawdata.value).value];
+                clientAccess = AccessLevel.values()[((SerialInt) rawdata.value).value];
                 break;
             }
 
             case STATUS_CURRENT_TIME: {
-                this.clockScrew = System.currentTimeMillis() - ((SerialLong) rawdata.value).value;
+                clockScrew = System.currentTimeMillis() - ((SerialLong) rawdata.value).value;
                 System.out.printf("Adjusting clock screw. Server differential is %d ms.\n", clockScrew);
                 break;
             }

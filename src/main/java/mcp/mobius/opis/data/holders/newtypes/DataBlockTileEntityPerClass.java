@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
@@ -18,35 +16,35 @@ public class DataBlockTileEntityPerClass implements ISerializable, Comparable {
     public DataBlockTileEntityPerClass(int id, int meta) {
         this.id = id;
         this.meta = meta;
-        this.amount = 0;
-        this.update = new DataTiming();
+        amount = 0;
+        update = new DataTiming();
     }
 
     public DataBlockTileEntityPerClass add() {
-        this.amount += 1;
+        amount += 1;
         return this;
     }
 
     public DataBlockTileEntityPerClass add(Double timing) {
-        this.amount += 1;
-        this.update.timing += timing;
+        amount += 1;
+        update.timing += timing;
 
         return this;
     }
 
     public DataBlockTileEntityPerClass add(int amount, Double timing) {
         this.amount += amount;
-        this.update.timing += timing;
+        update.timing += timing;
 
         return this;
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        stream.writeInt(this.id);
-        stream.writeInt(this.meta);
-        stream.writeInt(this.amount);
-        this.update.writeToStream(stream);
+        stream.writeInt(id);
+        stream.writeInt(meta);
+        stream.writeInt(amount);
+        update.writeToStream(stream);
     }
 
     public static DataBlockTileEntityPerClass readFromStream(ByteBuf stream) {
@@ -60,7 +58,7 @@ public class DataBlockTileEntityPerClass implements ISerializable, Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return this.update.compareTo(((DataBlockTileEntityPerClass) o).update);
+        return update.compareTo(((DataBlockTileEntityPerClass) o).update);
     }
 
 }

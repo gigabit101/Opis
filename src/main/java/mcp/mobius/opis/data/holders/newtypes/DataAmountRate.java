@@ -1,11 +1,10 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
 public class DataAmountRate implements Comparable, ISerializable {
+
     public Long size;    // Size is stored in byte
     public int interval;
 
@@ -17,20 +16,20 @@ public class DataAmountRate implements Comparable, ISerializable {
 
     @Override
     public int compareTo(Object o) {
-        return ((DataAmountRate) o).size.compareTo(this.size);    // Reverse order ! Put higher values FIRST
+        return ((DataAmountRate) o).size.compareTo(size);    // Reverse order ! Put higher values FIRST
     }
 
     public void reset() {
-        this.size = 0L;
+        size = 0L;
     }
 
     public String toString() {
-        return String.format("%.2f packet/s", (double) this.size / (double) this.interval);
+        return String.format("%.2f packet/s", (double) size / (double) interval);
     }
 
     public void writeToStream(ByteBuf stream) {
-        stream.writeLong(this.size);
-        stream.writeInt(this.interval);
+        stream.writeLong(size);
+        stream.writeInt(interval);
     }
 
     public static DataAmountRate readFromStream(ByteBuf stream) {

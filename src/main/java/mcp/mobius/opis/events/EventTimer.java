@@ -1,6 +1,7 @@
 package mcp.mobius.opis.events;
 
 public class EventTimer {
+
     private long interval;
     private long lastTick = System.nanoTime();
 
@@ -10,11 +11,13 @@ public class EventTimer {
 
     public boolean isDone() {
         long time = System.nanoTime();
-        long delta = (time - this.lastTick) - this.interval;
+        long delta = time - lastTick - interval;
         boolean done = delta >= 0;
-        if (!done) return false;
+        if (!done) {
+            return false;
+        }
 
-        this.lastTick = time - delta;
+        lastTick = time - delta;
         return true;
     }
 }

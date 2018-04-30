@@ -12,37 +12,36 @@ import java.util.Set;
  */
 public class ProfilerState<A extends IProfiler> {
 
-    private final A profiler;
+    public IProfiler profiler;
+    public boolean isEnabled;
+    private final A actualProfiler;
     private final Set<Side> runSides;
     private final ProfilerType type;
-    private boolean isEnabled;
 
     public ProfilerState(A profiler, ProfilerType type, Side... runSides) {
-        this.profiler = profiler;
+        isEnabled = type == ProfilerType.REAL_TIME;
+        this.actualProfiler = profiler;
+        this.profiler = isEnabled ? actualProfiler : Profilers.getDummyProfiler();
         this.type = type;
         this.runSides = EnumSet.noneOf(Side.class);
         Collections.addAll(this.runSides, runSides);
-        isEnabled = type == ProfilerType.REAL_TIME;
     }
 
     public A get() {
-        return profiler;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
+        return actualProfiler;
     }
 
     public void setEnabled() {
         if (type == ProfilerType.ON_REQUEST) {
             isEnabled = true;
-            Profilers.lastRun = System.currentTimeMillis();
+            profiler = actualProfiler;
         }
     }
 
-    public void setDissabled() {
+    public void setDisabled() {
         if (type == ProfilerType.ON_REQUEST) {
             isEnabled = false;
+            profiler = Profilers.getDummyProfiler();
         }
     }
 

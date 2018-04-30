@@ -15,15 +15,13 @@ public class CommandTicks extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
-
 
     @Override
     public int getRequiredPermissionLevel() {
         return 3;
     }
-
 
     @Override
     public String getDescription() {
@@ -42,7 +40,9 @@ public class CommandTicks extends CommandBase implements IOpisCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length < 1) return;
+        if (args.length < 1) {
+            return;
+        }
         try {
             Opis.profilerMaxTicks = Integer.valueOf(args[0]);
             sender.sendMessage(new TextComponentString(String.format("\u00A7oOpis ticks set to %s ticks.", args[0])));
@@ -53,8 +53,12 @@ public class CommandTicks extends CommandBase implements IOpisCommand {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (sender instanceof DedicatedServer) return true;
-        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+        if (sender instanceof DedicatedServer) {
+            return true;
+        }
+        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) {
+            return true;
+        }
         return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP) sender).getGameProfile().getName());
     }
 }

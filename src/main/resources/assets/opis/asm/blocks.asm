@@ -110,3 +110,40 @@ list i_FMLOH_write
 INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getOutboundFMLPacketProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
 ALOAD 4
 INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.start (Ljava/lang/Object;)V
+
+### ASMEventHandler
+list i_init
+ALOAD 0
+NEW java/lang/StringBuilder
+DUP
+ALOAD 2
+INVOKEVIRTUAL java/lang/reflect/Method.getDeclaringClass ()Ljava/lang/Class;
+INVOKEVIRTUAL java/lang/Class.getCanonicalName ()Ljava/lang/String;
+INVOKESPECIAL java/lang/StringBuilder.<init> (Ljava/lang/String;)V
+LDC "."
+INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+ALOAD 2
+INVOKEVIRTUAL java/lang/reflect/Method.getName ()Ljava/lang/String;
+INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+#ALOAD 2
+#INVOKESTATIC org/objectweb/asm/Type.getMethodDescriptor (Ljava/lang/reflect/Method;)Ljava/lang/String;
+#INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
+PUTFIELD net/minecraftforge/fml/common/eventhandler/ASMEventHandler.handler_method : Ljava/lang/String;
+
+list n_invoke
+ALOAD 1
+INVOKEINTERFACE net/minecraftforge/fml/common/eventhandler/IEventListener.invoke (Lnet/minecraftforge/fml/common/eventhandler/Event;)V
+
+list i_invoke_pre
+INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getASMEventHandlerProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
+INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.start ()V
+
+list i_invoke_post
+INVOKESTATIC mcp/mobius/opis/profiler/Profilers.getASMEventHandlerProfiler ()Lmcp/mobius/opis/profiler/IProfiler;
+ALOAD 1
+ALOAD 0
+GETFIELD net/minecraftforge/fml/common/eventhandler/ASMEventHandler.handler_method : Ljava/lang/String;
+ALOAD 0
+GETFIELD net/minecraftforge/fml/common/eventhandler/ASMEventHandler.owner : Lnet/minecraftforge/fml/common/ModContainer;
+INVOKEINTERFACE mcp/mobius/opis/profiler/IProfiler.stop (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)V

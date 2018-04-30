@@ -17,7 +17,6 @@ public class CommandAddPrivileged extends CommandBase implements IOpisCommand {
         return 3;
     }
 
-
     @Override
     public String getDescription() {
         return "Add a user to the privileged list of users.";
@@ -46,8 +45,12 @@ public class CommandAddPrivileged extends CommandBase implements IOpisCommand {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (sender instanceof DedicatedServer) return true;
-        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+        if (sender instanceof DedicatedServer) {
+            return true;
+        }
+        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) {
+            return true;
+        }
         return PlayerTracker.INSTANCE.isAdmin(((EntityPlayerMP) sender).getGameProfile().getName());
     }
 }

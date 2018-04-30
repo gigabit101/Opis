@@ -16,14 +16,15 @@ public class LayoutBase extends WidgetBase {
 
     @Override
     public void draw(Point pos) {
-        if (this.renderBG)
-            UIHelper.drawGradientRect(this.getLeft(), this.getTop(), this.getRight(), this.getBottom(), 0, this.bgcolor1, this.bgcolor2);
+        if (renderBG) {
+            UIHelper.drawGradientRect(getLeft(), getTop(), getRight(), getBottom(), 0, bgcolor1, bgcolor2);
+        }
     }
 
     public void setBackgroundColors(int bg1, int bg2) {
-        this.bgcolor1 = bg1;
-        this.bgcolor2 = bg2;
-        this.renderBG = true;
+        bgcolor1 = bg1;
+        bgcolor2 = bg2;
+        renderBG = true;
     }
 
 	/*

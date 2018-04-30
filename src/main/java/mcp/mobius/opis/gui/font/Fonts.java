@@ -7,7 +7,6 @@ import java.awt.*;
 
 public class Fonts {
 
-
     /**
      * USAGE GUIDE, HUE!
      * <p>
@@ -36,8 +35,7 @@ public class Fonts {
      * - oku
      */
 
-    public static TrueTypeFont fontHelvetica = null, fontMinecraft = null, fontCoolvetica = null,
-            fontArial = null, fontArialSmall = null, fontVenice = null;
+    public static TrueTypeFont fontHelvetica = null, fontMinecraft = null, fontCoolvetica = null, fontArial = null, fontArialSmall = null, fontVenice = null;
 
     public static void initFonts() {
         fontVenice = createFont(new ResourceLocation("okuguiapi", "venice.ttf"), 25, false);

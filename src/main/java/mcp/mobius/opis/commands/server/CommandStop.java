@@ -3,7 +3,6 @@ package mcp.mobius.opis.commands.server;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.commands.IOpisCommand;
 import mcp.mobius.opis.events.PlayerTracker;
-import mcp.mobius.opis.profiler.ProfilerSection;
 import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -18,9 +17,8 @@ public class CommandStop extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
-
 
     @Override
     public int getRequiredPermissionLevel() {
@@ -29,8 +27,12 @@ public class CommandStop extends CommandBase implements IOpisCommand {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (sender instanceof DedicatedServer) return true;
-        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+        if (sender instanceof DedicatedServer) {
+            return true;
+        }
+        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) {
+            return true;
+        }
         return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP) sender).getGameProfile().getName());
     }
 

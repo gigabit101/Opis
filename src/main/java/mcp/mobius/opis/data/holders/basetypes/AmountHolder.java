@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.basetypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -19,7 +17,7 @@ public class AmountHolder implements ISerializable {
     @Override
     public void writeToStream(ByteBuf stream) {
         ByteBufUtils.writeUTF8String(stream, key);
-        stream.writeInt(this.value);
+        stream.writeInt(value);
     }
 
     public static AmountHolder readFromStream(ByteBuf istream) {

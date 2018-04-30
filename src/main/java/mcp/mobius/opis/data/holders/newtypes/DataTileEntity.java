@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -16,10 +14,10 @@ public class DataTileEntity implements ISerializable {
     public CachedString cause;
 
     public DataTileEntity fill(TileEntity tileEntity, String cause) {
-        this.pos = new CoordinatesBlock(tileEntity.getWorld().provider.getDimension(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ());
-        this.clazz = new CachedString(tileEntity.getClass().getCanonicalName());
-        this.hashCode = System.identityHashCode(tileEntity);
-        this.isValid = !tileEntity.isInvalid();
+        pos = new CoordinatesBlock(tileEntity.getWorld().provider.getDimension(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ());
+        clazz = new CachedString(tileEntity.getClass().getCanonicalName());
+        hashCode = System.identityHashCode(tileEntity);
+        isValid = !tileEntity.isInvalid();
         this.cause = new CachedString(cause);
         return this;
     }
@@ -36,11 +34,11 @@ public class DataTileEntity implements ISerializable {
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        this.clazz.writeToStream(stream);
-        this.pos.writeToStream(stream);
-        this.cause.writeToStream(stream);
-        stream.writeInt(this.hashCode);
-        stream.writeBoolean(this.isValid);
+        clazz.writeToStream(stream);
+        pos.writeToStream(stream);
+        cause.writeToStream(stream);
+        stream.writeInt(hashCode);
+        stream.writeBoolean(isValid);
 
     }
 

@@ -7,7 +7,7 @@ import java.util.function.LongSupplier;
 /**
  * Created by covers1624 on 6/03/18.
  */
-public class Clock {
+public class Clock implements IClock {
 
     private static ThreadMXBean threadMX = ManagementFactory.getThreadMXBean();
     public static boolean threadCPUTimeSupported = false; //threadMX.isCurrentThreadCpuTimeSupported();
@@ -23,14 +23,17 @@ public class Clock {
         this.supplier = supplier;
     }
 
+    @Override
     public void start() {
         startTime = supplier.getAsLong();
     }
 
+    @Override
     public void stop() {
         timeDelta = supplier.getAsLong() - startTime;
     }
 
+    @Override
     public long getDelta() {
         return timeDelta;
     }

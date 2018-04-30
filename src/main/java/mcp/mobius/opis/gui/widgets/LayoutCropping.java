@@ -15,23 +15,23 @@ public class LayoutCropping extends LayoutBase {
     }
 
     public void setOffsets(int xoffset, int yoffset) {
-        this.xOffset = xoffset;
-        this.yOffset = yoffset;
+        xOffset = xoffset;
+        yOffset = yoffset;
     }
 
     @Override
     public void draw() {
-        this.rez = new ScaledResolution(mc);
-        this.saveGLState();
+        rez = new ScaledResolution(mc);
+        saveGLState();
 
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, this.alpha);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, alpha);
 
-        this.draw(this.getPos());
+        draw(getPos());
 
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(this.getPos().getX() * this.rez.getScaleFactor(), (this.rez.getScaledHeight() - (this.getPos().getY() + this.getSize().getY())) * this.rez.getScaleFactor(), this.getSize().getX() * this.rez.getScaleFactor(), this.getSize().getY() * this.rez.getScaleFactor());
+        GL11.glScissor(getPos().getX() * rez.getScaleFactor(), (rez.getScaledHeight() - (getPos().getY() + getSize().getY())) * rez.getScaleFactor(), getSize().getX() * rez.getScaleFactor(), getSize().getY() * rez.getScaleFactor());
         //GL11.glScissor(this.getPos().getX()*this.rez.getScaleFactor(), this.getPos().getY()*this.rez.getScaleFactor(), this.getSize().getX()*this.rez.getScaleFactor(), this.getSize().getY()*this.rez.getScaleFactor());
 
         //this.setPos(this.getLeft() - xOffset, this.getTop() - yOffset);
@@ -44,25 +44,29 @@ public class LayoutCropping extends LayoutBase {
 				widget.draw();		
 		*/
 
-
-        for (IWidget widget : this.renderQueue_LOW.values())
-            if (widget.shouldRender())
+        for (IWidget widget : renderQueue_LOW.values()) {
+            if (widget.shouldRender()) {
                 widget.draw();
+            }
+        }
 
-        for (IWidget widget : this.renderQueue_MEDIUM.values())
-            if (widget.shouldRender())
+        for (IWidget widget : renderQueue_MEDIUM.values()) {
+            if (widget.shouldRender()) {
                 widget.draw();
+            }
+        }
 
-        for (IWidget widget : this.renderQueue_HIGH.values())
-            if (widget.shouldRender())
+        for (IWidget widget : renderQueue_HIGH.values()) {
+            if (widget.shouldRender()) {
                 widget.draw();
+            }
+        }
 
         //this.setPos(this.getLeft() + xOffset, this.getTop() + yOffset);
 
-
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
-        this.loadGLState();
+        loadGLState();
     }
 
     @Override

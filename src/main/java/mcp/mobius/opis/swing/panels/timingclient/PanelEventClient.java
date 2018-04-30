@@ -1,6 +1,5 @@
 package mcp.mobius.opis.swing.panels.timingclient;
 
-
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.api.ITabPanel;
 import mcp.mobius.opis.data.holders.newtypes.CachedString;
@@ -15,9 +14,10 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
+import java.util.List;
 
 public class PanelEventClient extends JPanel implements ITabPanel, IMessageHandler {
+
     private JTableStats table;
     private JButton btnRunRender;
 
@@ -34,25 +34,25 @@ public class PanelEventClient extends JPanel implements ITabPanel, IMessageHandl
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 3 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Event", "Mod", "Class", "Handler", "Calls", "Timing"},
-                new Class[]{CachedString.class, CachedString.class, CachedString.class, CachedString.class, Long.class, DataTiming.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER}
+        table = new JTableStats(//
+                new String[] { "Event", "Mod", "Handler Method", "Calls", "Timing" },//
+                new Class[] { CachedString.class, CachedString.class, CachedString.class, Long.class, DataTiming.class },//
+                new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER }//
         );
 
         scrollPane.setViewportView(table);
     }
 
-    public void setTable(ArrayList<DataEvent> data) {
+    public void setTable(List<DataEvent> data) {
 
         DefaultTableModel model = table.getModel();
-        int row = this.updateData(table, model, DataEvent.class);
+        int row = updateData(table, model, DataEvent.class);
 
         for (DataEvent o : data) {
-            model.addRow(new Object[]{o.event, o.mod, o.package_, o.handler, o.nCalls, o.update});
+            model.addRow(new Object[] { o.event, o.mod, o.package_, o.nCalls, o.update });
         }
 
-        this.dataUpdated(table, model, row);
+        dataUpdated(table, model, row);
     }
 
     public JTableStats getTable() {
@@ -62,9 +62,11 @@ public class PanelEventClient extends JPanel implements ITabPanel, IMessageHandl
     public <U> int updateData(JTable table, DefaultTableModel model, Class<U> datatype) {
         int row = table.getSelectedRow();
 
-        if (model.getRowCount() > 0)
-            for (int i = model.getRowCount() - 1; i >= 0; i--)
+        if (model.getRowCount() > 0) {
+            for (int i = model.getRowCount() - 1; i >= 0; i--) {
                 model.removeRow(i);
+            }
+        }
 
         return row;
     }

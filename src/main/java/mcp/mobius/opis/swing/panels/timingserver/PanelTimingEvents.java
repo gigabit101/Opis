@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelTimingEvents extends JPanelMsgHandler implements ITabPanel {
+
     private JButtonAccess btnRun;
 
     public PanelTimingEvents() {
@@ -30,10 +31,10 @@ public class PanelTimingEvents extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 2 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Event", "Mod", "Class", "Handler", "Calls", "Timing"},
-                new Class[]{CachedString.class, CachedString.class, CachedString.class, CachedString.class, Long.class, DataTiming.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER}
+        table = new JTableStats(//
+                new String[] { "Event", "Mod", "Handler Method", "Calls", "Timing" },//
+                new Class[] { CachedString.class, CachedString.class, CachedString.class, Long.class, DataTiming.class },//
+                new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER }//
         );
         scrollPane.setViewportView(table);
     }
@@ -43,33 +44,33 @@ public class PanelTimingEvents extends JPanelMsgHandler implements ITabPanel {
         switch (msg) {
 
             case LIST_TIMING_EVENTS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(DataEvent.class);
+                int row = getTable().clearTable(DataEvent.class);
 
                 for (Object o : rawdata.array) {
                     DataEvent data = (DataEvent) o;
-                    model.addRow(new Object[]{data.event, data.mod, data.package_, data.handler, data.nCalls, data.update});
+                    model.addRow(new Object[] { data.event, data.mod, data.package_, data.nCalls, data.update });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
 
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
+                getBtnRun().setText("Run Opis");
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             default:

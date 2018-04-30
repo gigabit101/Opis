@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
@@ -18,8 +16,8 @@ public class DataChunkEntities implements ISerializable {
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        this.chunk.writeToStream(stream);
-        stream.writeInt(this.entities);
+        chunk.writeToStream(stream);
+        stream.writeInt(entities);
     }
 
     public static DataChunkEntities readFromStream(ByteBuf stream) {

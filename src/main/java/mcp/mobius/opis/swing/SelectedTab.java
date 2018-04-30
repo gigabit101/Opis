@@ -25,5 +25,5 @@ public enum SelectedTab {
     CLIENTEVENTS,
     THREADS,
     ANY,
-    NONE;
+    NONE
 }

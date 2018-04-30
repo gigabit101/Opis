@@ -18,8 +18,8 @@ import javax.swing.table.DefaultTableModel;
 import java.util.HashMap;
 
 public class PanelAmountTileEnts extends JPanelMsgHandler implements ITabPanel {
-    private JButtonAccess btnRefresh;
 
+    private JButtonAccess btnRefresh;
 
     /**
      * Create the panel.
@@ -34,11 +34,7 @@ public class PanelAmountTileEnts extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 4 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Name", "Mod", "Amount"},
-                new Class[]{String.class, String.class, Integer.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER}
-        );
+        table = new JTableStats(new String[] { "Name", "Mod", "Amount" }, new Class[] { String.class, String.class, Integer.class }, new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER });
         scrollPane.setViewportView(table);
     }
 
@@ -50,21 +46,22 @@ public class PanelAmountTileEnts extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_AMOUNT_TILEENTS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(DataBlockTileEntityPerClass.class);
+                int row = getTable().clearTable(DataBlockTileEntityPerClass.class);
 
-                HashMap<String, DataBlockTileEntityPerClass> cumData = new HashMap<String, DataBlockTileEntityPerClass>();
+                HashMap<String, DataBlockTileEntityPerClass> cumData = new HashMap<>();
 
                 for (Object o : rawdata.array) {
                     DataBlockTileEntityPerClass data = (DataBlockTileEntityPerClass) o;
                     String name = ModIdentification.getStackName(data.id, data.meta);
 
-                    if (!cumData.containsKey(name))
+                    if (!cumData.containsKey(name)) {
                         cumData.put(name, new DataBlockTileEntityPerClass(data.id, data.meta));
+                    }
 
                     cumData.get(name).add(data.amount, data.update.timing);
                 }
@@ -72,10 +69,10 @@ public class PanelAmountTileEnts extends JPanelMsgHandler implements ITabPanel {
                 for (String s : cumData.keySet()) {
                     String name = s;
                     String modID = ModIdentification.getModStackName(cumData.get(s).id, cumData.get(s).meta);
-                    model.addRow(new Object[]{name, modID, cumData.get(s).amount});
+                    model.addRow(new Object[] { name, modID, cumData.get(s).amount });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }

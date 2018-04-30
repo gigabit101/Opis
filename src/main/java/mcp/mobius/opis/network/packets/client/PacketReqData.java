@@ -1,7 +1,5 @@
 package mcp.mobius.opis.network.packets.client;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.DataType;
 import mcp.mobius.opis.data.holders.ISerializable;
@@ -57,27 +55,27 @@ public class PacketReqData extends PacketBase {
 
     @Override
     public void decode(ByteBuf input) {
-        this.dataReq = Message.values()[input.readInt()];
+        dataReq = Message.values()[input.readInt()];
 
         if (input.readBoolean()) {
             Class datatype = DataType.getForOrdinal(input.readInt());
-            this.param1 = dataRead(datatype, input);
+            param1 = dataRead(datatype, input);
         }
 
         if (input.readBoolean()) {
             Class datatype = DataType.getForOrdinal(input.readInt());
-            this.param2 = dataRead(datatype, input);
+            param2 = dataRead(datatype, input);
         }
 
     }
 
     @Override
     public void actionServer(World world, EntityPlayerMP player) {
-        String logmsg = String.format("Received request %s from player %s ... ", this.dataReq, player.getGameProfile().getName());
+        String logmsg = String.format("Received request %s from player %s ... ", dataReq, player.getGameProfile().getName());
 
-        if (this.dataReq.canPlayerUseCommand(player)) {
+        if (dataReq.canPlayerUseCommand(player)) {
             logmsg += "Accepted";
-            ServerMessageHandler.instance().handle(this.dataReq, this.param1, this.param2, player);
+            ServerMessageHandler.instance().handle(dataReq, param1, param2, player);
         } else {
             logmsg += "Rejected";
         }

@@ -13,31 +13,30 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.HashMap;
 
-public enum TabPanelRegistrar implements ChangeListener {
-    INSTANCE;
+public class TabPanelRegistrar implements ChangeListener {
 
-    //private ArrayList<ITabPanel>       panels     = new ArrayList<ITabPanel>();
-    //private HashMap<String, ITabPanel> lookup     = new HashMap<String, ITabPanel>();
-    private HashMap<String, JTabbedPane> sections = new HashMap<String, JTabbedPane>();
-    private HashMap<SelectedTab, ITabPanel> lookup = new HashMap<SelectedTab, ITabPanel>();
+    public static final TabPanelRegistrar INSTANCE = new TabPanelRegistrar();
+
+    private HashMap<String, JTabbedPane> sections = new HashMap<>();
+    private HashMap<SelectedTab, ITabPanel> lookup = new HashMap<>();
 
     public JTabbedPane registerSection(String name) {
         JTabbedPane pane = new JTabbedPane();
         pane.addChangeListener(this);
-        this.sections.put(name, pane);
+        sections.put(name, pane);
         SwingUI.instance().getTabbedPane().addTab(name, pane);
         return pane;
     }
 
-    public ITabPanel registerTab(ITabPanel panel, String name) {
-        this.lookup.put(panel.getSelectedTab(), panel);
+    public <T extends ITabPanel> T registerTab(T panel, String name) {
+        lookup.put(panel.getSelectedTab(), panel);
         SwingUI.instance().getTabbedPane().addTab(name, (JPanel) panel);
         return panel;
     }
 
-    public ITabPanel registerTab(ITabPanel panel, String name, String section) {
-        this.lookup.put(panel.getSelectedTab(), panel);
-        this.sections.get(section).addTab(name, (JPanel) panel);
+    public <T extends ITabPanel> T registerTab(T panel, String name, String section) {
+        lookup.put(panel.getSelectedTab(), panel);
+        sections.get(section).addTab(name, (JPanel) panel);
         return panel;
     }
 
@@ -50,9 +49,11 @@ public enum TabPanelRegistrar implements ChangeListener {
     }
 
     public void refreshAll() {
-        for (ITabPanel panel : this.lookup.values())
-            if (panel.refreshOnString())
+        for (ITabPanel panel : lookup.values()) {
+            if (panel.refreshOnString()) {
                 panel.refresh();
+            }
+        }
     }
 
     @Override

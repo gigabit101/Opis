@@ -40,7 +40,7 @@ public enum Message {
     VALUE_TIMING_WORLDTICK,
     VALUE_TIMING_ENTUPDATE,
     VALUE_TIMING_TICK,
-    VALUE_TIMING_NETWORK,
+    //VALUE_TIMING_NETWORK,
 
     VALUE_AMOUNT_TILEENTS(EnumSet.of(SelectedTab.SUMMARY)),
     VALUE_AMOUNT_ENTITIES(EnumSet.of(SelectedTab.SUMMARY)),
@@ -62,7 +62,6 @@ public enum Message {
     STATUS_STRINGUPD,
     STATUS_STRINGUPD_FULL,
 
-
     COMMAND_TELEPORT_BLOCK(PRIVILEGED),
     COMMAND_TELEPORT_CHUNK(PRIVILEGED),
     COMMAND_TELEPORT_TO_ENTITY(PRIVILEGED),
@@ -75,12 +74,18 @@ public enum Message {
     COMMAND_UNREGISTER_SWING,
     COMMAND_OPEN_SWING,
 
-    COMMAND_KILL_HOSTILES_DIM(PRIVILEGED),    // This will kill all hostile in the dim given as argument
-    COMMAND_KILL_HOSTILES_ALL(PRIVILEGED),    // This will kill all hostile in all the dimensions
-    COMMAND_PURGE_CHUNKS_DIM(PRIVILEGED),    // This will purge the chunks in the dim given as argument
-    COMMAND_PURGE_CHUNKS_ALL(PRIVILEGED),    // This will purge the chunks in all dimensions
-    COMMAND_KILL_STACKS_DIM(PRIVILEGED),    // This will kill all stacks in the dim given as argument
-    COMMAND_KILL_STACKS_ALL(PRIVILEGED),    // This will kill all stacks in all the dimensions
+    COMMAND_KILL_HOSTILES_DIM(PRIVILEGED),
+    // This will kill all hostile in the dim given as argument
+    COMMAND_KILL_HOSTILES_ALL(PRIVILEGED),
+    // This will kill all hostile in all the dimensions
+    COMMAND_PURGE_CHUNKS_DIM(PRIVILEGED),
+    // This will purge the chunks in the dim given as argument
+    COMMAND_PURGE_CHUNKS_ALL(PRIVILEGED),
+    // This will purge the chunks in all dimensions
+    COMMAND_KILL_STACKS_DIM(PRIVILEGED),
+    // This will kill all stacks in the dim given as argument
+    COMMAND_KILL_STACKS_ALL(PRIVILEGED),
+    // This will kill all stacks in all the dimensions
 
     OVERLAY_CHUNK_ENTITIES,
     OVERLAY_CHUNK_TIMING,
@@ -98,47 +103,50 @@ public enum Message {
     private AccessLevel accessLevel = AccessLevel.NONE;
     private EnumSet<SelectedTab> tabEnum;
 
-    private Message() {
+    Message() {
         accessLevel = AccessLevel.NONE;
         tabEnum = EnumSet.of(SelectedTab.ANY);
     }
 
-    private Message(AccessLevel level) {
+    Message(AccessLevel level) {
         accessLevel = level;
         tabEnum = EnumSet.of(SelectedTab.ANY);
     }
 
-    private Message(EnumSet<SelectedTab> _tabEnum) {
+    Message(EnumSet<SelectedTab> _tabEnum) {
         accessLevel = AccessLevel.NONE;
         tabEnum = _tabEnum;
     }
 
-    private Message(AccessLevel level, EnumSet<SelectedTab> _tabEnum) {
+    Message(AccessLevel level, EnumSet<SelectedTab> _tabEnum) {
         accessLevel = level;
         tabEnum = _tabEnum;
     }
 
     public AccessLevel getAccessLevel() {
-        return this.accessLevel;
+        return accessLevel;
     }
 
     public void setAccessLevel(AccessLevel level) {
-        this.accessLevel = level;
+        accessLevel = level;
     }
 
     public boolean canPlayerUseCommand(EntityPlayerMP player) {
-        return PlayerTracker.INSTANCE.getPlayerAccessLevel(player).ordinal() >= this.accessLevel.ordinal();
+        return PlayerTracker.INSTANCE.getPlayerAccessLevel(player).ordinal() >= accessLevel.ordinal();
     }
 
     public boolean canPlayerUseCommand(String name) {
-        return PlayerTracker.INSTANCE.getPlayerAccessLevel(name).ordinal() >= this.accessLevel.ordinal();
+        return PlayerTracker.INSTANCE.getPlayerAccessLevel(name).ordinal() >= accessLevel.ordinal();
     }
 
     public boolean isDisplayActive(SelectedTab tab) {
-        if (this.tabEnum.contains(SelectedTab.ANY)) return true;
-        if (this.tabEnum.contains(SelectedTab.NONE)) return false;
-        if (this.tabEnum.contains(tab)) return true;
-        return false;
+        if (tabEnum.contains(SelectedTab.ANY)) {
+            return true;
+        }
+        if (tabEnum.contains(SelectedTab.NONE)) {
+            return false;
+        }
+        return tabEnum.contains(tab);
     }
 
     public static void setTablesMinimumLevel(AccessLevel level) {

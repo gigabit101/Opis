@@ -15,7 +15,7 @@ import java.util.Map;
 public class ProfilerFMLProxyPacket implements IProfiler<FMLProxyPacket, Object, Object, Object> {
 
     public long dataAmount = 0;
-    public Map<String, DataPacket250> data = new HashMap<String, DataPacket250>();
+    public Map<String, DataPacket250> data = new HashMap<>();
 
     @Override
     public void reset() {

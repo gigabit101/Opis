@@ -15,22 +15,22 @@ public class PictureSwitch extends WidgetBase {
 
     public PictureSwitch(IWidget parent, String uri1, String uri2) {
         super(parent);
-        this.texture1 = new ResourceLocation(uri1);
-        this.texture2 = new ResourceLocation(uri2);
+        texture1 = new ResourceLocation(uri1);
+        texture2 = new ResourceLocation(uri2);
     }
 
     @Override
     public void draw(Point pos) {
-        this.saveGLState();
+        saveGLState();
 
-        ResourceLocation texture = mouseOver ? this.texture2 : this.texture1;
+        ResourceLocation texture = mouseOver ? texture2 : texture1;
 
         GL11.glPushMatrix();
-        this.texManager.bindTexture(texture);
-        UIHelper.drawTexture(pos.getX(), pos.getY(), this.getSize().getX(), this.getSize().getY());
+        texManager.bindTexture(texture);
+        UIHelper.drawTexture(pos.getX(), pos.getY(), getSize().getX(), getSize().getY());
         GL11.glPopMatrix();
 
-        this.loadGLState();
+        loadGLState();
     }
 
     @Override

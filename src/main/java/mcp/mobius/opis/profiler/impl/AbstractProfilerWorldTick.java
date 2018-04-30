@@ -1,6 +1,7 @@
 package mcp.mobius.opis.profiler.impl;
 
 import mcp.mobius.opis.profiler.Clock;
+import mcp.mobius.opis.profiler.IClock;
 import mcp.mobius.opis.profiler.IProfiler.IProfilerSingle;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public abstract class AbstractProfilerWorldTick implements IProfilerSingle<World> {
 
-    private Clock clock = Clock.createClock();
+    private IClock clock = Clock.createClock();
     public Map<Integer, DescriptiveStatistics> data = new HashMap<>();
 
     protected abstract DescriptiveStatistics createStats();

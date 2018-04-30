@@ -26,7 +26,9 @@ public class ActionTimingEntities implements ActionListener {
         PanelTimingEntities panel = (PanelTimingEntities) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.TIMINGENTITES);
 
         JTableStats table = panel.getTable();
-        if (table == null || table.getSelectedRow() == -1) return;
+        if (table == null || table.getSelectedRow() == -1) {
+            return;
+        }
         int indexData = table.convertRowIndexToModel(table.getSelectedRow());
         DataEntity data = (DataEntity) table.getTableData().get(indexData);
 

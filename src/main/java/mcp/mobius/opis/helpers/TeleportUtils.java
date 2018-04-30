@@ -186,12 +186,14 @@ public class TeleportUtils {
     public static Entity getHighestRidingEntity(Entity mount) {
         Entity entity;
 
-        for (entity = mount; entity.getPassengers().size() > 0; entity = entity.getPassengers().get(0)) ;
+        for (entity = mount; entity.getPassengers().size() > 0; entity = entity.getPassengers().get(0)) {
+        }
 
         return entity;
     }
 
     private static class PassengerHelper {
+
         public Entity entity;
         public LinkedList<PassengerHelper> passengers = new LinkedList<>();
         public double offsetX, offsetY, offsetZ;
@@ -279,7 +281,7 @@ public class TeleportUtils {
          * @return The passenger helper for the specified passenger.
          */
         public PassengerHelper getPassenger(Entity passenger) {
-            if (this.entity == passenger) {
+            if (entity == passenger) {
                 return this;
             }
 

@@ -12,22 +12,22 @@ public abstract class JPanelMsgHandler extends JPanel implements IMessageHandler
     public Message cachedmsg;
     public PacketBase cachedrawdata;
 
-
     public JTableStats getTable() {
-        return this.table;
+        return table;
     }
 
     public boolean cacheData(Message msg, PacketBase rawdata) {
-        this.cachedmsg = msg;
-        this.cachedrawdata = rawdata;
+        cachedmsg = msg;
+        cachedrawdata = rawdata;
         return true;
     }
 
     public boolean refresh() {
-        if (this.cachedmsg != null && this.cachedrawdata != null)
-            return this.handleMessage(this.cachedmsg, this.cachedrawdata);
-        else
+        if (cachedmsg != null && cachedrawdata != null) {
+            return handleMessage(cachedmsg, cachedrawdata);
+        } else {
             return false;
+        }
     }
 
 }

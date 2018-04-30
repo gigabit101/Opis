@@ -6,6 +6,7 @@ import java.lang.management.ThreadMXBean;
 public class Clock {
 
     public interface IClock {
+
         void start();
 
         void stop();
@@ -18,49 +19,52 @@ public class Clock {
     public static boolean canThreadCPU = false;
 
     public class ClockMX implements IClock {
+
         public long startTime = 0;
         public long timeDelta = 0;
 
         @Override
         public void start() {
-            this.startTime = threadMX.getCurrentThreadCpuTime();
+            startTime = threadMX.getCurrentThreadCpuTime();
         }
 
         @Override
         public void stop() {
-            this.timeDelta = threadMX.getCurrentThreadCpuTime() - this.startTime;
+            timeDelta = threadMX.getCurrentThreadCpuTime() - startTime;
         }
 
         @Override
         public long getDelta() {
-            return this.timeDelta;
+            return timeDelta;
         }
     }
 
     public class ClockNano implements IClock {
+
         public long startTime = 0;
         public long timeDelta = 0;
 
         @Override
         public void start() {
-            this.startTime = System.nanoTime();
+            startTime = System.nanoTime();
         }
 
         @Override
         public void stop() {
-            this.timeDelta = System.nanoTime() - this.startTime;
+            timeDelta = System.nanoTime() - startTime;
         }
 
         @Override
         public long getDelta() {
-            return this.timeDelta;
+            return timeDelta;
         }
     }
 
     public static IClock getNewClock() {
-        if (Clock.canThreadCPU)
+        if (Clock.canThreadCPU) {
             return new Clock().new ClockMX();
-        else
+        } else {
             return new Clock().new ClockNano();
+        }
     }
 }

@@ -9,12 +9,12 @@ import java.util.Map;
 /**
  * Created by covers1624 on 5/03/18.
  */
-@TransformerExclusions("mcp.mobius.opis.asm")
+@TransformerExclusions ("mcp.mobius.opis.asm")
 public class OpisLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{OpisClassTransformer.class.getName()};
+        return new String[] { OpisClassTransformer.class.getName() };
     }
 
     @Override

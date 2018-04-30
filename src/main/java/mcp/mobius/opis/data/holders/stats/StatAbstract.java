@@ -1,6 +1,5 @@
 package mcp.mobius.opis.data.holders.stats;
 
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -8,6 +7,7 @@ import mcp.mobius.opis.data.holders.basetypes.CoordinatesChunk;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public abstract class StatAbstract implements Comparable, ISerializable {
+
     protected DescriptiveStatistics dstat = new DescriptiveStatistics();
     public Long dataPoints = 0L;
     protected Double geomMean = null;
@@ -28,73 +28,74 @@ public abstract class StatAbstract implements Comparable, ISerializable {
 
     public void addMeasure(long timing) {
         //this.dstat.addValue((double)timing/1000.0);
-        this.dstat.addValue((double) timing / 1000.);
+        dstat.addValue((double) timing / 1000.);
         dataPoints += 1;
     }
 
     public void addMeasure(double timing) {
-        this.dstat.addValue(timing);
+        dstat.addValue(timing);
         dataPoints += 1;
     }
 
     public double getGeometricMean() {
-        if (geomMean != null)
+        if (geomMean != null) {
             return geomMean;
-        else
+        } else {
             return dstat.getGeometricMean();
+        }
     }
 
     public void setGeometricMean(double value) {
-        this.geomMean = value;
+        geomMean = value;
     }
 
     public double getDataSum() {
-        if (dataSum != null)
+        if (dataSum != null) {
             return dataSum;
-        else
+        } else {
             return dstat.getSum();
+        }
     }
 
     public void setDataSum(double value) {
-        this.dataSum = value;
+        dataSum = value;
     }
 
     public long getDataPoints() {
-        return this.dataPoints;
+        return dataPoints;
     }
 
     public void setDataPoints(long ndata) {
-        this.dataPoints = ndata;
+        dataPoints = ndata;
     }
 
     @Override
     public int compareTo(Object o) {
-        double value = ((StatAbstract) o).getGeometricMean() - this.getGeometricMean();
-        if (value > 0)
+        double value = ((StatAbstract) o).getGeometricMean() - getGeometricMean();
+        if (value > 0) {
             return 1;
-        if (value < 0)
+        }
+        if (value < 0) {
             return -1;
+        }
         return 0;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
-    ;
-
     public CoordinatesBlock getCoordinates() {
-        return this.coord;
+        return coord;
     }
 
     public CoordinatesChunk getChunk() {
-        return this.chunk;
+        return chunk;
     }
 
     public CoordinatesBlock getTeleportTarget() {
-        return this.coord;
+        return coord;
     }
-
 
     public abstract void writeToStream(ByteBuf stream);
 

@@ -14,6 +14,7 @@ import mcp.mobius.opis.network.packets.client.PacketReqData;
 import net.minecraft.util.math.MathHelper;
 
 public class TableChunks extends ViewTable {
+
     IMapView mapView;
     IMapMode mapMode;
     OverlayEntityPerChunk overlay;
@@ -30,18 +31,16 @@ public class TableChunks extends ViewTable {
 
     @Override
     public void onMouseClick(MouseEvent event) {
-        TableRow row = this.getRow(event.x, event.y);
+        TableRow row = getRow(event.x, event.y);
         if (row != null) {
             CoordinatesBlock coord = ((ReducedData) row.getObject()).chunk.asCoordinatesBlock();
-            this.overlay.selectedChunk = ((ReducedData) row.getObject()).chunk;
-            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, this.overlay.selectedChunk));
-            this.overlay.showList = false;
+            overlay.selectedChunk = ((ReducedData) row.getObject()).chunk;
+            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, overlay.selectedChunk));
+            overlay.showList = false;
 
-            this.mapView.setDimension(coord.dim);
-            this.mapView.setViewCentre(coord.x, coord.z);
-            this.overlay.requestChunkUpdate(this.mapView.getDimension(),
-                    MathHelper.ceil(this.mapView.getX()) >> 4,
-                    MathHelper.ceil(this.mapView.getZ()) >> 4);
+            mapView.setDimension(coord.dim);
+            mapView.setViewCentre(coord.x, coord.z);
+            overlay.requestChunkUpdate(mapView.getDimension(), MathHelper.ceil(mapView.getX()) >> 4, MathHelper.ceil(mapView.getZ()) >> 4);
 
         }
     }

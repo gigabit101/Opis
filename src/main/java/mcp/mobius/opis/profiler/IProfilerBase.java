@@ -2,25 +2,26 @@ package mcp.mobius.opis.profiler;
 
 @Deprecated
 public interface IProfilerBase {
-    public void reset();
 
-    public void start();
+    void reset();
 
-    public void stop();
+    void start();
 
-    public void start(Object key);
+    void stop();
 
-    public void stop(Object key);
+    void start(Object key);
 
-    public void start(Object key1, Object key2);
+    void stop(Object key);
 
-    public void stop(Object key1, Object key2);
+    void start(Object key1, Object key2);
 
-    public void start(Object key1, Object key2, Object key3);
+    void stop(Object key1, Object key2);
 
-    public void stop(Object key1, Object key2, Object key3);
+    void start(Object key1, Object key2, Object key3);
 
-    public void start(Object key1, Object key2, Object key3, Object key4);
+    void stop(Object key1, Object key2, Object key3);
 
-    public void stop(Object key1, Object key2, Object key3, Object key4);
+    void start(Object key1, Object key2, Object key3, Object key4);
+
+    void stop(Object key1, Object key2, Object key3, Object key4);
 }

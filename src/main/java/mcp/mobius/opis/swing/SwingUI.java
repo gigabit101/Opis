@@ -24,7 +24,7 @@ import java.util.HashSet;
 
 public class SwingUI extends JFrame implements WindowListener, ChangeListener, IMessageHandler {
 
-    public static HashSet<JButtonAccess> registeredButtons = new HashSet<JButtonAccess>();
+    public static HashSet<JButtonAccess> registeredButtons = new HashSet<>();
 
     private static SwingUI _instance = new SwingUI();
 
@@ -36,14 +36,11 @@ public class SwingUI extends JFrame implements WindowListener, ChangeListener, I
     private JTabbedPane tabbedPane;
 
     public void showUI() {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    SwingUI.instance().setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                SwingUI.instance().setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -65,7 +62,7 @@ public class SwingUI extends JFrame implements WindowListener, ChangeListener, I
         tabbedPane.addChangeListener(this);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
-        this.addWindowListener(this);
+        addWindowListener(this);
         ToolTipManager.sharedInstance().setInitialDelay(500);
         ToolTipManager.sharedInstance().setDismissDelay(60 * 1000);
 
@@ -121,7 +118,7 @@ public class SwingUI extends JFrame implements WindowListener, ChangeListener, I
             }
             case CLIENT_SHOW_SWING: {
                 Opis.swingOpen = true;
-                this.showUI();
+                showUI();
                 Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
                 PacketManager.sendToServer(new PacketReqData(Message.SWING_TAB_CHANGED, new SerialInt(SelectedTab.SUMMARY.ordinal())));
                 break;

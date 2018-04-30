@@ -16,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
@@ -29,9 +28,9 @@ import java.util.stream.Collectors;
 public enum ChunkManager implements IMessageHandler {
     INSTANCE;
 
-    private ArrayList<CoordinatesChunk> chunksLoad = new ArrayList<CoordinatesChunk>();
-    private HashMap<CoordinatesChunk, StatsChunk> chunkMeanTime = new HashMap<CoordinatesChunk, StatsChunk>();
-    public ArrayList<TicketData> tickets = new ArrayList<TicketData>();
+    private ArrayList<CoordinatesChunk> chunksLoad = new ArrayList<>();
+    private HashMap<CoordinatesChunk, StatsChunk> chunkMeanTime = new HashMap<>();
+    public ArrayList<TicketData> tickets = new ArrayList<>();
 
     public void addLoadedChunks(ArrayList<ISerializable> data) {
         for (ISerializable chunk : data) {
@@ -45,8 +44,9 @@ public enum ChunkManager implements IMessageHandler {
 
     public void setChunkMeanTime(ArrayList<ISerializable> data) {
         chunkMeanTime.clear();
-        for (ISerializable stat : data)
+        for (ISerializable stat : data) {
             chunkMeanTime.put(((StatsChunk) stat).getChunk(), (StatsChunk) stat);
+        }
     }
 
     public HashMap<CoordinatesChunk, StatsChunk> getChunkMeanTime() {
@@ -54,41 +54,44 @@ public enum ChunkManager implements IMessageHandler {
     }
 
     public ArrayList<CoordinatesChunk> getLoadedChunks(int dimension) {
-        HashSet<CoordinatesChunk> chunkStatus = new HashSet<CoordinatesChunk>();
+        HashSet<CoordinatesChunk> chunkStatus = new HashSet<>();
         WorldServer world = DimensionManager.getWorld(dimension);
         if (world != null) {
             for (ChunkPos coord : world.getPersistentChunks().keySet()) {
                 chunkStatus.add(new CoordinatesChunk(dimension, coord, (byte) 1));
             }
 
-            for (Object o : ((ChunkProviderServer) world.getChunkProvider()).getLoadedChunks()) {
+            for (Object o : world.getChunkProvider().getLoadedChunks()) {
                 Chunk chunk = (Chunk) o;
 
                 chunkStatus.add(new CoordinatesChunk(dimension, chunk.getPos(), (byte) 0));
             }
         }
 
-        return new ArrayList<CoordinatesChunk>(chunkStatus);
+        return new ArrayList<>(chunkStatus);
     }
 
     public HashSet<TicketData> getTickets() {
-        HashSet<TicketData> tickets = new HashSet<TicketData>();
-        for (int dim : DimensionManager.getIDs())
-            for (Ticket ticket : DimensionManager.getWorld(dim).getPersistentChunks().values())
+        HashSet<TicketData> tickets = new HashSet<>();
+        for (int dim : DimensionManager.getIDs()) {
+            for (Ticket ticket : DimensionManager.getWorld(dim).getPersistentChunks().values()) {
                 tickets.add(new TicketData(ticket));
+            }
+        }
 
         return tickets;
     }
 
     public ArrayList<StatsChunk> getChunksUpdateTime() {
-        HashMap<CoordinatesChunk, StatsChunk> chunks = new HashMap<CoordinatesChunk, StatsChunk>();
+        HashMap<CoordinatesChunk, StatsChunk> chunks = new HashMap<>();
 
         for (CoordinatesBlock coords : Profilers.TILE_UPDATE.get().data.keySet().stream().map(DimBlockPos::toOld).collect(Collectors.toList())) {
             DataBlockTileEntity data = new DataBlockTileEntity().fill(coords);
             CoordinatesChunk chunk = data.pos.asCoordinatesChunk();
 
-            if (!chunks.containsKey(chunk))
+            if (!chunks.containsKey(chunk)) {
                 chunks.put(chunk, new StatsChunk(chunk));
+            }
 
             chunks.get(chunk).addTileEntity();
             chunks.get(chunk).addMeasure(data.update.timing);
@@ -99,24 +102,26 @@ public enum ChunkManager implements IMessageHandler {
             DataEntity data = new DataEntity().fill(entity);
             CoordinatesChunk chunk = data.pos.asCoordinatesChunk();
 
-            if (!chunks.containsKey(chunk))
+            if (!chunks.containsKey(chunk)) {
                 chunks.put(chunk, new StatsChunk(chunk));
+            }
 
             chunks.get(chunk).addEntity();
             chunks.get(chunk).addMeasure(data.update.timing);
         }
 
-        ArrayList<StatsChunk> chunksUpdate = new ArrayList<StatsChunk>(chunks.values());
+        ArrayList<StatsChunk> chunksUpdate = new ArrayList<>(chunks.values());
         return chunksUpdate;
     }
 
     public ArrayList<StatsChunk> getTopChunks(int quantity) {
-        ArrayList<StatsChunk> chunks = this.getChunksUpdateTime();
-        ArrayList<StatsChunk> outList = new ArrayList<StatsChunk>();
+        ArrayList<StatsChunk> chunks = getChunksUpdateTime();
+        ArrayList<StatsChunk> outList = new ArrayList<>();
         Collections.sort(chunks);
 
-        for (int i = 0; i < Math.min(quantity, chunks.size()); i++)
+        for (int i = 0; i < Math.min(quantity, chunks.size()); i++) {
             outList.add(chunks.get(i));
+        }
 
         return outList;
     }
@@ -142,11 +147,13 @@ public enum ChunkManager implements IMessageHandler {
 
     public void purgeChunks(int dim) {
         WorldServer world = DimensionManager.getWorld(dim);
-        if (world == null) return;
+        if (world == null) {
+            return;
+        }
 
         int loadedChunksDelta = 100;
 
-        ((ChunkProviderServer) world.getChunkProvider()).queueUnloadAll();
+        world.getChunkProvider().queueUnloadAll();
 
         while (loadedChunksDelta >= 100) {
             int loadedBefore = world.getChunkProvider().getLoadedChunkCount();
@@ -159,11 +166,11 @@ public enum ChunkManager implements IMessageHandler {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_TIMING_CHUNK: {
-                this.setChunkMeanTime(rawdata.array);
+                setChunkMeanTime(rawdata.array);
                 break;
             }
             case LIST_CHUNK_LOADED: {
-                this.addLoadedChunks(rawdata.array);
+                addLoadedChunks(rawdata.array);
                 break;
             }
             case LIST_CHUNK_LOADED_CLEAR: {
@@ -173,7 +180,6 @@ public enum ChunkManager implements IMessageHandler {
             default:
                 return false;
         }
-
 
         return true;
     }

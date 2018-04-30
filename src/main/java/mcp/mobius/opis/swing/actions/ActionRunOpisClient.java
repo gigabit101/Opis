@@ -1,7 +1,6 @@
 package mcp.mobius.opis.swing.actions;
 
 import mcp.mobius.opis.Opis;
-import mcp.mobius.opis.profiler.ProfilerSection;
 import mcp.mobius.opis.profiler.Profilers;
 import net.minecraftforge.fml.relauncher.Side;
 

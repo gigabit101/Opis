@@ -3,7 +3,9 @@ package mcp.mobius.opis;
 import mcp.mobius.opis.commands.client.CommandOpis;
 import mcp.mobius.opis.commands.server.*;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
-import mcp.mobius.opis.data.profilers.*;
+import mcp.mobius.opis.data.profilers.ProfilerRenderBlock;
+import mcp.mobius.opis.data.profilers.ProfilerRenderEntity;
+import mcp.mobius.opis.data.profilers.ProfilerRenderTileEntity;
 import mcp.mobius.opis.events.*;
 import mcp.mobius.opis.helpers.ModIdentification;
 import mcp.mobius.opis.network.PacketManager;
@@ -32,15 +34,15 @@ import net.minecraftforge.registries.GameData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "opis", name = "Opis", version = "1.2.3a", acceptableRemoteVersions = "*")
+@Mod (modid = "opis", name = "Opis", version = "1.2.3a", acceptableRemoteVersions = "*")
 public class Opis {
 
-    @Mod.Instance("opis")
+    @Mod.Instance ("opis")
     public static Opis instance;
 
     public static Logger log = LogManager.getLogger("Opis");
 
-    @SidedProxy(clientSide = "mcp.mobius.opis.proxy.ProxyClient", serverSide = "mcp.mobius.opis.proxy.ProxyServer")
+    @SidedProxy (clientSide = "mcp.mobius.opis.proxy.ProxyClient", serverSide = "mcp.mobius.opis.proxy.ProxyServer")
     public static ProxyServer proxy;
 
     public static int profilerDelay = 1;
@@ -48,7 +50,6 @@ public class Opis {
     public static boolean profilerRunClient = false;
     public static int profilerMaxTicks = 250;
     public static boolean microseconds = true;
-    private static int lagGenID = -1;
     public static CoordinatesBlock selectedBlock = null;
     public static boolean swingOpen = false;
 
@@ -64,12 +65,10 @@ public class Opis {
         config = new Configuration(event.getSuggestedConfigurationFile());
 
         profilerDelay = config.get(Configuration.CATEGORY_GENERAL, "profiler.delay", 1).getInt();
-        lagGenID = config.get(Configuration.CATEGORY_GENERAL, "laggenerator_id", -1).getInt();
         profilerMaxTicks = config.get(Configuration.CATEGORY_GENERAL, "profiler.maxpts", 250).getInt();
         microseconds = config.get(Configuration.CATEGORY_GENERAL, "display.microseconds", true).getBoolean(true);
 
-
-        String[] users = config.get("ACCESS_RIGHTS", "privileged", new String[]{}, commentPrivileged).getStringList();
+        String[] users = config.get("ACCESS_RIGHTS", "privileged", new String[] {}, commentPrivileged).getStringList();
         AccessLevel minTables = AccessLevel.PRIVILEGED;
         AccessLevel minOverlays = AccessLevel.PRIVILEGED;
         AccessLevel openOpis = AccessLevel.PRIVILEGED;
@@ -90,8 +89,9 @@ public class Opis {
         Message.setOverlaysMinimumLevel(minOverlays);
         Message.setOpisMinimumLevel(openOpis);
 
-        for (String s : users)
+        for (String s : users) {
             PlayerTracker.INSTANCE.addPrivilegedPlayer(s, false);
+        }
 
         config.save();
 
@@ -118,7 +118,7 @@ public class Opis {
         ProfilerSection.RENDER_TILEENTITY.setProfiler(new ProfilerRenderTileEntity());
         ProfilerSection.RENDER_ENTITY.setProfiler(new ProfilerRenderEntity());
         ProfilerSection.RENDER_BLOCK.setProfiler(new ProfilerRenderBlock());
-        ProfilerSection.EVENT_INVOKE.setProfiler(new ProfilerEvent());
+        //ProfilerSection.EVENT_INVOKE.setProfiler(new ProfilerEvent());
     }
 
     public static void registerBlock(Block block, String name) {
@@ -141,10 +141,10 @@ public class Opis {
         //ProfilerSection.DIMENSION_BLOCKTICK.setProfiler(new ProfilerDimBlockTick());
         //ProfilerSection.ENTITY_UPDATETIME.setProfiler(new ProfilerEntityUpdate());
         //ProfilerSection.TICK.setProfiler(new ProfilerTick());
-//        ProfilerSection.TILEENT_UPDATETIME.setProfiler(new ProfilerTileEntityUpdate());
+        //ProfilerSection.TILEENT_UPDATETIME.setProfiler(new ProfilerTileEntityUpdate());
         //ProfilerSection.PACKET_INBOUND.setProfiler(new ProfilerPacket());
         //ProfilerSection.PACKET_OUTBOUND.setProfiler(new ProfilerPacket());
-        ProfilerSection.NETWORK_TICK.setProfiler(new ProfilerNetworkTick());
+        //ProfilerSection.NETWORK_TICK.setProfiler(new ProfilerNetworkTick());
 
         event.registerServerCommand(new CommandChunkList());
         event.registerServerCommand(new CommandFrequency());

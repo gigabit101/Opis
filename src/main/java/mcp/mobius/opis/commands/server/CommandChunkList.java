@@ -16,7 +16,7 @@ public class CommandChunkList extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
 
     @Override
@@ -46,16 +46,17 @@ public class CommandChunkList extends CommandBase implements IOpisCommand {
             return;
         }
 
-        ArrayList<StatsChunk> chunks = new ArrayList<StatsChunk>();
+        ArrayList<StatsChunk> chunks = new ArrayList<>();
 
-        if (args.length == 0)
+        if (args.length == 0) {
             chunks = ChunkManager.INSTANCE.getTopChunks(20);
-        else
+        } else {
             try {
                 chunks = ChunkManager.INSTANCE.getTopChunks(Integer.valueOf(args.length));
             } catch (Exception e) {
                 return;
             }
+        }
 
         sender.sendMessage(new TextComponentString("[DIM X Z] Time NTEs"));
         for (StatsChunk stat : chunks) {

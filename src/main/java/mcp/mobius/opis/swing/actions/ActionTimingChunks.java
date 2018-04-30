@@ -24,7 +24,9 @@ public class ActionTimingChunks implements ActionListener {
         PanelTimingChunks panel = (PanelTimingChunks) TabPanelRegistrar.INSTANCE.getTab(SelectedTab.TIMINGCHUNKS);
 
         JTableStats table = panel.getTable();
-        if (table == null || table.getSelectedRow() == -1) return;
+        if (table == null || table.getSelectedRow() == -1) {
+            return;
+        }
         int indexData = table.convertRowIndexToModel(table.getSelectedRow());
         StatsChunk data = (StatsChunk) table.getTableData().get(indexData);
 

@@ -2,7 +2,6 @@ package mcp.mobius.opis.profiler.impl;
 
 import io.netty.channel.ChannelHandlerContext;
 import mcp.mobius.opis.data.holders.newtypes.DataPacket;
-import mcp.mobius.opis.data.holders.newtypes.DataPacket250;
 import mcp.mobius.opis.profiler.IProfiler;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.common.FMLCommonHandler;

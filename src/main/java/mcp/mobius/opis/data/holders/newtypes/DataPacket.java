@@ -1,12 +1,11 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraft.network.Packet;
 
 public class DataPacket implements ISerializable {
+
     public int id;
     public DataByteSize size;
     public DataByteRate rate;
@@ -17,10 +16,10 @@ public class DataPacket implements ISerializable {
     }
 
     public DataPacket(Packet packet) {
-        this.type = new CachedString(packet.getClass().getSimpleName());
-        this.size = new DataByteSize(0);
-        this.rate = new DataByteRate(0, 5);
-        this.amount = new DataAmountRate(0, 5);
+        type = new CachedString(packet.getClass().getSimpleName());
+        size = new DataByteSize(0);
+        rate = new DataByteRate(0, 5);
+        amount = new DataAmountRate(0, 5);
     }
 
     public DataPacket fill(Packet packet, int pktsize) {
@@ -34,23 +33,23 @@ public class DataPacket implements ISerializable {
 			
 		}
 		*/
-        this.size.size += pktsize;
-        this.rate.size += pktsize;
-        this.amount.size += 1;
+        size.size += pktsize;
+        rate.size += pktsize;
+        amount.size += 1;
         return this;
     }
 
     public void startInterval() {
-        this.rate.reset();
-        this.amount.reset();
+        rate.reset();
+        amount.reset();
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        this.size.writeToStream(stream);
-        this.rate.writeToStream(stream);
-        this.amount.writeToStream(stream);
-        this.type.writeToStream(stream);
+        size.writeToStream(stream);
+        rate.writeToStream(stream);
+        amount.writeToStream(stream);
+        type.writeToStream(stream);
     }
 
     public static DataPacket readFromStream(ByteBuf stream) {

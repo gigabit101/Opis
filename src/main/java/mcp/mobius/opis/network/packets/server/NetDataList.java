@@ -1,7 +1,5 @@
 package mcp.mobius.opis.network.packets.server;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.api.MessageHandlerRegistrar;
 import mcp.mobius.opis.data.holders.DataType;
@@ -18,45 +16,50 @@ import java.util.List;
 
 public class NetDataList extends PacketBase {
 
-    public NetDataList() {}
+    public NetDataList() {
+    }
 
     public NetDataList(Message msg, List<? extends ISerializable> data) {
         this.msg = msg;
-        this.array = new ArrayList<ISerializable>(data);
+        array = new ArrayList<>(data);
     }
 
     @Override
     public void encode(ByteBuf output) {
-        output.writeInt(this.msg.ordinal());
-        output.writeInt(this.array.size());
+        output.writeInt(msg.ordinal());
+        output.writeInt(array.size());
 
-        if (this.array.size() > 0)
-            //Packet.writeString(data.get(0).getClass().getCanonicalName(), ostream);
-            output.writeInt(DataType.getForClass(this.array.get(0).getClass()).ordinal());
+        if (array.size() > 0)
+        //Packet.writeString(data.get(0).getClass().getCanonicalName(), ostream);
+        {
+            output.writeInt(DataType.getForClass(array.get(0).getClass()).ordinal());
+        }
 
-        for (ISerializable odata : this.array)
+        for (ISerializable odata : array) {
             odata.writeToStream(output);
+        }
     }
 
     @Override
     public void decode(ByteBuf input) {
-        this.msg = Message.values()[input.readInt()];
+        msg = Message.values()[input.readInt()];
         int ndata = input.readInt();
-        this.clazzStr = "";
+        clazzStr = "";
         if (ndata > 0) {
-            this.clazz = DataType.getForOrdinal(input.readInt());
+            clazz = DataType.getForOrdinal(input.readInt());
         }
 
-        this.array = new ArrayList<ISerializable>();
+        array = new ArrayList<>();
 
-        for (int i = 0; i < ndata; i++)
-            this.array.add(dataRead(this.clazz, input));
+        for (int i = 0; i < ndata; i++) {
+            array.add(dataRead(clazz, input));
+        }
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void actionClient(World world, EntityPlayer player) {
-        MessageHandlerRegistrar.INSTANCE.routeMessage(this.msg, this);
+        MessageHandlerRegistrar.INSTANCE.routeMessage(msg, this);
     }
 
 }

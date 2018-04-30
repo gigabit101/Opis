@@ -17,8 +17,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-
 public class PanelTimingHandlers extends JPanelMsgHandler implements ITabPanel {
+
     private JButtonAccess btnRun;
     private JLabel lblSummary;
 
@@ -36,10 +36,7 @@ public class PanelTimingHandlers extends JPanelMsgHandler implements ITabPanel {
 
         add(scrollPane, "cell 0 1 2 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Mod", "Tick", "Update Time"},
-                new Class[]{CachedString.class, String.class, DataTiming.class}
-        );
+        table = new JTableStats(new String[] { "Mod", "Tick", "Update Time" }, new Class[] { CachedString.class, String.class, DataTiming.class });
         scrollPane.setViewportView(table);
 
         lblSummary = new JLabel("TmpText");
@@ -58,40 +55,40 @@ public class PanelTimingHandlers extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_TIMING_HANDLERS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(DataEvent.class);
+                int row = getTable().clearTable(DataEvent.class);
 
                 for (Object o : rawdata.array) {
                     DataEvent data = (DataEvent) o;
                     try {
-                        model.addRow(new Object[]{data.mod, data.event.toString().split("\\$")[1], data.update});
+                        model.addRow(new Object[] { data.mod, data.event.toString().split("\\$")[1], data.update });
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        model.addRow(new Object[]{data.mod, data.event.toString(), data.update});
+                        model.addRow(new Object[] { data.mod, data.event.toString(), data.update });
                     }
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
             case VALUE_TIMING_HANDLERS: {
-                this.getLblSummary().setText(String.format("Total update time : %s", ((DataTiming) rawdata.value).toString()));
+                getLblSummary().setText(String.format("Total update time : %s", rawdata.value.toString()));
                 break;
             }
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
+                getBtnRun().setText("Run Opis");
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             default:

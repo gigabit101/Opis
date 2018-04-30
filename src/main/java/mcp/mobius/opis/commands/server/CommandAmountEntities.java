@@ -16,9 +16,8 @@ public class CommandAmountEntities extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
-
 
     @Override
     public int getRequiredPermissionLevel() {
@@ -47,15 +46,16 @@ public class CommandAmountEntities extends CommandBase implements IOpisCommand {
             return;
         }
 
-
         ArrayList<AmountHolder> ents;
 
-        if (args.length == 1 && args[0].equals("all"))
+        if (args.length == 1 && args[0].equals("all")) {
             ents = EntityManager.INSTANCE.getCumulativeEntities(false);
-        else
+        } else {
             ents = EntityManager.INSTANCE.getCumulativeEntities(true);
+        }
 
-        for (AmountHolder s : ents)
+        for (AmountHolder s : ents) {
             icommandsender.sendMessage(new TextComponentString(String.format("%s : %s", s.key, s.value)));
+        }
     }
 }

@@ -1,12 +1,11 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public class DataPacket250 implements ISerializable {
+
     public CachedString channel;
     public DataByteSize size;
     public DataByteRate rate;
@@ -17,29 +16,29 @@ public class DataPacket250 implements ISerializable {
 
     public DataPacket250(String channel) {
         this.channel = new CachedString(channel);
-        this.size = new DataByteSize(0);
-        this.rate = new DataByteRate(0, 5);
-        this.amount = new DataAmountRate(0, 5);
+        size = new DataByteSize(0);
+        rate = new DataByteRate(0, 5);
+        amount = new DataAmountRate(0, 5);
     }
 
     public DataPacket250 fill(FMLProxyPacket packet, int pktsize) {
-        this.size.size += pktsize;
-        this.rate.size += pktsize;
-        this.amount.size += 1;
+        size.size += pktsize;
+        rate.size += pktsize;
+        amount.size += 1;
         return this;
     }
 
     public void start() {
-        this.rate.reset();
-        this.amount.reset();
+        rate.reset();
+        amount.reset();
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        this.channel.writeToStream(stream);
-        this.size.writeToStream(stream);
-        this.rate.writeToStream(stream);
-        this.amount.writeToStream(stream);
+        channel.writeToStream(stream);
+        size.writeToStream(stream);
+        rate.writeToStream(stream);
+        amount.writeToStream(stream);
     }
 
     public static DataPacket250 readFromStream(ByteBuf stream) {

@@ -20,11 +20,7 @@ public class PanelInbound250 extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");
 
-        table = new JTableStats(
-                new String[]{"Channel", "Amount", "Rate", "Total Size"},
-                new Class[]{CachedString.class, DataAmountRate.class, DataByteRate.class, DataByteSize.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.RIGHT, SwingConstants.RIGHT, SwingConstants.RIGHT}
-        );
+        table = new JTableStats(new String[] { "Channel", "Amount", "Rate", "Total Size" }, new Class[] { CachedString.class, DataAmountRate.class, DataByteRate.class, DataByteSize.class }, new int[] { SwingConstants.LEFT, SwingConstants.RIGHT, SwingConstants.RIGHT, SwingConstants.RIGHT });
         scrollPane.setViewportView(table);
     }
 
@@ -32,24 +28,19 @@ public class PanelInbound250 extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_PACKETS_INBOUND_250: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
-                DefaultTableModel model = this.getTable().getModel();
-                int row = this.getTable().clearTable(DataPacket250.class);
+                DefaultTableModel model = getTable().getModel();
+                int row = getTable().clearTable(DataPacket250.class);
 
                 for (Object o : rawdata.array) {
                     DataPacket250 packet = (DataPacket250) o;
-                    model.addRow(new Object[]{
-                            packet.channel,
-                            packet.amount,
-                            packet.rate,
-                            packet.size
-                    });
+                    model.addRow(new Object[] { packet.channel, packet.amount, packet.rate, packet.size });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }

@@ -25,28 +25,32 @@ public abstract class ButtonBase extends WidgetBase {
     public void draw() {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        for (IWidget widget : this.widgets.values())
-            if (widget instanceof LabelFixedFont)
-                if (this.mouseOver)
+        for (IWidget widget : widgets.values()) {
+            if (widget instanceof LabelFixedFont) {
+                if (mouseOver) {
                     ((LabelFixedFont) widget).setColor(0xffffa0);
-                else
+                } else {
                     ((LabelFixedFont) widget).setColor(0xffffff);
+                }
+            }
+        }
 
         super.draw();
     }
 
     @Override
     public void draw(Point pos) {
-        this.saveGLState();
+        saveGLState();
         int texOffset = 0;
 
-        if (this.mouseOver)
+        if (mouseOver) {
             texOffset = 1;
+        }
 
-        this.mc.getTextureManager().bindTexture(widgetsTexture);
-        UIHelper.drawTexture(this.getPos().getX(), this.getPos().getY(), this.getSize().getX(), this.getSize().getY(), 0, 66 + texOffset * 20, 200, 20);
+        mc.getTextureManager().bindTexture(widgetsTexture);
+        UIHelper.drawTexture(getPos().getX(), getPos().getY(), getSize().getX(), getSize().getY(), 0, 66 + texOffset * 20, 200, 20);
 
-        this.loadGLState();
+        loadGLState();
     }
 
     @Override
@@ -66,9 +70,10 @@ public abstract class ButtonBase extends WidgetBase {
 
     @Override
     public void onMouseClick(MouseEvent event) {
-        if (event.button == 0)
-            this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        if (event.button == 0) {
+            mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        }
 
-        this.emit(Signal.CLICKED, event.button);
+        emit(Signal.CLICKED, event.button);
     }
 }

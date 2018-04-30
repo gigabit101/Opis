@@ -9,7 +9,7 @@ import java.util.WeakHashMap;
 
 public class ProfilerRenderTileEntity extends ProfilerAbstract {
 
-    public WeakHashMap<TileEntity, DescriptiveStatistics> data = new WeakHashMap<TileEntity, DescriptiveStatistics>();
+    public WeakHashMap<TileEntity, DescriptiveStatistics> data = new WeakHashMap<>();
     private IClock clock = Clock.getNewClock();
 
     @Override
@@ -20,8 +20,9 @@ public class ProfilerRenderTileEntity extends ProfilerAbstract {
     @Override
     public void start(Object key) {
         TileEntity tileEnt = (TileEntity) key;
-        if (!data.containsKey(tileEnt))
+        if (!data.containsKey(tileEnt)) {
             data.put(tileEnt, new DescriptiveStatistics());
+        }
 
         clock.start();
     }

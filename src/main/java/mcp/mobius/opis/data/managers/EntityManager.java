@@ -18,21 +18,20 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public enum EntityManager {
     INSTANCE;
 
-    public ArrayList<DataEntity> getWorses(int amount) {
-        ArrayList<DataEntity> sorted = new ArrayList<>();
-        ArrayList<DataEntity> topEntities = new ArrayList<>();
+    public List<DataEntity> getWorses(int amount) {
+        List<DataEntity> sorted = new ArrayList<>();
+        List<DataEntity> topEntities = new ArrayList<>();
 
-        for (Entity entity : Profilers.ENTITY_UPDATE.get().data.keySet())
+        for (Entity entity : Profilers.ENTITY_UPDATE.get().data.keySet()) {
             sorted.add(new DataEntity().fill(entity));
-
-        Collections.sort(sorted);
+        }
+        sorted.sort(null);
 
         int i = 0;
         while (topEntities.size() < Math.min(amount, sorted.size()) && (i < sorted.size())) {
@@ -54,8 +53,8 @@ public enum EntityManager {
     }
 
     /* Returns all the entities in all dimensions (without timing data) */
-    public ArrayList<DataEntity> getAllEntities() {
-        ArrayList<DataEntity> entities = new ArrayList<>();
+    public List<DataEntity> getAllEntities() {
+        List<DataEntity> entities = new ArrayList<>();
         for (int i : DimensionManager.getIDs()) {
             entities.addAll(getEntitiesInDim(i));
         }
@@ -63,11 +62,13 @@ public enum EntityManager {
     }
 
     /* Returns all the entities in the given dimension (without timing data) */
-    public ArrayList<DataEntity> getEntitiesInDim(int dim) {
-        ArrayList<DataEntity> entities = new ArrayList<>();
+    public List<DataEntity> getEntitiesInDim(int dim) {
+        List<DataEntity> entities = new ArrayList<>();
 
         World world = DimensionManager.getWorld(dim);
-        if (world == null) return entities;
+        if (world == null) {
+            return entities;
+        }
 
         ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
@@ -91,7 +92,9 @@ public enum EntityManager {
     public HashMap<CoordinatesChunk, ArrayList<DataEntity>> getEntitiesPerChunkInDim(int dim) {
         HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = new HashMap<>();
         World world = DimensionManager.getWorld(dim);
-        if (world == null) return entities;
+        if (world == null) {
+            return entities;
+        }
 
         ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
@@ -114,7 +117,9 @@ public enum EntityManager {
         ArrayList<DataEntity> entities = new ArrayList<>();
 
         World world = DimensionManager.getWorld(coord.dim);
-        if (world == null) return entities;
+        if (world == null) {
+            return entities;
+        }
 
         ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
@@ -137,7 +142,9 @@ public enum EntityManager {
 
         for (int dim : DimensionManager.getIDs()) {
             World world = DimensionManager.getWorld(dim);
-            if (world == null) continue;
+            if (world == null) {
+                continue;
+            }
 
             ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
@@ -153,8 +160,9 @@ public enum EntityManager {
             }
         }
 
-        for (String key : entities.keySet())
+        for (String key : entities.keySet()) {
             cumData.add(new AmountHolder(key, entities.get(key)));
+        }
 
         return cumData;
     }
@@ -162,17 +170,17 @@ public enum EntityManager {
     public boolean teleportPlayer(CoordinatesBlock coord, EntityPlayerMP player) {
         //System.out.printf("%s %s\n", coord, getTeleportTarget(coord));
         TeleportUtils.teleportEntity(player, coord.dim, coord.x + 0.5, coord.y + 0.5, coord.z + 0.5);
-//		CoordinatesBlock target = Teleport.instance().getTeleportTarget(coord);
-//		if (target == null) return false;
-//
-//		target = Teleport.instance().fixNetherTP(target);
-//
-//		if (target == null) return false;
-//
-//		if (Teleport.instance().movePlayerToDimension(player, coord.dim))
-//			player.setPositionAndUpdate(target.x + 0.5, target.y, target.z + 0.5);
-//		else
-//			return false;
+        //		CoordinatesBlock target = Teleport.instance().getTeleportTarget(coord);
+        //		if (target == null) return false;
+        //
+        //		target = Teleport.instance().fixNetherTP(target);
+        //
+        //		if (target == null) return false;
+        //
+        //		if (Teleport.instance().movePlayerToDimension(player, coord.dim))
+        //			player.setPositionAndUpdate(target.x + 0.5, target.y, target.z + 0.5);
+        //		else
+        //			return false;
 
         return true;
     }
@@ -188,18 +196,18 @@ public enum EntityManager {
             return false;
         }
         TeleportUtils.teleportEntity(src, trg.world.provider.getDimension(), trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
-//		if (src instanceof EntityPlayerMP){
-//			if (Teleport.instance().movePlayerToDimension((EntityPlayerMP)src, trg.world.provider.getDimension()))
-//				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
-//			else
-//				return false;
-//		}
-//		else{
-//			if (Teleport.instance().moveEntityToDimension(src, trg.world.provider.getDimension()))
-//				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
-//			else
-//				return false;
-//		}
+        //		if (src instanceof EntityPlayerMP){
+        //			if (Teleport.instance().movePlayerToDimension((EntityPlayerMP)src, trg.world.provider.getDimension()))
+        //				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
+        //			else
+        //				return false;
+        //		}
+        //		else{
+        //			if (Teleport.instance().moveEntityToDimension(src, trg.world.provider.getDimension()))
+        //				src.setLocationAndAngles(trg.posX, trg.posY, trg.posZ, src.rotationYaw, src.rotationPitch);
+        //			else
+        //				return false;
+        //		}
 
         return true;
 
@@ -207,7 +215,9 @@ public enum EntityManager {
 
     public Entity getEntity(int eid, int dim) {
         World world = DimensionManager.getWorld(dim);
-        if (world == null) return null;
+        if (world == null) {
+            return null;
+        }
 
         return world.getEntityByID(eid);
     }
@@ -227,11 +237,11 @@ public enum EntityManager {
             }
         }
 
-
-        if (ent instanceof EntityPlayerMP && filtered)
+        if (ent instanceof EntityPlayerMP && filtered) {
             return "Player";
-        else if (ent instanceof EntityPlayerMP && !filtered)
+        } else if (ent instanceof EntityPlayerMP && !filtered) {
             return "[ Player ] " + ((EntityPlayerMP) ent).getGameProfile().getName();
+        }
 
         String name = ent.getName();
 
@@ -258,10 +268,11 @@ public enum EntityManager {
             return -1; //Error msg for when trying to kill a player
         }
 
-
         for (int dim : DimensionManager.getIDs()) {
             World world = DimensionManager.getWorld(dim);
-            if (world == null) continue;
+            if (world == null) {
+                continue;
+            }
 
             ArrayList<Entity> copyList = new ArrayList<>(world.loadedEntityList);
 
@@ -288,8 +299,9 @@ public enum EntityManager {
 
         ArrayList<DataEntity> outList = new ArrayList<>();
 
-        for (EntityPlayerMP p : players)
+        for (EntityPlayerMP p : players) {
             outList.add(new DataEntity().fill(p));
+        }
 
         return outList;
     }
@@ -304,7 +316,9 @@ public enum EntityManager {
 
     public int killAllPerClass(int dim, Class clazz) {
         WorldServer world = DimensionManager.getWorld(dim);
-        if (world == null) return -1;
+        if (world == null) {
+            return -1;
+        }
 
         int killedEnts = 0;
 
@@ -324,8 +338,9 @@ public enum EntityManager {
 
         for (Entity entity : Profilers.ENTITY_UPDATE.get().data.keySet()) {
             String name = getEntityName(entity, true);
-            if (!data.containsKey(name))
+            if (!data.containsKey(name)) {
                 data.put(name, new DataEntityPerClass(name));
+            }
 
             data.get(name).add(Profilers.ENTITY_UPDATE.get().data.get(entity).getGeometricMean());
         }

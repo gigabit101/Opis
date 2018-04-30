@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
@@ -16,22 +14,22 @@ public class DataEntityPerClass implements Comparable, ISerializable {
 
     public DataEntityPerClass(String name) {
         this.name = new CachedString(name);
-        this.nents = 0;
-        this.update = new DataTiming();
+        nents = 0;
+        update = new DataTiming();
     }
 
     public DataEntityPerClass add(Double timing) {
-        this.nents += 1;
-        this.update.timing += timing;
+        nents += 1;
+        update.timing += timing;
 
         return this;
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        stream.writeInt(this.nents);
-        this.name.writeToStream(stream);
-        this.update.writeToStream(stream);
+        stream.writeInt(nents);
+        name.writeToStream(stream);
+        update.writeToStream(stream);
     }
 
     public static DataEntityPerClass readFromStream(ByteBuf stream) {
@@ -44,7 +42,7 @@ public class DataEntityPerClass implements Comparable, ISerializable {
 
     @Override
     public int compareTo(Object o) {
-        return this.update.compareTo(((DataEntityPerClass) o).update);
+        return update.compareTo(((DataEntityPerClass) o).update);
     }
 
 }

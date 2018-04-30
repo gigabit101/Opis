@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.profiler.Profilers;
@@ -13,7 +11,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -36,25 +33,28 @@ public class DataDimension implements ISerializable {
         WorldServer world = DimensionManager.getWorld(dim);
 
         this.dim = dim;
-        this.name = new CachedString(world.provider.getDimensionType().getName());
-        this.players = world.playerEntities.size();
-        this.forced = world.getPersistentChunks().size();
-        this.loaded = world.getChunkProvider().getLoadedChunkCount();
+        name = new CachedString(world.provider.getDimensionType().getName());
+        players = world.playerEntities.size();
+        forced = world.getPersistentChunks().size();
+        loaded = world.getChunkProvider().getLoadedChunkCount();
 
         Map<Integer, DescriptiveStatistics> data = Profilers.DIMENSION_TICK.get().data;
-        this.update = new DataTiming(data.containsKey(dim) ? data.get(dim).getGeometricMean() : 0.0D);
+        update = new DataTiming(data.containsKey(dim) ? data.get(dim).getGeometricMean() : 0.0D);
 
-        this.mobs = 0;
-        this.neutral = 0;
-        this.entities = world.loadedEntityList.size();
+        mobs = 0;
+        neutral = 0;
+        entities = world.loadedEntityList.size();
 
-        for (Entity entity : (ArrayList<Entity>) world.loadedEntityList) {
-            if (entity instanceof EntityMob)
-                this.mobs += 1;
-            if (entity instanceof EntityAnimal)
-                this.neutral += 1;
-            if (entity instanceof EntityItem)
-                this.itemstacks += 1;
+        for (Entity entity : world.loadedEntityList) {
+            if (entity instanceof EntityMob) {
+                mobs += 1;
+            }
+            if (entity instanceof EntityAnimal) {
+                neutral += 1;
+            }
+            if (entity instanceof EntityItem) {
+                itemstacks += 1;
+            }
         }
 
         return this;
@@ -70,8 +70,8 @@ public class DataDimension implements ISerializable {
         stream.writeInt(mobs);
         stream.writeInt(neutral);
         stream.writeInt(itemstacks);
-        this.update.writeToStream(stream);
-        this.name.writeToStream(stream);
+        update.writeToStream(stream);
+        name.writeToStream(stream);
     }
 
     public static DataDimension readFromStream(ByteBuf stream) {

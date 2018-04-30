@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelTimingEntitiesPerClass extends JPanelMsgHandler implements ITabPanel {
+
     private JButtonAccess btnRun;
 
     public PanelTimingEntitiesPerClass() {
@@ -30,11 +31,7 @@ public class PanelTimingEntitiesPerClass extends JPanelMsgHandler implements ITa
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 2 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Name", "Amount", "Timing", "Mean value"},
-                new Class[]{CachedString.class, Integer.class, DataTiming.class, DataTiming.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER}
-        );
+        table = new JTableStats(new String[] { "Name", "Amount", "Timing", "Mean value" }, new Class[] { CachedString.class, Integer.class, DataTiming.class, DataTiming.class }, new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.CENTER, SwingConstants.CENTER });
         scrollPane.setViewportView(table);
     }
 
@@ -43,33 +40,33 @@ public class PanelTimingEntitiesPerClass extends JPanelMsgHandler implements ITa
         switch (msg) {
 
             case LIST_TIMING_ENTITIES_PER_CLASS: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(DataEntityPerClass.class);
+                int row = getTable().clearTable(DataEntityPerClass.class);
 
                 for (Object o : rawdata.array) {
                     DataEntityPerClass data = (DataEntityPerClass) o;
-                    model.addRow(new Object[]{data.name, data.nents, data.update, new DataTiming(data.update.timing / data.nents)});
+                    model.addRow(new Object[] { data.name, data.nents, data.update, new DataTiming(data.update.timing / data.nents) });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
 
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
+                getBtnRun().setText("Run Opis");
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             default:

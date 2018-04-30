@@ -29,6 +29,7 @@ public class OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
     public static OverlayEntityPerChunk INSTANCE = new OverlayEntityPerChunk();
 
     class ReducedData implements Comparable {
+
         CoordinatesChunk chunk;
         int amount;
 
@@ -39,34 +40,36 @@ public class OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
 
         @Override
         public int compareTo(Object arg0) {
-            return ((ReducedData) arg0).amount - this.amount;
+            return ((ReducedData) arg0).amount - amount;
         }
 
     }
 
     public boolean showList = false;
     public LayoutCanvas canvas = null;
-    public HashMap<CoordinatesChunk, Integer> overlayData = new HashMap<CoordinatesChunk, Integer>();
-    public ArrayList<ReducedData> reducedData = new ArrayList<ReducedData>();
-    public ArrayList<DataEntity> entStats = new ArrayList<DataEntity>();
+    public HashMap<CoordinatesChunk, Integer> overlayData = new HashMap<>();
+    public ArrayList<ReducedData> reducedData = new ArrayList<>();
+    public ArrayList<DataEntity> entStats = new ArrayList<>();
     public CoordinatesChunk selectedChunk = null;
 
     public void setEntStats(ArrayList<ISerializable> data) {
-        this.entStats.clear();
-        for (ISerializable stat : data)
-            this.entStats.add((DataEntity) stat);
+        entStats.clear();
+        for (ISerializable stat : data) {
+            entStats.add((DataEntity) stat);
+        }
     }
 
     public void reduceData() {
-        this.reducedData.clear();
-        for (CoordinatesChunk chunk : this.overlayData.keySet())
-            this.reducedData.add(new ReducedData(chunk, this.overlayData.get(chunk)));
-        Collections.sort(this.reducedData);
+        reducedData.clear();
+        for (CoordinatesChunk chunk : overlayData.keySet()) {
+            reducedData.add(new ReducedData(chunk, overlayData.get(chunk)));
+        }
+        Collections.sort(reducedData);
     }
 
     @Override
     public ArrayList<IMwChunkOverlay> getChunksOverlay(int dim, double centerX, double centerZ, double minX, double minZ, double maxX, double maxZ) {
-        ArrayList<IMwChunkOverlay> overlays = new ArrayList<IMwChunkOverlay>();
+        ArrayList<IMwChunkOverlay> overlays = new ArrayList<>();
 
         int minEnts = 9999;
         int maxEnts = 0;
@@ -77,11 +80,13 @@ public class OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
         }
 
         for (CoordinatesChunk chunk : overlayData.keySet()) {
-            if (chunk.dim == dim)
-                if (this.selectedChunk != null)
-                    overlays.add(new OverlayElement(chunk.toChunkCoordIntPair().x, chunk.toChunkCoordIntPair().z, minEnts, maxEnts, overlayData.get(chunk), chunk.equals(this.selectedChunk)));
-                else
+            if (chunk.dim == dim) {
+                if (selectedChunk != null) {
+                    overlays.add(new OverlayElement(chunk.toChunkCoordIntPair().x, chunk.toChunkCoordIntPair().z, minEnts, maxEnts, overlayData.get(chunk), chunk.equals(selectedChunk)));
+                } else {
                     overlays.add(new OverlayElement(chunk.toChunkCoordIntPair().x, chunk.toChunkCoordIntPair().z, minEnts, maxEnts, overlayData.get(chunk), false));
+                }
+            }
         }
         return overlays;
     }
@@ -94,43 +99,45 @@ public class OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
     @Override
     public String getStatusString(int dim, int bX, int bY, int bZ) {
         CoordinatesChunk chunk = new CoordinatesChunk(dim, bX >> 4, bZ >> 4);
-        if (this.overlayData.containsKey(chunk))
-            return String.format(", entities: %d", this.overlayData.get(chunk));
-        else
+        if (overlayData.containsKey(chunk)) {
+            return String.format(", entities: %d", overlayData.get(chunk));
+        } else {
             return ", entities: 0";
+        }
     }
 
     @Override
     public void onMiddleClick(int dim, int bX, int bZ, IMapView mapview) {
-        this.showList = false;
+        showList = false;
 
         int chunkX = bX >> 4;
         int chunkZ = bZ >> 4;
         CoordinatesChunk clickedChunk = new CoordinatesChunk(dim, chunkX, chunkZ);
-        CoordinatesChunk prevSelected = this.selectedChunk;
+        CoordinatesChunk prevSelected = selectedChunk;
 
-        if (this.overlayData.containsKey(clickedChunk)) {
-            if (this.selectedChunk == null)
-                this.selectedChunk = clickedChunk;
-            else if (this.selectedChunk.equals(clickedChunk))
-                this.selectedChunk = null;
-            else
-                this.selectedChunk = clickedChunk;
+        if (overlayData.containsKey(clickedChunk)) {
+            if (selectedChunk == null) {
+                selectedChunk = clickedChunk;
+            } else if (selectedChunk.equals(clickedChunk)) {
+                selectedChunk = null;
+            } else {
+                selectedChunk = clickedChunk;
+            }
         } else {
-            this.selectedChunk = null;
+            selectedChunk = null;
         }
 
-        if (this.selectedChunk == null)
-            this.showList = true;
+        if (selectedChunk == null) {
+            showList = true;
+        }
 
-        if (prevSelected == null && this.selectedChunk != null)
-            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, this.selectedChunk));
-
-        else if (this.selectedChunk != null && !this.selectedChunk.equals(prevSelected))
-            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, this.selectedChunk));
-
-        else if (this.selectedChunk == null)
+        if (prevSelected == null && selectedChunk != null) {
+            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, selectedChunk));
+        } else if (selectedChunk != null && !selectedChunk.equals(prevSelected)) {
+            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, selectedChunk));
+        } else if (selectedChunk == null) {
             PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_ENTITIES));
+        }
     }
 
     @Override
@@ -159,88 +166,89 @@ public class OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
     public void onDraw(IMapView mapview, IMapMode mapmode) {
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void setupChunkTable() {
-        if (this.canvas == null)
-            this.canvas = new LayoutCanvas();
+        if (canvas == null) {
+            canvas = new LayoutCanvas();
+        }
 
-        if (this.canvas.hasWidget("Table"))
-            this.canvas.delWidget("Table");
+        if (canvas.hasWidget("Table")) {
+            canvas.delWidget("Table");
+        }
 
-        LayoutBase layout = (LayoutBase) this.canvas.addWidget("Table", new LayoutBase(null));
+        LayoutBase layout = (LayoutBase) canvas.addWidget("Table", new LayoutBase(null));
         layout.setGeometry(new WidgetGeometry(100.0, 0.0, 20.0, 100.0, CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));
         layout.setBackgroundColors(0x90202020, 0x90202020);
 
         TableChunks table = (TableChunks) layout.addWidget("Table_", new TableChunks(null, this));
 
         table.setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
-        table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER)
-                .setColumnsTitle("Pos", "N Entities")
-                .setColumnsWidth(75, 25)
-                .setRowColors(0xff808080, 0xff505050)
-                .setFontSize(1.0f);
+        table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER).setColumnsTitle("Pos", "N Entities").setColumnsWidth(75, 25).setRowColors(0xff808080, 0xff505050).setFontSize(1.0f);
 
         int nrows = 0;
-        for (ReducedData data : this.reducedData) {
+        for (ReducedData data : reducedData) {
             table.addRow(data, data.chunk.toString(), String.valueOf(data.amount));
             nrows++;
-            if (nrows > 100) break;
+            if (nrows > 100) {
+                break;
+            }
         }
 
-        this.showList = true;
+        showList = true;
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly (Side.CLIENT)
     public void setupEntTable() {
-        if (this.canvas == null)
-            this.canvas = new LayoutCanvas();
+        if (canvas == null) {
+            canvas = new LayoutCanvas();
+        }
 
-        if (this.canvas.hasWidget("Table"))
-            this.canvas.delWidget("Table");
+        if (canvas.hasWidget("Table")) {
+            canvas.delWidget("Table");
+        }
 
-        LayoutBase layout = (LayoutBase) this.canvas.addWidget("Table", new LayoutBase(null));
+        LayoutBase layout = (LayoutBase) canvas.addWidget("Table", new LayoutBase(null));
         layout.setGeometry(new WidgetGeometry(100.0, 0.0, 20.0, 100.0, CType.RELXY, CType.RELXY, WAlign.RIGHT, WAlign.TOP));
         layout.setBackgroundColors(0x90202020, 0x90202020);
 
         TableEntities table = (TableEntities) layout.addWidget("Table_", new TableEntities(null, this));
 
         table.setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
-        table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER)
-                .setColumnsTitle("Name", "Pos")
-                .setColumnsWidth(75, 25)
-                .setRowColors(0xff808080, 0xff505050)
-                .setFontSize(1.0f);
+        table.setColumnsAlign(WAlign.CENTER, WAlign.CENTER).setColumnsTitle("Name", "Pos").setColumnsWidth(75, 25).setRowColors(0xff808080, 0xff505050).setFontSize(1.0f);
 
         int nrows = 0;
-        for (DataEntity data : this.entStats) {
+        for (DataEntity data : entStats) {
 
             String name = data.name.toString();
 
             table.addRow(data, name, String.format("[ %d %d %d ]", data.pos.x, data.pos.y, data.pos.z));
             nrows++;
-            if (nrows > 100) break;
+            if (nrows > 100) {
+                break;
+            }
         }
 
-        this.showList = true;
+        showList = true;
     }
 
     @Override
     public boolean onMouseInput(IMapView mapview, IMapMode mapmode) {
-        if (this.canvas != null && this.canvas.shouldRender() && ((LayoutCanvas) this.canvas).hasWidgetAtCursor()) {
+        if (canvas != null && canvas.shouldRender() && canvas.hasWidgetAtCursor()) {
 
-            if (this.canvas.getWidget("Table").getWidget("Table_") instanceof TableEntities)
-                ((TableEntities) this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
-            else
-                ((TableChunks) this.canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
+            if (canvas.getWidget("Table").getWidget("Table_") instanceof TableEntities) {
+                ((TableEntities) canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
+            } else {
+                ((TableChunks) canvas.getWidget("Table").getWidget("Table_")).setMap(mapview, mapmode);
+            }
 
-            this.canvas.handleMouseInput();
+            canvas.handleMouseInput();
             return true;
         }
         return false;
     }
 
     public void requestChunkUpdate(int dim, int chunkX, int chunkZ) {
-        ArrayList<CoordinatesChunk> chunks = new ArrayList<CoordinatesChunk>();
+        ArrayList<CoordinatesChunk> chunks = new ArrayList<>();
 
         for (int x = -5; x <= 5; x++) {
             for (int z = -5; z <= 5; z++) {
@@ -252,27 +260,28 @@ public class OverlayEntityPerChunk implements IMwDataProvider, IMessageHandler {
             }
         }
 
-        if (chunks.size() > 0)
+        if (chunks.size() > 0) {
             PacketManager.sendToServer(new PacketReqChunks(dim, chunks));
+        }
     }
 
     @Override
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_CHUNK_ENTITIES: {
-                this.setEntStats(rawdata.array);
-                this.setupEntTable();
+                setEntStats(rawdata.array);
+                setupEntTable();
                 break;
             }
             //TODO look into why this is Unhandled
             case OVERLAY_CHUNK_ENTITIES: {
-                HashMap<CoordinatesChunk, Integer> chunkStatus = new HashMap<CoordinatesChunk, Integer>();
+                HashMap<CoordinatesChunk, Integer> chunkStatus = new HashMap<>();
                 for (ISerializable s : rawdata.array) {
                     chunkStatus.put(((DataChunkEntities) s).chunk, ((DataChunkEntities) s).entities);
                 }
-                this.overlayData = chunkStatus;
-                this.reduceData();
-                this.setupChunkTable();
+                overlayData = chunkStatus;
+                reduceData();
+                setupChunkTable();
             }
 
             default:

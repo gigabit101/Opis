@@ -16,7 +16,7 @@ public class CommandKillAll extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
 
     @Override
@@ -41,7 +41,9 @@ public class CommandKillAll extends CommandBase implements IOpisCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (args.length < 1) return;
+        if (args.length < 1) {
+            return;
+        }
 
         String searchname = StringUtils.join(args, " ").toLowerCase();
 
@@ -57,8 +59,12 @@ public class CommandKillAll extends CommandBase implements IOpisCommand {
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        if (sender instanceof DedicatedServer) return true;
-        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) return true;
+        if (sender instanceof DedicatedServer) {
+            return true;
+        }
+        if (!(sender instanceof DedicatedServer) && !(sender instanceof EntityPlayerMP)) {
+            return true;
+        }
         return PlayerTracker.INSTANCE.isPrivileged(((EntityPlayerMP) sender).getGameProfile().getName());
     }
 }

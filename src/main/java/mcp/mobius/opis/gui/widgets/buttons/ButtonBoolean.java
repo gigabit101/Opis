@@ -14,26 +14,27 @@ public class ButtonBoolean extends ButtonBase {
     public ButtonBoolean(IWidget parent, String textFalse, String textTrue) {
         super(parent);
 
-        this.addWidget("LabelFalse", new LabelFixedFont(this, textFalse));
-        this.getWidget("LabelFalse").setGeometry(new WidgetGeometry(50.0D, 50.0D, 100.0D, 20.0D, CType.RELXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
-        this.addWidget("LabelTrue", new LabelFixedFont(this, textTrue));
-        this.getWidget("LabelTrue").hide();
-        this.getWidget("LabelTrue").setGeometry(new WidgetGeometry(50.0D, 50.0D, 100.0D, 20.0D, CType.RELXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
+        addWidget("LabelFalse", new LabelFixedFont(this, textFalse));
+        getWidget("LabelFalse").setGeometry(new WidgetGeometry(50.0D, 50.0D, 100.0D, 20.0D, CType.RELXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
+        addWidget("LabelTrue", new LabelFixedFont(this, textTrue));
+        getWidget("LabelTrue").hide();
+        getWidget("LabelTrue").setGeometry(new WidgetGeometry(50.0D, 50.0D, 100.0D, 20.0D, CType.RELXY, CType.ABSXY, WAlign.CENTER, WAlign.CENTER));
     }
 
     @Override
     public void onMouseClick(MouseEvent event) {
         super.onMouseClick(event);
 
-        if (event.button == 0)
-            this.state = !this.state;
+        if (event.button == 0) {
+            state = !state;
+        }
 
-        if (this.state) {
-            this.getWidget("LabelTrue").show();
-            this.getWidget("LabelFalse").hide();
+        if (state) {
+            getWidget("LabelTrue").show();
+            getWidget("LabelFalse").hide();
         } else {
-            this.getWidget("LabelTrue").hide();
-            this.getWidget("LabelFalse").show();
+            getWidget("LabelTrue").hide();
+            getWidget("LabelFalse").show();
         }
     }
 }

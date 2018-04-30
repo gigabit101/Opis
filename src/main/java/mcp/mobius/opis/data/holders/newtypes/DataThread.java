@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
@@ -11,14 +9,14 @@ public class DataThread implements ISerializable {
     public CachedString clzz;
 
     public DataThread fill(Thread thread) {
-        this.name = new CachedString(thread.getName());
-        this.clzz = new CachedString(thread.getClass().getSimpleName());
+        name = new CachedString(thread.getName());
+        clzz = new CachedString(thread.getClass().getSimpleName());
         return this;
     }
 
     public void writeToStream(ByteBuf stream) {
-        this.name.writeToStream(stream);
-        this.clzz.writeToStream(stream);
+        name.writeToStream(stream);
+        clzz.writeToStream(stream);
 
     }
 

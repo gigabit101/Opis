@@ -12,18 +12,18 @@ public class PictureDisplay extends WidgetBase {
 
     public PictureDisplay(IWidget parent, String uri) {
         super(parent);
-        this.texture = new ResourceLocation(uri);
+        texture = new ResourceLocation(uri);
     }
 
     @Override
     public void draw(Point pos) {
-        this.saveGLState();
+        saveGLState();
 
         GL11.glPushMatrix();
-        this.texManager.bindTexture(texture);
-        UIHelper.drawTexture(pos.getX(), pos.getY(), this.getSize().getX(), this.getSize().getY());
+        texManager.bindTexture(texture);
+        UIHelper.drawTexture(pos.getX(), pos.getY(), getSize().getX(), getSize().getY());
         GL11.glPopMatrix();
 
-        this.loadGLState();
+        loadGLState();
     }
 }

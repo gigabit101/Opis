@@ -14,6 +14,7 @@ import mcp.mobius.opis.network.packets.client.PacketReqData;
 import net.minecraft.client.Minecraft;
 
 public class TableEntities extends ViewTable {
+
     IMapView mapView;
     IMapMode mapMode;
     OverlayEntityPerChunk overlay;
@@ -30,7 +31,7 @@ public class TableEntities extends ViewTable {
 
     @Override
     public void onMouseClick(MouseEvent event) {
-        TableRow row = this.getRow(event.x, event.y);
+        TableRow row = getRow(event.x, event.y);
         if (row != null) {
             int eid = ((DataEntity) row.getObject()).eid;
             int dim = ((DataEntity) row.getObject()).pos.dim;

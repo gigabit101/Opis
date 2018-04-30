@@ -13,10 +13,10 @@ import java.util.HashMap;
 //TODO Covers: Rewrite this, MC has a mod container.. why? what?
 public class ModIdentification {
 
-    public static HashMap<String, String> modSource_Name = new HashMap<String, String>();
-    public static HashMap<String, String> modSource_ID = new HashMap<String, String>();
-    public static HashMap<Integer, String> itemMap = new HashMap<Integer, String>();
-    public static HashMap<String, String> keyhandlerStrings = new HashMap<String, String>();
+    public static HashMap<String, String> modSource_Name = new HashMap<>();
+    public static HashMap<String, String> modSource_ID = new HashMap<>();
+    public static HashMap<Integer, String> itemMap = new HashMap<>();
+    public static HashMap<String, String> keyhandlerStrings = new HashMap<>();
 
     public static void init() {
 
@@ -48,14 +48,16 @@ public class ModIdentification {
         }
 
         String modName = "<Unknown>";
-        for (String s : modSource_Name.keySet())
+        for (String s : modSource_Name.keySet()) {
             if (objPath.contains(s)) {
                 modName = modSource_Name.get(s);
                 break;
             }
+        }
 
-        if (modName.equals("Minecraft Coder Pack"))
+        if (modName.equals("Minecraft Coder Pack")) {
             modName = "Minecraft";
+        }
 
         return modName;
     }

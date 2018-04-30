@@ -18,7 +18,7 @@ public class BlockLag extends BlockContainer {
     public BlockLag(Material par2Material) {
         super(par2Material);
         setCreativeTab(CreativeTabs.MISC);
-        this.setUnlocalizedName("lag_generator_9001");
+        setUnlocalizedName("lag_generator_9001");
     }
 
     @Override

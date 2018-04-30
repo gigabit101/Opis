@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -24,25 +22,25 @@ public class DataBlockTileEntity implements ISerializable, Comparable {
     public DataTiming update;
 
     public DataBlockTileEntity fill(CoordinatesBlock coord) {
-        this.pos = coord;
-        World world = DimensionManager.getWorld(this.pos.dim);
+        pos = coord;
+        World world = DimensionManager.getWorld(pos.dim);
 
-        this.id = (short) Block.getIdFromBlock(world.getBlockState(new BlockPos(this.pos.x, this.pos.y, this.pos.z)).getBlock());
+        id = (short) Block.getIdFromBlock(world.getBlockState(new BlockPos(pos.x, pos.y, pos.z)).getBlock());
         IBlockState state = world.getBlockState(new BlockPos(pos.x, pos.y, pos.z));
-		this.meta   = (short) state.getBlock().getMetaFromState(state);
+        meta = (short) state.getBlock().getMetaFromState(state);
 
         Map<DimBlockPos, DescriptiveStatistics> data = Profilers.TILE_UPDATE.get().data;
-        this.update = new DataTiming(data.containsKey(this.pos.toNew()) ? data.get(this.pos.toNew()).getGeometricMean() : 0.0D);
+        update = new DataTiming(data.containsKey(pos.toNew()) ? data.get(pos.toNew()).getGeometricMean() : 0.0D);
 
         return this;
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        stream.writeShort(this.id);
-        stream.writeShort(this.meta);
-        this.pos.writeToStream(stream);
-        this.update.writeToStream(stream);
+        stream.writeShort(id);
+        stream.writeShort(meta);
+        pos.writeToStream(stream);
+        update.writeToStream(stream);
     }
 
     public static DataBlockTileEntity readFromStream(ByteBuf stream) {
@@ -56,7 +54,7 @@ public class DataBlockTileEntity implements ISerializable, Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return this.update.compareTo(((DataBlockTileEntity) o).update);
+        return update.compareTo(((DataBlockTileEntity) o).update);
     }
 
 }

@@ -1,13 +1,12 @@
 package mcp.mobius.opis.data.holders.basetypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.ChunkPos;
 
 public final class CoordinatesChunk implements ISerializable {
+
     public final int dim, x, y, z;
     public final int chunkX, chunkZ;
     public final byte metadata;
@@ -15,15 +14,15 @@ public final class CoordinatesChunk implements ISerializable {
     public final static CoordinatesChunk INVALID = new CoordinatesChunk(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
     public CoordinatesChunk(CoordinatesBlock coord) {
-        this.dim = coord.dim;
-        this.chunkX = coord.chunkX;
-        this.chunkZ = coord.chunkZ;
+        dim = coord.dim;
+        chunkX = coord.chunkX;
+        chunkZ = coord.chunkZ;
 
-        this.x = chunkX << 4;
-        this.y = 0;
-        this.z = chunkZ << 4;
+        x = chunkX << 4;
+        y = 0;
+        z = chunkZ << 4;
 
-        this.metadata = 0;
+        metadata = 0;
     }
 
     public CoordinatesChunk(int dim, int chunkX, int chunkZ) {
@@ -31,11 +30,11 @@ public final class CoordinatesChunk implements ISerializable {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
 
-        this.x = chunkX << 4;
-        this.y = 0;
-        this.z = chunkZ << 4;
+        x = chunkX << 4;
+        y = 0;
+        z = chunkZ << 4;
 
-        this.metadata = 0;
+        metadata = 0;
     }
 
     public CoordinatesChunk(int dim, int chunkX, int chunkZ, byte metadata) {
@@ -43,71 +42,71 @@ public final class CoordinatesChunk implements ISerializable {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
 
-        this.x = chunkX << 4;
-        this.y = 0;
-        this.z = chunkZ << 4;
+        x = chunkX << 4;
+        y = 0;
+        z = chunkZ << 4;
 
         this.metadata = metadata;
     }
 
     public CoordinatesChunk(int dim, ChunkPos coord) {
         this.dim = dim;
-        this.chunkX = coord.x;
-        this.chunkZ = coord.z;
+        chunkX = coord.x;
+        chunkZ = coord.z;
 
-        this.x = chunkX << 4;
-        this.y = 0;
-        this.z = chunkZ << 4;
+        x = chunkX << 4;
+        y = 0;
+        z = chunkZ << 4;
 
-        this.metadata = 0;
+        metadata = 0;
     }
 
     public CoordinatesChunk(int dim, ChunkPos coord, byte metadata) {
         this.dim = dim;
-        this.chunkX = coord.x;
-        this.chunkZ = coord.z;
+        chunkX = coord.x;
+        chunkZ = coord.z;
 
-        this.x = chunkX << 4;
-        this.y = 0;
-        this.z = chunkZ << 4;
+        x = chunkX << 4;
+        y = 0;
+        z = chunkZ << 4;
 
         this.metadata = metadata;
     }
 
     public CoordinatesChunk(TileEntity te) {
-        this.dim = te.getWorld().provider.getDimension();
-        this.chunkX = te.getPos().getX() >> 4;
-        this.chunkZ = te.getPos().getZ() >> 4;
+        dim = te.getWorld().provider.getDimension();
+        chunkX = te.getPos().getX() >> 4;
+        chunkZ = te.getPos().getZ() >> 4;
 
-        this.x = this.chunkX << 4;
-        this.y = 0;
-        this.z = this.chunkZ << 4;
+        x = chunkX << 4;
+        y = 0;
+        z = chunkZ << 4;
 
-        this.metadata = 0;
+        metadata = 0;
     }
 
     public boolean isInvalid() {
-        return this.equals(CoordinatesChunk.INVALID);
+        return equals(CoordinatesChunk.INVALID);
     }
 
     public String toString() {
-        return String.format("[%6d %6d %6d]", this.dim, this.chunkX, this.chunkZ);
+        return String.format("[%6d %6d %6d]", dim, chunkX, chunkZ);
     }
 
     public boolean equals(Object o) {
         CoordinatesChunk c = (CoordinatesChunk) o;
-        return (this.dim == c.dim) && (this.chunkX == c.chunkX) && (this.chunkZ == c.chunkZ);
+        return (dim == c.dim) && (chunkX == c.chunkX) && (chunkZ == c.chunkZ);
     }
 
     //00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
     //11111111 11111111 11111111 11122222 22222222 22222222 22222200 00000000
 
     public int hashCode() {
-        return this.dim + 31 * this.chunkX + 877 * this.chunkZ;
+        return dim + 31 * chunkX + 877 * chunkZ;
     }
 
     public ChunkPos toChunkCoordIntPair() {
-        return new ChunkPos(this.chunkX, this.chunkZ);
+        return new ChunkPos(chunkX, chunkZ);
     }
 
     public CoordinatesBlock asCoordinatesBlock() {
@@ -116,10 +115,10 @@ public final class CoordinatesChunk implements ISerializable {
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        stream.writeInt(this.dim);
-        stream.writeInt(this.chunkX);
-        stream.writeInt(this.chunkZ);
-        stream.writeByte(this.metadata);
+        stream.writeInt(dim);
+        stream.writeInt(chunkX);
+        stream.writeInt(chunkZ);
+        stream.writeByte(metadata);
     }
 
     public static CoordinatesChunk readFromStream(ByteBuf stream) {

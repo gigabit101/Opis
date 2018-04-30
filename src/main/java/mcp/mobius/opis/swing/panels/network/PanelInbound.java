@@ -23,11 +23,7 @@ public class PanelInbound extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 0,grow");
 
-        table = new JTableStats(
-                new String[]{"Type", "ID", "Amount", "Rate", "Total Size"},
-                new Class[]{String.class, Integer.class, DataAmountRate.class, DataByteRate.class, DataByteSize.class},
-                new int[]{SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.RIGHT, SwingConstants.RIGHT, SwingConstants.RIGHT}
-        );
+        table = new JTableStats(new String[] { "Type", "ID", "Amount", "Rate", "Total Size" }, new Class[] { String.class, Integer.class, DataAmountRate.class, DataByteRate.class, DataByteSize.class }, new int[] { SwingConstants.LEFT, SwingConstants.CENTER, SwingConstants.RIGHT, SwingConstants.RIGHT, SwingConstants.RIGHT });
         scrollPane.setViewportView(table);
     }
 
@@ -35,26 +31,22 @@ public class PanelInbound extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_PACKETS_INBOUND: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
-                DefaultTableModel model = this.getTable().getModel();
-                int row = this.getTable().clearTable(DataPacket.class);
+                DefaultTableModel model = getTable().getModel();
+                int row = getTable().clearTable(DataPacket.class);
 
                 for (Object o : rawdata.array) {
                     DataPacket packet = (DataPacket) o;
-                    if (packet.type.equals("<UNUSED>")) continue;
-                    model.addRow(new Object[]{
-                            packet.type,
-                            packet.id,
-                            packet.amount,
-                            packet.rate,
-                            packet.size
-                    });
+                    if (packet.type.equals("<UNUSED>")) {
+                        continue;
+                    }
+                    model.addRow(new Object[] { packet.type, packet.id, packet.amount, packet.rate, packet.size });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }

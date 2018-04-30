@@ -7,7 +7,7 @@ import java.io.IOException;
 public class DataTimingMillisecond extends DataTiming {
 
     public DataTimingMillisecond() {
-        this.timing = 0.0D;
+        timing = 0.0D;
     }
 
     public DataTimingMillisecond(double timing) {
@@ -15,11 +15,11 @@ public class DataTimingMillisecond extends DataTiming {
     }
 
     public String toString() {
-        return String.format("%.3f ms", this.timing / 1000.0 / 1000.0);
+        return String.format("%.3f ms", timing / 1000.0 / 1000.0);
     }
 
     public void writeToStream(DataOutputStream stream) throws IOException {
-        stream.writeDouble(this.timing);
+        stream.writeDouble(timing);
     }
 
     public static DataTimingMillisecond readFromStream(DataInputStream stream) throws IOException {

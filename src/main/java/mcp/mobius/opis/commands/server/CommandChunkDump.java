@@ -17,7 +17,7 @@ public class CommandChunkDump extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CommandChunkDump extends CommandBase implements IOpisCommand {
 
         Opis.log.log(Level.INFO, "== CHUNK DUMP ==");
 
-        HashMap<ChunkPos, Boolean> chunkStatus = new HashMap<ChunkPos, Boolean>();
+        HashMap<ChunkPos, Boolean> chunkStatus = new HashMap<>();
 
         Integer[] worldIDs = DimensionManager.getIDs();
         for (Integer worldID : worldIDs) {

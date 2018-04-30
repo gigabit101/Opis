@@ -5,18 +5,19 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class SerialNumeral<U> {
+
     private enum Type {
         INTEGER,
         LONG,
         FLOAT,
         DOUBLE,
-        STRING;
+        STRING
     }
 
-    public static final SerialNumeral<Integer> INTEGER = new SerialNumeral<Integer>(Type.INTEGER);
-    public static final SerialNumeral<Float> FLOAT = new SerialNumeral<Float>(Type.FLOAT);
-    public static final SerialNumeral<Long> LONG = new SerialNumeral<Long>(Type.LONG);
-    public static final SerialNumeral<Double> DOUBLE = new SerialNumeral<Double>(Type.DOUBLE);
+    public static final SerialNumeral<Integer> INTEGER = new SerialNumeral<>(Type.INTEGER);
+    public static final SerialNumeral<Float> FLOAT = new SerialNumeral<>(Type.FLOAT);
+    public static final SerialNumeral<Long> LONG = new SerialNumeral<>(Type.LONG);
+    public static final SerialNumeral<Double> DOUBLE = new SerialNumeral<>(Type.DOUBLE);
 
     U value;
     Type type;
@@ -30,24 +31,24 @@ public class SerialNumeral<U> {
     }
 
     public U getValue() {
-        return this.value;
+        return value;
     }
 
     public void writeToSteam(DataOutputStream stream) throws IOException {
-        stream.writeByte(this.type.ordinal());
+        stream.writeByte(type.ordinal());
 
         switch (type) {
             case DOUBLE:
-                stream.writeDouble((Double) this.value);
+                stream.writeDouble((Double) value);
                 break;
             case FLOAT:
-                stream.writeFloat((Float) this.value);
+                stream.writeFloat((Float) value);
                 break;
             case INTEGER:
-                stream.writeInt((Integer) this.value);
+                stream.writeInt((Integer) value);
                 break;
             case LONG:
-                stream.writeLong((Long) this.value);
+                stream.writeLong((Long) value);
                 break;
             default:
                 break;
@@ -58,22 +59,22 @@ public class SerialNumeral<U> {
         Type datatype = Type.values()[stream.readByte()];
         switch (datatype) {
             case DOUBLE: {
-                SerialNumeral<Double> retVal = new SerialNumeral<Double>(Type.DOUBLE);
+                SerialNumeral<Double> retVal = new SerialNumeral<>(Type.DOUBLE);
                 retVal.setValue(stream.readDouble());
                 return retVal;
             }
             case FLOAT: {
-                SerialNumeral<Float> retVal = new SerialNumeral<Float>(Type.FLOAT);
+                SerialNumeral<Float> retVal = new SerialNumeral<>(Type.FLOAT);
                 retVal.setValue(stream.readFloat());
                 return retVal;
             }
             case INTEGER: {
-                SerialNumeral<Integer> retVal = new SerialNumeral<Integer>(Type.INTEGER);
+                SerialNumeral<Integer> retVal = new SerialNumeral<>(Type.INTEGER);
                 retVal.setValue(stream.readInt());
                 return retVal;
             }
             case LONG: {
-                SerialNumeral<Long> retVal = new SerialNumeral<Long>(Type.LONG);
+                SerialNumeral<Long> retVal = new SerialNumeral<>(Type.LONG);
                 retVal.setValue(stream.readLong());
                 return retVal;
             }

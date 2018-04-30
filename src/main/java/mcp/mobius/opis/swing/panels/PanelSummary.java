@@ -21,7 +21,6 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
@@ -35,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
+
     private JLabel lblTimingWorldTick;
     private JLabel lblTimingTileEnts;
     private JLabel lblTimingEntities;
@@ -151,14 +151,13 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
         lblTickTime = new JLabel("0");
         add(lblTickTime, "cell 3 10 2 1,alignx right");
 
-
         tabGraphs = new JTabbedPane();
         add(tabGraphs, "cell 0 11 15 1,grow");
 
-        JPanel panelTick = this.createTickGraph();
+        JPanel panelTick = createTickGraph();
         tabGraphs.addTab("Tick time", panelTick);
 
-        JPanel panelPing = this.createPingGraph();
+        JPanel panelPing = createPingGraph();
         tabGraphs.addTab("Ping", panelPing);
 
     }
@@ -220,24 +219,26 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
     }
 
     public void setProgressBar(int min, int max, int value) {
-        if (min != -1)
-            this.getProgressBarRun().setMinimum(min);
+        if (min != -1) {
+            getProgressBarRun().setMinimum(min);
+        }
 
-        if (max != -1)
-            this.getProgressBarRun().setMaximum(max);
+        if (max != -1) {
+            getProgressBarRun().setMaximum(max);
+        }
 
-        if (value != -1)
-            this.getProgressBarRun().setValue(value);
+        if (value != -1) {
+            getProgressBarRun().setValue(value);
+        }
     }
 
     private DataTimingMillisecond timingWorldTickTotal = new DataTimingMillisecond();
-    private DataTimingMillisecond timingHandlersTotal = new DataTimingMillisecond();
     private DataTimingMillisecond timingTileEntsTotal = new DataTimingMillisecond();
     private DataTimingMillisecond timingEntitiesTotal = new DataTimingMillisecond();
     private DataTimingMillisecond timingNetworkTotal = new DataTimingMillisecond();
 
-    ArrayList<Double> datapointsTick = new ArrayList<Double>();
-    ArrayList<Double> datapointsPing = new ArrayList<Double>();
+    ArrayList<Double> datapointsTick = new ArrayList<>();
+    ArrayList<Double> datapointsPing = new ArrayList<>();
     XYSeries xydataTick = new XYSeries("Update time");
     XYSeries xydataPing = new XYSeries("Ping");
     XYSeriesCollection datasetTick = new XYSeriesCollection();
@@ -280,99 +281,100 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
     public void setTimingTick(ISerializable tickStat) {
         DataTimingMillisecond ticktime = ((DataTiming) tickStat).asMillisecond();
 
-        this.getLblTickTime().setText(ticktime.toString());
+        getLblTickTime().setText(ticktime.toString());
 
         datapointsTick.add(ticktime.timing / 1000. / 1000.);
-        if (datapointsTick.size() > 101)
+        if (datapointsTick.size() > 101) {
             datapointsTick.remove(0);
+        }
 
         xydataTick.clear();
-        for (int i = 0; i < datapointsTick.size(); i++)
+        for (int i = 0; i < datapointsTick.size(); i++) {
             xydataTick.add(i, datapointsTick.get(i));
+        }
 
         datasetTick.removeAllSeries();
         datasetTick.addSeries(xydataTick);
 
         Double verticalScale = 50.0 * (MathHelper.floor(xydataTick.getMaxY() / 50.0D) + 1);
-        ((NumberAxis) xyPlotTick.getRangeAxis()).setRange(0.0, verticalScale);
-        ((NumberAxis) xyPlotTick.getDomainAxis()).setRange(0.0, 100.0);
+        xyPlotTick.getRangeAxis().setRange(0.0, verticalScale);
+        xyPlotTick.getDomainAxis().setRange(0.0, 100.0);
     }
 
     public void setTimingPing(ISerializable pingStat) {
         DataTimingMillisecond pingtime = ((DataTiming) pingStat).asMillisecond();
 
         datapointsPing.add(pingtime.timing / 1000. / 1000.);
-        if (datapointsPing.size() > 101)
+        if (datapointsPing.size() > 101) {
             datapointsPing.remove(0);
+        }
 
         xydataPing.clear();
-        for (int i = 0; i < datapointsPing.size(); i++)
+        for (int i = 0; i < datapointsPing.size(); i++) {
             xydataPing.add(i, datapointsPing.get(i));
+        }
 
         datasetPing.removeAllSeries();
         datasetPing.addSeries(xydataPing);
 
         Double verticalScale = 500.0 * (MathHelper.floor(xydataPing.getMaxY() / 500.0D) + 1);
-        ((NumberAxis) xyPlotPing.getRangeAxis()).setRange(0.0, verticalScale);
-        ((NumberAxis) xyPlotPing.getDomainAxis()).setRange(0.0, 100.0);
+        xyPlotPing.getRangeAxis().setRange(0.0, verticalScale);
+        xyPlotPing.getDomainAxis().setRange(0.0, 100.0);
     }
 
     private DataTimingMillisecond getProfiledTickTotalTime() {
-        return new DataTimingMillisecond(timingWorldTickTotal.timing + timingTileEntsTotal.timing + timingEntitiesTotal.timing + timingHandlersTotal.timing);
+        return new DataTimingMillisecond(timingWorldTickTotal.timing + timingTileEntsTotal.timing + timingEntitiesTotal.timing);
     }
 
     @Override
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case VALUE_AMOUNT_TILEENTS: {
-                this.getLblAmountTileEnts().setText(String.valueOf(((SerialInt) rawdata.value).value));
+                getLblAmountTileEnts().setText(String.valueOf(((SerialInt) rawdata.value).value));
                 break;
             }
             case VALUE_AMOUNT_ENTITIES: {
-                this.getLblAmountEntities().setText(String.valueOf(((SerialInt) rawdata.value).value));
+                getLblAmountEntities().setText(String.valueOf(((SerialInt) rawdata.value).value));
                 break;
             }
             case VALUE_AMOUNT_UPLOAD: {
-                double uploadKB = (((SerialLong) rawdata.value).value) / 1024.0;
-                this.getLblAmountUpload().setText(String.format("%.3f", uploadKB));
+                double uploadKB = ((SerialLong) rawdata.value).value / 1024.0;
+                getLblAmountUpload().setText(String.format("%.3f", uploadKB));
                 break;
             }
             case VALUE_AMOUNT_DOWNLOAD: {
-                double downloadKB = (((SerialLong) rawdata.value).value) / 1024.0;
-                this.getLblAmountDownload().setText(String.format("%.3f", downloadKB));
+                double downloadKB = ((SerialLong) rawdata.value).value / 1024.0;
+                getLblAmountDownload().setText(String.format("%.3f", downloadKB));
                 break;
             }
             case VALUE_TIMING_TICK: {
-                this.setTimingTick(rawdata.value);
+                setTimingTick(rawdata.value);
                 break;
             }
             case VALUE_CHUNK_FORCED: {
-                this.getLblAmountForced().setText(String.valueOf(((SerialInt) rawdata.value).value));
+                getLblAmountForced().setText(String.valueOf(((SerialInt) rawdata.value).value));
                 break;
             }
             case VALUE_CHUNK_LOADED: {
-                this.getLblAmountLoaded().setText(String.valueOf(((SerialInt) rawdata.value).value));
-                break;
-            }
-            case VALUE_TIMING_NETWORK: {
+                getLblAmountLoaded().setText(String.valueOf(((SerialInt) rawdata.value).value));
                 break;
             }
             case VALUE_TIMING_TILEENTS: {
-                this.timingTileEntsTotal = ((DataTiming) rawdata.value).asMillisecond();
-                this.getLblTimingTileEnts().setText(this.timingTileEntsTotal.toString());
-                this.getLblTimingTotal().setText(String.format("%s", this.getProfiledTickTotalTime().toString()));
+                timingTileEntsTotal = ((DataTiming) rawdata.value).asMillisecond();
+                getLblTimingTileEnts().setText(timingTileEntsTotal.toString());
+                getLblTimingTotal().setText(String.format("%s", getProfiledTickTotalTime().toString()));
                 break;
             }
             case VALUE_TIMING_ENTITIES: {
-                this.timingEntitiesTotal = ((DataTiming) rawdata.value).asMillisecond();
-                this.getLblTimingEntities().setText(this.timingEntitiesTotal.toString());
-                this.getLblTimingTotal().setText(String.format("%s", this.getProfiledTickTotalTime().toString()));
+                timingEntitiesTotal = ((DataTiming) rawdata.value).asMillisecond();
+                getLblTimingEntities().setText(timingEntitiesTotal.toString());
+                getLblTimingTotal().setText(String.format("%s", getProfiledTickTotalTime().toString()));
                 break;
             }
             case VALUE_TIMING_WORLDTICK: {
-                this.timingWorldTickTotal = ((DataBlockTick) rawdata.value).total.asMillisecond();
-                this.getLblTimingWorldTick().setText(this.timingWorldTickTotal.toString());
-                this.getLblTimingTotal().setText(String.format("%s", this.getProfiledTickTotalTime().toString()));
+                timingWorldTickTotal = ((DataBlockTick) rawdata.value).total.asMillisecond();
+                getLblTimingWorldTick().setText(timingWorldTickTotal.toString());
+                getLblTimingTotal().setText(String.format("%s", getProfiledTickTotalTime().toString()));
 
                 String tooltip = "<html><font face=\"monospace\"><pre>";
 
@@ -382,39 +384,39 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
 
                 tooltip += "</pre></html>";
 
-                this.getLblTimingWorldTick().setToolTipText(tooltip);
+                getLblTimingWorldTick().setToolTipText(tooltip);
 
                 break;
             }
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
-                this.setProgressBar(0, ((SerialInt) rawdata.value).value, 0);
+                getBtnRun().setText("Running...");
+                setProgressBar(0, ((SerialInt) rawdata.value).value, 0);
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
-                this.setProgressBar(0, ((SerialInt) rawdata.value).value, ((SerialInt) rawdata.value).value);
+                getBtnRun().setText("Run Opis");
+                setProgressBar(0, ((SerialInt) rawdata.value).value, ((SerialInt) rawdata.value).value);
                 break;
             }
             case STATUS_RUN_UPDATE: {
-                this.setProgressBar(-1, -1, ((SerialInt) rawdata.value).value);
+                setProgressBar(-1, -1, ((SerialInt) rawdata.value).value);
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
-                this.setProgressBar(-1, -1, ((SerialInt) rawdata.value).value);
+                getBtnRun().setText("Running...");
+                setProgressBar(-1, -1, ((SerialInt) rawdata.value).value);
                 break;
             }
             case STATUS_TIME_LAST_RUN: {
                 long serverLastRun = ((SerialLong) rawdata.value).value;
                 if (serverLastRun == 0) {
-                    this.getLblTimeStamp().setText("Last run : <Never>");
+                    getLblTimeStamp().setText("Last run : <Never>");
                 } else {
                     long clientLastRun = serverLastRun + DataCache.instance().getClockScrew();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date resultdate = new Date(clientLastRun);
 
-                    this.getLblTimeStamp().setText(String.format("Last run : %s", sdf.format(resultdate)));
+                    getLblTimeStamp().setText(String.format("Last run : %s", sdf.format(resultdate)));
                 }
                 break;
             }
@@ -424,12 +426,12 @@ public class PanelSummary extends JPanelMsgHandler implements ITabPanel {
             }
 
             case STATUS_PING: {
-                this.pingData.addValue(System.nanoTime() - ((SerialLong) rawdata.value).value);
-                this.nPings += 1;
+                pingData.addValue(System.nanoTime() - ((SerialLong) rawdata.value).value);
+                nPings += 1;
 
-                DataTiming timing = new DataTiming(this.pingData.getGeometricMean());
-                this.setTimingPing(timing);
-                this.getLblTimingPing().setText(timing.asMillisecond().toString());
+                DataTiming timing = new DataTiming(pingData.getGeometricMean());
+                setTimingPing(timing);
+                getLblTimingPing().setText(timing.asMillisecond().toString());
                 break;
             }
 

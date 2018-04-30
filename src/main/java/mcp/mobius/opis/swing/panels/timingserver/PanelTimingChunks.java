@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelTimingChunks extends JPanelMsgHandler implements ITabPanel {
+
     private JButtonAccess btnRun;
     private JButtonAccess btnTeleport;
     private JButtonAccess btnCenter;
@@ -43,10 +44,7 @@ public class PanelTimingChunks extends JPanelMsgHandler implements ITabPanel {
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 4 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Dimension", "Position", "TileEntities", "Entities", "Update Time"},
-                new Class[]{Integer.class, String.class, Integer.class, Integer.class, StatAbstract.class}
-        );
+        table = new JTableStats(new String[] { "Dimension", "Position", "TileEntities", "Entities", "Update Time" }, new Class[] { Integer.class, String.class, Integer.class, Integer.class, StatAbstract.class });
         scrollPane.setViewportView(table);
     }
 
@@ -66,37 +64,32 @@ public class PanelTimingChunks extends JPanelMsgHandler implements ITabPanel {
     public boolean handleMessage(Message msg, PacketBase rawdata) {
         switch (msg) {
             case LIST_TIMING_CHUNK: {
-                this.cacheData(msg, rawdata);
+                cacheData(msg, rawdata);
 
-                this.getTable().setTableData(rawdata.array);
+                getTable().setTableData(rawdata.array);
 
                 DefaultTableModel model = table.getModel();
-                int row = this.getTable().clearTable(StatsChunk.class);
+                int row = getTable().clearTable(StatsChunk.class);
 
                 for (Object o : rawdata.array) {
                     StatsChunk stat = (StatsChunk) o;
-                    model.addRow(new Object[]{
-                            stat.getChunk().dim,
-                            String.format("[ %4d %4d ]", stat.getChunk().chunkX, stat.getChunk().chunkZ),
-                            stat.tileEntities,
-                            stat.entities,
-                            stat});
+                    model.addRow(new Object[] { stat.getChunk().dim, String.format("[ %4d %4d ]", stat.getChunk().chunkX, stat.getChunk().chunkZ), stat.tileEntities, stat.entities, stat });
                 }
 
-                this.getTable().dataUpdated(row);
+                getTable().dataUpdated(row);
 
                 break;
             }
             case STATUS_START: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             case STATUS_STOP: {
-                this.getBtnRun().setText("Run Opis");
+                getBtnRun().setText("Run Opis");
                 break;
             }
             case STATUS_RUNNING: {
-                this.getBtnRun().setText("Running...");
+                getBtnRun().setText("Running...");
                 break;
             }
             default:

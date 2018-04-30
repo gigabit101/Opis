@@ -104,7 +104,7 @@ public class TrueTypeFont {
 
     public TrueTypeFont(Font font, boolean antiAlias, char[] additionalChars) {
         this.font = font;
-        this.fontSize = font.getSize() + 3;
+        fontSize = font.getSize() + 3;
         this.antiAlias = antiAlias;
 
         createSet(additionalChars);
@@ -160,7 +160,7 @@ public class TrueTypeFont {
         gt.setColor(Color.WHITE);
         int charx = 3;
         int chary = 1;
-        gt.drawString(String.valueOf(ch), (charx), (chary) + fontMetrics.getAscent());
+        gt.drawString(String.valueOf(ch), charx, chary + fontMetrics.getAscent());
 
         return fontImage;
 
@@ -248,8 +248,8 @@ public class TrueTypeFont {
         float TextureSrcY = srcY / textureHeight;
         float SrcWidth = srcX2 - srcX;
         float SrcHeight = srcY2 - srcY;
-        float RenderWidth = (SrcWidth / textureWidth);
-        float RenderHeight = (SrcHeight / textureHeight);
+        float RenderWidth = SrcWidth / textureWidth;
+        float RenderHeight = SrcHeight / textureHeight;
 
         buffer.pos(drawX, drawY, 0).tex(TextureSrcX, TextureSrcY).endVertex();
         buffer.pos(drawX, drawY + DrawHeight, 0).tex(TextureSrcX, TextureSrcY + RenderHeight).endVertex();
@@ -275,7 +275,7 @@ public class TrueTypeFont {
                 lastWidth = intObject.width;
             }
         }
-        return (totalwidth);
+        return totalwidth;
     }
 
     public int getHeight() {
@@ -392,7 +392,7 @@ public class TrueTypeFont {
                     }
                     //if center get next lines total width/2;
                 } else {
-                    drawQuad(buffer, (totalwidth + intObject.width) + x / scaleX, startY + y / scaleY, totalwidth + x / scaleX, (startY + intObject.height) + y / scaleY, intObject.storedX + intObject.width, intObject.storedY + intObject.height, intObject.storedX, intObject.storedY);
+                    drawQuad(buffer, totalwidth + intObject.width + x / scaleX, startY + y / scaleY, totalwidth + x / scaleX, startY + intObject.height + y / scaleY, intObject.storedX + intObject.width, intObject.storedY + intObject.height, intObject.storedX, intObject.storedY);
                     if (d > 0) {
                         totalwidth += (intObject.width - c) * d;
                     }
@@ -415,7 +415,7 @@ public class TrueTypeFont {
             ByteBuffer byteBuffer;
             DataBuffer db = bufferedImage.getData().getDataBuffer();
             if (db instanceof DataBufferInt) {
-                int intI[] = ((DataBufferInt) (bufferedImage.getData().getDataBuffer())).getData();
+                int intI[] = ((DataBufferInt) bufferedImage.getData().getDataBuffer()).getData();
                 byte newI[] = new byte[intI.length * 4];
                 for (int i = 0; i < intI.length; i++) {
                     byte b[] = intToByteArray(intI[i]);
@@ -429,13 +429,12 @@ public class TrueTypeFont {
 
                 byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(newI);
             } else {
-                byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(((DataBufferByte) (bufferedImage.getData().getDataBuffer())).getData());
+                byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8)).order(ByteOrder.nativeOrder()).put(((DataBufferByte) bufferedImage.getData().getDataBuffer()).getData());
             }
             byteBuffer.flip();
 
             int internalFormat = GL11.GL_RGBA8, format = GL11.GL_RGBA;
             IntBuffer textureId = BufferUtils.createIntBuffer(1);
-            ;
             GL11.glGenTextures(textureId);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId.get(0));
 
@@ -470,7 +469,7 @@ public class TrueTypeFont {
     }
 
     public static byte[] intToByteArray(int value) {
-        return new byte[]{(byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value};
+        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
     }
 
     public void destroy() {

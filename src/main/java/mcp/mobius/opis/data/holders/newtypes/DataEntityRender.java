@@ -13,13 +13,13 @@ public class DataEntityRender extends DataEntity {
 
     public DataEntityRender fill(Entity entity) {
 
-        this.eid = entity.getEntityId();
-        this.name = new CachedString(EntityManager.INSTANCE.getEntityName(entity, false));
-        this.pos = new CoordinatesBlock(entity);
+        eid = entity.getEntityId();
+        name = new CachedString(EntityManager.INSTANCE.getEntityName(entity, false));
+        pos = new CoordinatesBlock(entity);
 
-        WeakHashMap<Entity, DescriptiveStatistics> data = ((ProfilerRenderEntity) (ProfilerSection.RENDER_ENTITY.getProfiler())).data;
-        this.update = new DataTiming(data.containsKey(entity) ? data.get(entity).getGeometricMean() : 0.0D);
-        this.npoints = data.containsKey(entity) ? data.get(entity).getN() : 0;
+        WeakHashMap<Entity, DescriptiveStatistics> data = ((ProfilerRenderEntity) ProfilerSection.RENDER_ENTITY.getProfiler()).data;
+        update = new DataTiming(data.containsKey(entity) ? data.get(entity).getGeometricMean() : 0.0D);
+        npoints = data.containsKey(entity) ? data.get(entity).getN() : 0;
 
         return this;
     }

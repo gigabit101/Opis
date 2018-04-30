@@ -4,10 +4,14 @@ import codechicken.asm.ASMBlock;
 import codechicken.asm.ASMReader;
 import codechicken.asm.ModularASMTransformer;
 import codechicken.asm.ObfMapping;
+import codechicken.asm.transformers.FieldWriter;
 import codechicken.asm.transformers.MethodInjector;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import java.util.Map;
+
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
 
 /**
  * Created by covers1624 on 5/03/18.
@@ -53,18 +57,24 @@ public class OpisClassTransformer implements IClassTransformer {
         {
             mapping = new ObfMapping("net/minecraft/network/NettyPacketDecoder", "decode", "(Lio/netty/channel/ChannelHandlerContext;Lio/netty/buffer/ByteBuf;Ljava/util/List;)V");
             transformer.add(new MethodInjector(mapping, blocks.get("n_NPD_decode"), blocks.get("i_NPD_decode"), true));
-        }
-        {
             mapping = new ObfMapping("net/minecraft/network/NettyPacketEncoder", "encode", "(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;Lio/netty/buffer/ByteBuf;)V");
             transformer.add(new MethodInjector(mapping, blocks.get("n_NPE_encode"), blocks.get("i_NPE_encode"), false));
         }
         {
             mapping = new ObfMapping("net/minecraftforge/fml/common/network/internal/FMLProxyPacket", "func_148833_a", "(Lnet/minecraft/network/INetHandler;)V");
             transformer.add(new MethodInjector(mapping, null, blocks.get("i_FMLPP_processPacket"), true));
-        }
-        {
             mapping = new ObfMapping("net/minecraftforge/fml/common/network/FMLOutboundHandler", "write", "(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Object;Lio/netty/channel/ChannelPromise;)V");
             transformer.add(new MethodInjector(mapping, blocks.get("n_FMLOH_write"), blocks.get("i_FMLOH_write"), false));
+        }
+        {
+            mapping = new ObfMapping("net/minecraftforge/fml/common/eventhandler/ASMEventHandler", "handler_method", "Ljava/lang/String;");
+            transformer.add(new FieldWriter(ACC_PRIVATE | ACC_FINAL, mapping));
+            mapping = new ObfMapping("net/minecraftforge/fml/common/eventhandler/ASMEventHandler", "<init>", "(Ljava/lang/Object;Ljava/lang/reflect/Method;Lnet/minecraftforge/fml/common/ModContainer;Z)V");
+            transformer.add(new MethodInjector(mapping, blocks.get("i_init"), true));
+            mapping = new ObfMapping("net/minecraftforge/fml/common/eventhandler/ASMEventHandler", "invoke", "(Lnet/minecraftforge/fml/common/eventhandler/Event;)V");
+            ASMBlock needle = blocks.get("n_invoke");
+            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_invoke_pre"), true));
+            transformer.add(new MethodInjector(mapping, needle, blocks.get("i_invoke_post"), false));
         }
     }
 

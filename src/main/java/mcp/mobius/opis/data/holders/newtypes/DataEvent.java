@@ -1,62 +1,40 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.collect.Table.Cell;
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class DataEvent implements ISerializable, Comparable {
+
     public CachedString event;
-    public CachedString handler;
     public CachedString package_;
     public CachedString mod;
     public long nCalls;
     public DataTiming update;
 
-    public DataEvent fill(Cell<Class, String, DescriptiveStatistics> cellData, String modName) {
-        /*
-		String handlerName = cell.getColumnKey().getSimpleName();
-		try {
-			String[] splitHandler = handlerName.split("_");
-			handlerName  = splitHandler[2] + "." + splitHandler[3];
-		} catch (Exception e){}
-		*/
-        String[] nameRaw = cellData.getColumnKey().split("\\|");
-
-        String handlerName = nameRaw[1];
-        try {
-            String[] splitHandler = handlerName.split("_");
-            handlerName = splitHandler[2] + "." + splitHandler[3];
-        } catch (Exception e) {
-        }
-
-        this.package_ = new CachedString(nameRaw[0]);
-        this.handler = new CachedString(handlerName);
-        this.event = new CachedString(cellData.getRowKey().getName().replace("net.minecraftforge.event.", ""));
-        this.nCalls = cellData.getValue().getN();
-        this.mod = new CachedString(modName);
-
-        this.update = new DataTiming(cellData.getValue().getGeometricMean());
+    public DataEvent fill(Class clazz, String pkg, String modName, DescriptiveStatistics stats) {
+        package_ = new CachedString(pkg);
+        String name = clazz.getName();
+        event = new CachedString(name.substring(name.lastIndexOf(".") + 1));//TODO this removed "net.minecraftforge.event.", why..
+        nCalls = stats.getN();
+        mod = new CachedString(modName);
+        update = new DataTiming(stats.getGeometricMean());
         return this;
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        this.event.writeToStream(stream);
-        this.package_.writeToStream(stream);
-        this.handler.writeToStream(stream);
-        this.update.writeToStream(stream);
-        this.mod.writeToStream(stream);
-        stream.writeLong(this.nCalls);
+        event.writeToStream(stream);
+        package_.writeToStream(stream);
+        update.writeToStream(stream);
+        mod.writeToStream(stream);
+        stream.writeLong(nCalls);
     }
 
     public static DataEvent readFromStream(ByteBuf stream) {
         DataEvent retVal = new DataEvent();
         retVal.event = CachedString.readFromStream(stream);
         retVal.package_ = CachedString.readFromStream(stream);
-        retVal.handler = CachedString.readFromStream(stream);
         retVal.update = DataTiming.readFromStream(stream);
         retVal.mod = CachedString.readFromStream(stream);
         retVal.nCalls = stream.readLong();
@@ -65,6 +43,6 @@ public class DataEvent implements ISerializable, Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return this.update.compareTo(((DataEvent) o).update);
+        return update.compareTo(((DataEvent) o).update);
     }
 }

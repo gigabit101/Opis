@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
@@ -22,24 +20,24 @@ public class DataEntity implements ISerializable, Comparable {
 
     public DataEntity fill(Entity entity) {
 
-        this.eid = entity.getEntityId();
-        this.name = new CachedString(EntityManager.INSTANCE.getEntityName(entity, false));
-        this.pos = new CoordinatesBlock(entity);
+        eid = entity.getEntityId();
+        name = new CachedString(EntityManager.INSTANCE.getEntityName(entity, false));
+        pos = new CoordinatesBlock(entity);
 
         Map<Entity, DescriptiveStatistics> data = Profilers.ENTITY_UPDATE.get().data;
-        this.update = new DataTiming(data.containsKey(entity) ? data.get(entity).getGeometricMean() : 0.0D);
-        this.npoints = data.containsKey(entity) ? data.get(entity).getN() : 0;
+        update = new DataTiming(data.containsKey(entity) ? data.get(entity).getGeometricMean() : 0.0D);
+        npoints = data.containsKey(entity) ? data.get(entity).getN() : 0;
 
         return this;
     }
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        stream.writeInt(this.eid);
-        this.name.writeToStream(stream);
-        this.pos.writeToStream(stream);
-        this.update.writeToStream(stream);
-        stream.writeLong(this.npoints);
+        stream.writeInt(eid);
+        name.writeToStream(stream);
+        pos.writeToStream(stream);
+        update.writeToStream(stream);
+        stream.writeLong(npoints);
     }
 
     public static DataEntity readFromStream(ByteBuf stream) {
@@ -54,6 +52,6 @@ public class DataEntity implements ISerializable, Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return this.update.compareTo(((DataEntity) o).update);
+        return update.compareTo(((DataEntity) o).update);
     }
 }

@@ -2,6 +2,7 @@ package mcp.mobius.opis.profiler.impl;
 
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.profiler.Clock;
+import mcp.mobius.opis.profiler.IClock;
 import mcp.mobius.opis.profiler.IProfiler.IProfilerSingle;
 import net.minecraft.entity.Entity;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
@@ -14,7 +15,7 @@ import java.util.WeakHashMap;
  */
 public class ProfilerEntityUpdate implements IProfilerSingle<Entity> {
 
-    private Clock clock = Clock.createClock();
+    private IClock clock = Clock.createClock();
     public Map<Entity, DescriptiveStatistics> data = new WeakHashMap<>();
 
     @Override

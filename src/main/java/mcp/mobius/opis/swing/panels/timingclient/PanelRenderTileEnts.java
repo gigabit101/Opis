@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
 public class PanelRenderTileEnts extends JPanel implements ITabPanel, IMessageHandler {
+
     private JTableStats table;
     private JButton btnRunRender;
     private JLabel lblTotal;
@@ -35,10 +36,7 @@ public class PanelRenderTileEnts extends JPanel implements ITabPanel, IMessageHa
         JScrollPane scrollPane = new JScrollPane();
         add(scrollPane, "cell 0 1 3 1,grow");
 
-        table = new JTableStats(
-                new String[]{"Name", "Coordinates", "Timing"},
-                new Class[]{String.class, Object.class, DataTiming.class}
-        );
+        table = new JTableStats(new String[] { "Name", "Coordinates", "Timing" }, new Class[] { String.class, Object.class, DataTiming.class });
         scrollPane.setViewportView(table);
 
         lblTotal = new JLabel("Total : 0 µs");
@@ -48,7 +46,7 @@ public class PanelRenderTileEnts extends JPanel implements ITabPanel, IMessageHa
     public void setTable(ArrayList<DataTileEntityRender> data) {
 
         DefaultTableModel model = table.getModel();
-        int row = this.updateData(table, model, DataTileEntityRender.class);
+        int row = updateData(table, model, DataTileEntityRender.class);
 
         for (DataTileEntityRender o : data) {
 
@@ -61,14 +59,10 @@ public class PanelRenderTileEnts extends JPanel implements ITabPanel, IMessageHa
             } catch (Exception e) {
             }
 
-            model.addRow(new Object[]{
-                    name,
-                    String.format("[ %4d %4d %4d ]", o.pos.x, o.pos.y, o.pos.z),
-                    o.update
-            });
+            model.addRow(new Object[] { name, String.format("[ %4d %4d %4d ]", o.pos.x, o.pos.y, o.pos.z), o.update });
         }
 
-        this.dataUpdated(table, model, row);
+        dataUpdated(table, model, row);
     }
 
     public JTableStats getTable() {
@@ -78,9 +72,11 @@ public class PanelRenderTileEnts extends JPanel implements ITabPanel, IMessageHa
     public <U> int updateData(JTable table, DefaultTableModel model, Class<U> datatype) {
         int row = table.getSelectedRow();
 
-        if (model.getRowCount() > 0)
-            for (int i = model.getRowCount() - 1; i >= 0; i--)
+        if (model.getRowCount() > 0) {
+            for (int i = model.getRowCount() - 1; i >= 0; i--) {
                 model.removeRow(i);
+            }
+        }
 
         return row;
     }

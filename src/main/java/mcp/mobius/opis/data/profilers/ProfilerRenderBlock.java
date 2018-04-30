@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class ProfilerRenderBlock extends ProfilerAbstract {
 
     private IClock clock = Clock.getNewClock();
-    public HashMap<CoordinatesBlock, DescriptiveStatistics> data = new HashMap<CoordinatesBlock, DescriptiveStatistics>();
+    public HashMap<CoordinatesBlock, DescriptiveStatistics> data = new HashMap<>();
 
     @Override
     public void reset() {
@@ -20,8 +20,9 @@ public class ProfilerRenderBlock extends ProfilerAbstract {
     public void start(Object key1, Object key2, Object key3, Object key4) {
         CoordinatesBlock coord = new CoordinatesBlock(Minecraft.getMinecraft().world.provider.getDimension(), (Integer) key2, (Integer) key3, (Integer) key4);
 
-        if (!data.containsKey(coord))
+        if (!data.containsKey(coord)) {
             data.put(coord, new DescriptiveStatistics());
+        }
         clock.start();
     }
 

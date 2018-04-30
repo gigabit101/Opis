@@ -11,20 +11,19 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CommandTimingEntities extends CommandBase implements IOpisCommand {
 
     @Override
     public String getCommandNameOpis() {
-        return this.getName();
+        return getName();
     }
-
 
     @Override
     public int getRequiredPermissionLevel() {
         return 0;
     }
-
 
     @Override
     public String getDescription() {
@@ -49,7 +48,7 @@ public class CommandTimingEntities extends CommandBase implements IOpisCommand {
             return;
         }
 
-        ArrayList<DataEntity> ents = new ArrayList<DataEntity>();
+        List<DataEntity> ents = new ArrayList<>();
         if (args.length == 0) {
             ents = EntityManager.INSTANCE.getWorses(20);
         } else {

@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.basetypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 
@@ -15,7 +13,7 @@ public class SerialLong implements ISerializable {
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        stream.writeLong(this.value);
+        stream.writeLong(value);
     }
 
     public static SerialLong readFromStream(ByteBuf stream) {

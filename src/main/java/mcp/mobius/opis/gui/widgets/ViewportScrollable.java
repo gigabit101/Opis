@@ -11,6 +11,7 @@ import org.lwjgl.util.Point;
 public class ViewportScrollable extends WidgetBase {
 
     public class Escalator extends WidgetBase {
+
         int yOffset = 0;
         int sizeCursor = 8;
         int maxValue = 0;
@@ -23,11 +24,11 @@ public class ViewportScrollable extends WidgetBase {
         }
 
         public void setOffset(int yoffset) {
-            this.yOffset = yoffset;
+            yOffset = yoffset;
         }
 
         public void setMaxValue(int value) {
-            this.maxValue = value;
+            maxValue = value;
         }
 
         public void setStep(int step) {
@@ -36,26 +37,27 @@ public class ViewportScrollable extends WidgetBase {
 
         @Override
         public void draw(Point pos) {
-            UIHelper.drawGradientRect(this.getLeft(), this.getTop(), this.getRight(), this.getBottom(), 1, 0xff999999, 0xff999999);
-            int offsetScaled = (int) (((double) this.getSize().getY() - (double) sizeCursor + 1) / (double) this.maxValue * (yOffset));
-            UIHelper.drawGradientRect(this.getLeft(), this.getTop() + offsetScaled, this.getRight(), this.getTop() + offsetScaled + sizeCursor, 1, 0xffffffff, 0xffffffff);
+            UIHelper.drawGradientRect(getLeft(), getTop(), getRight(), getBottom(), 1, 0xff999999, 0xff999999);
+            int offsetScaled = (int) (((double) getSize().getY() - (double) sizeCursor + 1) / (double) maxValue * yOffset);
+            UIHelper.drawGradientRect(getLeft(), getTop() + offsetScaled, getRight(), getTop() + offsetScaled + sizeCursor, 1, 0xffffffff, 0xffffffff);
         }
 
         @Override
         public void onMouseClick(MouseEvent event) {
             if (event.button == 0) {
-                int offsetScaled = this.getTop() + (int) (((double) this.getSize().getY() - (double) sizeCursor + 1) / (double) this.maxValue * (yOffset));
+                int offsetScaled = getTop() + (int) (((double) getSize().getY() - (double) sizeCursor + 1) / (double) maxValue * yOffset);
 
-                this.drag = false;
+                drag = false;
 
-                if (event.y < offsetScaled)
-                    this.yOffset += this.step;
-                else if (event.y > offsetScaled + sizeCursor)
-                    this.yOffset -= this.step;
-                else
-                    this.drag = true;
+                if (event.y < offsetScaled) {
+                    yOffset += step;
+                } else if (event.y > offsetScaled + sizeCursor) {
+                    yOffset -= step;
+                } else {
+                    drag = true;
+                }
 
-                this.emit(Signal.VALUE_CHANGED, this.yOffset);
+                emit(Signal.VALUE_CHANGED, yOffset);
 
             } else {
                 super.onMouseClick(event);
@@ -64,23 +66,25 @@ public class ViewportScrollable extends WidgetBase {
 
         @Override
         public void onMouseRelease(MouseEvent event) {
-            if (event.button == 0)
-                this.drag = false;
+            if (event.button == 0) {
+                drag = false;
+            }
             super.onMouseRelease(event);
         }
 
         @Override
         public void onMouseDrag(MouseEvent event) {
-            if (this.drag) {
-                int relativeY = (int) event.y - this.getTop();
-                double factor = ((double) this.getSize().getY() - (double) sizeCursor + 1) / (double) this.maxValue;
-                this.yOffset = (int) (relativeY / factor);
-                this.yOffset = Math.max(this.yOffset, this.maxValue);
-                this.yOffset = Math.min(this.yOffset, 0);
-                this.emit(Signal.VALUE_CHANGED, this.yOffset);
-                this.emit(Signal.DRAGGED, this);
-            } else
+            if (drag) {
+                int relativeY = (int) event.y - getTop();
+                double factor = ((double) getSize().getY() - (double) sizeCursor + 1) / (double) maxValue;
+                yOffset = (int) (relativeY / factor);
+                yOffset = Math.max(yOffset, maxValue);
+                yOffset = Math.min(yOffset, 0);
+                emit(Signal.VALUE_CHANGED, yOffset);
+                emit(Signal.DRAGGED, this);
+            } else {
                 super.onMouseDrag(event);
+            }
         }
 
     }
@@ -91,30 +95,28 @@ public class ViewportScrollable extends WidgetBase {
 
     public ViewportScrollable(IWidget parent) {
         super(parent);
-        this.addWidget("Cropping", new LayoutCropping(null)).setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
-        this.addWidget("Escalator", new Escalator(null, this.step * 5)).setGeometry(new WidgetGeometry(100.0, 0, 8, 100.0, CType.RELXY, CType.REL_Y, WAlign.RIGHT, WAlign.TOP)).hide();
+        addWidget("Cropping", new LayoutCropping(null)).setGeometry(new WidgetGeometry(0.0, 0.0, 100.0, 100.0, CType.RELXY, CType.RELXY, WAlign.LEFT, WAlign.TOP));
+        addWidget("Escalator", new Escalator(null, step * 5)).setGeometry(new WidgetGeometry(100.0, 0, 8, 100.0, CType.RELXY, CType.REL_Y, WAlign.RIGHT, WAlign.TOP)).hide();
     }
 
     public IWidget attachWidget(IWidget widget) {
-        this.attachedWidget = this.getWidget("Cropping").addWidget("Cropped", widget);
-        return this.attachedWidget;
+        attachedWidget = getWidget("Cropping").addWidget("Cropped", widget);
+        return attachedWidget;
     }
 
     public IWidget getAttachedWidget() {
-        return this.attachedWidget;
+        return attachedWidget;
     }
 
     public IWidget setStep(int step) {
         this.step = step;
-        ((Escalator) this.getWidget("Escalator")).setStep(this.step * 5);
+        ((Escalator) getWidget("Escalator")).setStep(this.step * 5);
         return this;
     }
 
     public int getOffset() {
-        return this.yOffset;
+        return yOffset;
     }
-
-    ;
 
     @Override
     public void draw(Point pos) {
@@ -124,55 +126,60 @@ public class ViewportScrollable extends WidgetBase {
     public void draw() {
         //if (Display.wasResized())
 
-        if ((this.attachedWidget != null) && (this.attachedWidget.getSize().getY() > this.getSize().getY()))
-            this.getWidget("Escalator").show();
-        else
-            this.getWidget("Escalator").hide();
+        if ((attachedWidget != null) && (attachedWidget.getSize().getY() > getSize().getY())) {
+            getWidget("Escalator").show();
+        } else {
+            getWidget("Escalator").hide();
+        }
 
         super.draw();
     }
 
     @Override
     public void onMouseWheel(MouseEvent event) {
-        this.yOffset += event.z / 120.0 * this.step;
+        yOffset += event.z / 120.0 * step;
 
-        this.yOffset = Math.max(this.yOffset, this.getSize().getY() - this.attachedWidget.getSize().getY());
-        this.yOffset = Math.min(this.yOffset, 0);
+        yOffset = Math.max(yOffset, getSize().getY() - attachedWidget.getSize().getY());
+        yOffset = Math.min(yOffset, 0);
 
-        ((LayoutCropping) this.getWidget("Cropping")).setOffsets(0, this.yOffset);
-        ((Escalator) this.getWidget("Escalator")).setOffset(this.yOffset);
+        ((LayoutCropping) getWidget("Cropping")).setOffsets(0, yOffset);
+        ((Escalator) getWidget("Escalator")).setOffset(yOffset);
     }
 
     @Override
     public void onWidgetEvent(IWidget srcwidget, Signal signal, Object... params) {
-        if (srcwidget.equals(this.attachedWidget) && signal == Signal.GEOM_CHANGED) {
-            ((Escalator) this.getWidget("Escalator")).setMaxValue(this.getSize().getY() - srcwidget.getSize().getY());
-        } else if (srcwidget.equals(this.getWidget("Escalator")) && signal == Signal.VALUE_CHANGED) {
-            this.yOffset = (Integer) params[0];
-            ((LayoutCropping) this.getWidget("Cropping")).setOffsets(0, this.yOffset);
-        } else
+        if (srcwidget.equals(attachedWidget) && signal == Signal.GEOM_CHANGED) {
+            ((Escalator) getWidget("Escalator")).setMaxValue(getSize().getY() - srcwidget.getSize().getY());
+        } else if (srcwidget.equals(getWidget("Escalator")) && signal == Signal.VALUE_CHANGED) {
+            yOffset = (Integer) params[0];
+            ((LayoutCropping) getWidget("Cropping")).setOffsets(0, yOffset);
+        } else {
             super.onWidgetEvent(srcwidget, signal, params);
+        }
 
     }
 
     @Override
     public void onMouseDrag(MouseEvent event) {
-        if (this.getWidget("Escalator").shouldRender() && ((Escalator) this.getWidget("Escalator")).drag)
-            this.getWidget("Escalator").onMouseDrag(event);
-        else
+        if (getWidget("Escalator").shouldRender() && ((Escalator) getWidget("Escalator")).drag) {
+            getWidget("Escalator").onMouseDrag(event);
+        } else {
             super.onMouseDrag(event);
+        }
     }
 
     @Override
     public void onMouseClick(MouseEvent event) {
         if (event.button == 0) {
-            if (!this.getWidget("Escalator").isWidgetAtCoordinates(event.x, event.y)) {
-                ((Escalator) this.getWidget("Escalator")).drag = false;
+            if (!getWidget("Escalator").isWidgetAtCoordinates(event.x, event.y)) {
+                ((Escalator) getWidget("Escalator")).drag = false;
                 super.onMouseClick(event);
-            } else
-                this.getWidget("Escalator").onMouseClick(event);
-        } else
+            } else {
+                getWidget("Escalator").onMouseClick(event);
+            }
+        } else {
             super.onMouseClick(event);
+        }
     }
 
 }

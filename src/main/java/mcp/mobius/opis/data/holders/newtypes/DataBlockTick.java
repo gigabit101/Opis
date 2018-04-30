@@ -1,7 +1,5 @@
 package mcp.mobius.opis.data.holders.newtypes;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
 import io.netty.buffer.ByteBuf;
 import mcp.mobius.opis.data.holders.ISerializable;
 import mcp.mobius.opis.profiler.Profilers;
@@ -12,16 +10,17 @@ import java.util.Map;
 
 //TODO, Rename, WorldServer not BlockTick
 public class DataBlockTick implements ISerializable {
-    public HashMap<Integer, DataTiming> perdim = new HashMap<Integer, DataTiming>();
+
+    public HashMap<Integer, DataTiming> perdim = new HashMap<>();
     public DataTiming total;
 
     public DataBlockTick fill() {
-        this.total = new DataTiming();
+        total = new DataTiming();
         Map<Integer, DescriptiveStatistics> data = Profilers.WORLD_SERVER_TICK.get().data;
 
         for (Integer dim : data.keySet()) {
-            this.perdim.put(dim, new DataTiming(data.get(dim).getGeometricMean()));
-            this.total.timing += data.get(dim).getGeometricMean();
+            perdim.put(dim, new DataTiming(data.get(dim).getGeometricMean()));
+            total.timing += data.get(dim).getGeometricMean();
         }
 
         return this;
@@ -29,19 +28,20 @@ public class DataBlockTick implements ISerializable {
 
     @Override
     public void writeToStream(ByteBuf stream) {
-        stream.writeShort(this.perdim.size());
-        for (Integer key : this.perdim.keySet()) {
+        stream.writeShort(perdim.size());
+        for (Integer key : perdim.keySet()) {
             stream.writeInt(key);
-            this.perdim.get(key).writeToStream(stream);
+            perdim.get(key).writeToStream(stream);
         }
-        this.total.writeToStream(stream);
+        total.writeToStream(stream);
     }
 
     public static DataBlockTick readFromStream(ByteBuf stream) {
         DataBlockTick retVal = new DataBlockTick();
         int nkeys = stream.readShort();
-        for (int i = 0; i < nkeys; i++)
+        for (int i = 0; i < nkeys; i++) {
             retVal.perdim.put(stream.readInt(), DataTiming.readFromStream(stream));
+        }
         retVal.total = DataTiming.readFromStream(stream);
         return retVal;
     }
