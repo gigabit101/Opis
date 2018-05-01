@@ -4,7 +4,7 @@
   "name": "Opis",
   "description": "Contextual server profiler",
   "version": "${version}",
-  "mcversion": "${mcversion}",
+  "mcversion": "${mc_version}",
   "url": "",
   "updateUrl": "",
   "authors": ["ProfMobius"],

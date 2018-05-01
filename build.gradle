@@ -9,13 +9,23 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            name = "CB Repo"
+            url = "http://chickenbones.net/maven"
+        }
+        jcenter()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.covers1624:GradleStuff:1.0-SNAPSHOT'
+        classpath 'de.undercouch:gradle-download-task:3.4.2'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.covers1624.contained-deps'
+apply plugin: 'net.covers1624.repacked-deps'
+apply plugin: 'de.undercouch.download'
 apply plugin: 'maven'
 
 group = "mcp.mobius" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -35,8 +45,8 @@ configFile.withReader {
 }
 
 version = "${project.config.mod_version}." + (System.getenv("BUILD_NUMBER") ?: "1")
-
-println config.mc_version + "-" + config.forge_version
+println "Starting build of ${archivesBaseName}. Version: ${version}"
+println "Using Forge ${config.forge_version}, for Minecraft ${config.mc_version}"
 
 minecraft {
     version = config.mc_version + "-" + config.forge_version
@@ -44,6 +54,17 @@ minecraft {
     runDir = "run"
     replace '${mod_version}', project.config.mod_version
     makeObfSourceJar = false
+}
+
+containedDeps {
+    configuration = "pack"
+    tasks = "jar, deobfJar"
+}
+
+repackedDeps {
+    configuration = "shade"
+    tasks = "jar, deobfJar"
+    addExtraSrgLine "PK: org/apache/commons/math3 mcp/mobius/opis/repack/org/apache/commons/math3"
 }
 
 processResources {
@@ -62,8 +83,9 @@ processResources {
 }
 
 configurations {
-    deployerJars
-    shade
+    pack
+    compile.extendsFrom pack
+    //TODO, Smart shade.
     compile.extendsFrom shade
 }
 
@@ -78,14 +100,16 @@ repositories {
 
 dependencies {
     compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"
+    pack "codechicken:ChickenASM:1.12-${config.cc_asm_version}"
+    pack 'org.jfree:jcommon:1.0.21'
+    pack 'org.jfree:jfreechart:1.0.17'
+    pack 'com.miglayout:miglayout-swing:4.2'
+    pack 'net.sf.opencsv:opencsv:2.3'
     shade 'org.apache.commons:commons-math3:3.2'
-    shade 'org.jfree:jcommon:1.0.21'
-    shade 'org.jfree:jfreechart:1.0.17'
-    shade 'com.miglayout:miglayout-swing:4.2'
-    shade 'net.sf.opencsv:opencsv:2.3'
 }
 
 version = "${project.minecraft.version}-${project.version}"
+
 def commonManifest = {
     attributes 'FMLAT': 'opis_at.cfg'
 }
@@ -93,11 +117,6 @@ def commonManifest = {
 jar {
     classifier = 'universal'
     manifest commonManifest
-    configurations.shade.each { dep ->
-        from(project.zipTree(dep)) {
-            exclude 'META-INF', 'META-INF/**'
-        }
-    }
 }
 
 task deobfJar(type: Jar) {
@@ -109,8 +128,15 @@ task deobfJar(type: Jar) {
 task srcJar(type: Jar) {
     from sourceSets.main.allSource
     classifier = 'sources'
-    manifest commonManifest
 }
+
+task downloadMapwriter(type: Download) {
+    src "https://media.forgecdn.net/files/2510/933/MapWriter-1.12.2-2.8.2.jar"
+    dest "libs/MapWriter-1.12.2-2.8.2.jar"
+    useETag true
+    onlyIfModified true
+}
+mergeJars.dependsOn downloadMapwriter
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
     onlyIf { // Skip the task if our secret data isn't available

@@ -131,7 +131,6 @@ public class PacketManager {
             return super.addDiscriminator(discriminator, type);
         }
 
-        @SuppressWarnings ("rawtypes")
         private static boolean hasEmptyConstructor(Class type) {
             try {
                 for (Constructor c : type.getConstructors()) {
