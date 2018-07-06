@@ -44,8 +44,10 @@ public class OpisClassTransformer implements IClassTransformer {
         }
         {
             mapping = new ObfMapping("net/minecraftforge/fml/common/FMLCommonHandler", "onPreWorldTick", "(Lnet/minecraft/world/World;)V");
+            forceMap(mapping);
             transformer.add(new MethodInjector(mapping, null, blocks.get("i_FMLCH_PreWorldTick"), true));
             mapping = new ObfMapping("net/minecraftforge/fml/common/FMLCommonHandler", "onPostWorldTick", "(Lnet/minecraft/world/World;)V");
+            forceMap(mapping);
             transformer.add(new MethodInjector(mapping, voidReturnNeedle, blocks.get("i_FMLCH_PostWorldTick"), true));
         }
         {
@@ -62,6 +64,7 @@ public class OpisClassTransformer implements IClassTransformer {
         }
         {
             mapping = new ObfMapping("net/minecraftforge/fml/common/network/internal/FMLProxyPacket", "func_148833_a", "(Lnet/minecraft/network/INetHandler;)V");
+            forceMap(mapping);
             transformer.add(new MethodInjector(mapping, null, blocks.get("i_FMLPP_processPacket"), true));
             mapping = new ObfMapping("net/minecraftforge/fml/common/network/FMLOutboundHandler", "write", "(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Object;Lio/netty/channel/ChannelPromise;)V");
             transformer.add(new MethodInjector(mapping, blocks.get("n_FMLOH_write"), blocks.get("i_FMLOH_write"), false));
@@ -81,5 +84,11 @@ public class OpisClassTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         return transformer.transform(transformedName, basicClass);
+    }
+
+    public static void forceMap(ObfMapping mapping) {
+        if(ObfMapping.obfuscated) {
+            mapping.map(ObfMapping.obfMapper);
+        }
     }
 }

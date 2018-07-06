@@ -112,6 +112,8 @@ version = "${project.minecraft.version}-${project.version}"
 
 def commonManifest = {
     attributes 'FMLAT': 'opis_at.cfg'
+    attributes 'FMLCorePlugin': 'mcp.mobius.opis.asm.OpisLoadingPlugin'
+    attributes 'FMLCorePluginContainsFMLMod': 'true'
 }
 
 jar {
