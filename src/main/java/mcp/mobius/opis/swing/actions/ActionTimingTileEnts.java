@@ -1,13 +1,13 @@
 package mcp.mobius.opis.swing.actions;
 
-import mapwriter.Mw;
-import mapwriter.api.MwAPI;
-import mapwriter.gui.MwGui;
+//import mapwriter.Mw;
+//import mapwriter.api.MwAPI;
+//import mapwriter.gui.MwGui;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.api.TabPanelRegistrar;
 import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.newtypes.DataBlockTileEntity;
-import mcp.mobius.opis.gui.overlay.OverlayMeanTime;
+//import mcp.mobius.opis.gui.overlay.OverlayMeanTime;
 import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
@@ -33,10 +33,10 @@ public class ActionTimingTileEnts implements ActionListener {
         DataBlockTileEntity data = (DataBlockTileEntity) table.getTableData().get(indexData);
 
         if (e.getSource() == panel.getBtnCenter()) {
-            CoordinatesBlock coord = data.pos;
-            OverlayMeanTime.INSTANCE.setSelectedChunk(coord.dim, coord.x >> 4, coord.z >> 4);
-            MwAPI.setCurrentDataProvider(OverlayMeanTime.INSTANCE);
-            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.getInstance(), coord.dim, coord.x, coord.z));
+//            CoordinatesBlock coord = data.pos;
+//            OverlayMeanTime.INSTANCE.setSelectedChunk(coord.dim, coord.x >> 4, coord.z >> 4);
+//            MwAPI.setCurrentDataProvider(OverlayMeanTime.INSTANCE);
+//            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.getInstance(), coord.dim, coord.x, coord.z));
         }
 
         if (e.getSource() == panel.getBtnTeleport()) {

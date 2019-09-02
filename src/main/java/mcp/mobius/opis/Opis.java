@@ -34,7 +34,7 @@ import net.minecraftforge.registries.GameData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod (modid = "opis", name = "Opis", version = "1.2.3a", acceptableRemoteVersions = "*")
+@Mod (modid = "opis", name = "Opis", version = "2.0.0", acceptableRemoteVersions = "*")
 public class Opis {
 
     @Mod.Instance ("opis")
@@ -107,13 +107,13 @@ public class Opis {
     @Mod.EventHandler
     public void load(FMLInitializationEvent event) {
 
-        Block blockDemo = new BlockLag(Material.WOOD);
-        registerBlock(blockDemo, "opis.laggen");
-        GameRegistry.registerTileEntity(TileLag.class, "opis.laggen");
-
-        Block blockDebug = new BlockDebug(Material.WOOD);
-        registerBlock(blockDebug, "opis.debug");
-        GameRegistry.registerTileEntity(TileDebug.class, "opis.debug");
+//        Block blockDemo = new BlockLag(Material.WOOD);
+//        registerBlock(blockDemo, "opis.laggen");
+//        GameRegistry.registerTileEntity(TileLag.class, "opis.laggen");
+//
+//        Block blockDebug = new BlockDebug(Material.WOOD);
+//        registerBlock(blockDebug, "opis.debug");
+//        GameRegistry.registerTileEntity(TileDebug.class, "opis.debug");
 
         ProfilerSection.RENDER_TILEENTITY.setProfiler(new ProfilerRenderTileEntity());
         ProfilerSection.RENDER_ENTITY.setProfiler(new ProfilerRenderEntity());

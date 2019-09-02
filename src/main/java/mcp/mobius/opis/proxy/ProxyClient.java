@@ -1,6 +1,6 @@
 package mcp.mobius.opis.proxy;
 
-import mapwriter.api.MwAPI;
+//import mapwriter.api.MwAPI;
 import mcp.mobius.opis.Opis;
 import mcp.mobius.opis.api.IMessageHandler;
 import mcp.mobius.opis.api.MessageHandlerRegistrar;
@@ -11,9 +11,9 @@ import mcp.mobius.opis.data.managers.MetaManager;
 import mcp.mobius.opis.data.managers.StringCache;
 import mcp.mobius.opis.gui.font.Fonts;
 import mcp.mobius.opis.gui.font.TrueTypeFont;
-import mcp.mobius.opis.gui.overlay.OverlayLoadedChunks;
-import mcp.mobius.opis.gui.overlay.OverlayMeanTime;
-import mcp.mobius.opis.gui.overlay.entperchunk.OverlayEntityPerChunk;
+//import mcp.mobius.opis.gui.overlay.OverlayLoadedChunks;
+//import mcp.mobius.opis.gui.overlay.OverlayMeanTime;
+//import mcp.mobius.opis.gui.overlay.entperchunk.OverlayEntityPerChunk;
 import mcp.mobius.opis.network.PacketBase;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.profiler.Profilers;
@@ -35,6 +35,7 @@ import mcp.mobius.opis.swing.panels.tracking.PanelAmountTileEnts;
 import mcp.mobius.opis.swing.panels.tracking.PanelDimensions;
 import mcp.mobius.opis.swing.panels.tracking.PanelPlayers;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Level;
 
@@ -44,9 +45,10 @@ public class ProxyClient extends ProxyServer implements IMessageHandler {
 
     @Override
     public void init() {
-        MwAPI.registerDataProvider("Loaded chunks", OverlayLoadedChunks.INSTANCE);
-        MwAPI.registerDataProvider("Mean time", OverlayMeanTime.INSTANCE);
-        MwAPI.registerDataProvider("Ent per chunk", OverlayEntityPerChunk.INSTANCE);
+
+        if (Loader.isModLoaded("mapwriter")) {
+            mapWriterInit();
+        }
 
         fontMC8 = Fonts.createFont(new ResourceLocation("opis", "fonts/LiberationMono-Bold.ttf"), 14, true);
 
@@ -168,17 +170,23 @@ public class ProxyClient extends ProxyServer implements IMessageHandler {
         MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_START_PROFILING, Opis.proxy);
         MessageHandlerRegistrar.INSTANCE.registerHandler(Message.CLIENT_SHOW_RENDER_TICK, Opis.proxy);
 
-        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.OVERLAY_CHUNK_ENTITIES, OverlayEntityPerChunk.INSTANCE);
-        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_ENTITIES, OverlayEntityPerChunk.INSTANCE);
-        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_TICKETS, OverlayLoadedChunks.INSTANCE);
-        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_TILEENTS, OverlayMeanTime.INSTANCE);
-
         MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_TIMING_CHUNK, ChunkManager.INSTANCE);
         MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_LOADED, ChunkManager.INSTANCE);
         MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_LOADED_CLEAR, ChunkManager.INSTANCE);
 
         MessageHandlerRegistrar.INSTANCE.registerHandler(Message.STATUS_STRINGUPD, StringCache.INSTANCE);
         MessageHandlerRegistrar.INSTANCE.registerHandler(Message.STATUS_STRINGUPD_FULL, StringCache.INSTANCE);
+    }
+
+    public void mapWriterInit() {
+//        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.OVERLAY_CHUNK_ENTITIES, OverlayEntityPerChunk.INSTANCE);
+//        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_ENTITIES, OverlayEntityPerChunk.INSTANCE);
+//        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_TICKETS, OverlayLoadedChunks.INSTANCE);
+//        MessageHandlerRegistrar.INSTANCE.registerHandler(Message.LIST_CHUNK_TILEENTS, OverlayMeanTime.INSTANCE);
+
+//        MwAPI.registerDataProvider("Loaded chunks", OverlayLoadedChunks.INSTANCE);
+//        MwAPI.registerDataProvider("Mean time", OverlayMeanTime.INSTANCE);
+//        MwAPI.registerDataProvider("Ent per chunk", OverlayEntityPerChunk.INSTANCE);
     }
 
     @Override

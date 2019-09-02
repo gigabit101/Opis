@@ -10,11 +10,11 @@ import static mcp.mobius.opis.network.enums.AccessLevel.PRIVILEGED;
 
 public enum Message {
 
-    LIST_CHUNK_TILEENTS,
-    LIST_CHUNK_ENTITIES,
+    //LIST_CHUNK_TILEENTS,
+    //LIST_CHUNK_ENTITIES,
     LIST_CHUNK_LOADED,
     LIST_CHUNK_LOADED_CLEAR,
-    LIST_CHUNK_TICKETS,
+    //LIST_CHUNK_TICKETS,
     LIST_TIMING_TILEENTS,
     LIST_TIMING_TILEENTS_PER_CLASS,
     LIST_TIMING_ENTITIES,
@@ -87,8 +87,8 @@ public enum Message {
     COMMAND_KILL_STACKS_ALL(PRIVILEGED),
     // This will kill all stacks in all the dimensions
 
-    OVERLAY_CHUNK_ENTITIES,
-    OVERLAY_CHUNK_TIMING,
+    //OVERLAY_CHUNK_ENTITIES,
+    //OVERLAY_CHUNK_TIMING,
 
     CLIENT_START_PROFILING,
     CLIENT_STOP_PROFILING,
@@ -150,8 +150,8 @@ public enum Message {
     }
 
     public static void setTablesMinimumLevel(AccessLevel level) {
-        Message.LIST_CHUNK_TILEENTS.setAccessLevel(level);
-        Message.LIST_CHUNK_ENTITIES.setAccessLevel(level);
+        //Message.LIST_CHUNK_TILEENTS.setAccessLevel(level);
+        //Message.LIST_CHUNK_ENTITIES.setAccessLevel(level);
         Message.LIST_TIMING_TILEENTS.setAccessLevel(level);
         Message.LIST_TIMING_ENTITIES.setAccessLevel(level);
         Message.LIST_TIMING_HANDLERS.setAccessLevel(level);
@@ -173,10 +173,10 @@ public enum Message {
     }
 
     public static void setOverlaysMinimumLevel(AccessLevel level) {
-        Message.OVERLAY_CHUNK_ENTITIES.setAccessLevel(level);
-        Message.OVERLAY_CHUNK_TIMING.setAccessLevel(level);
-        Message.LIST_CHUNK_LOADED.setAccessLevel(level);
-        Message.LIST_CHUNK_TICKETS.setAccessLevel(level);
+        //Message.OVERLAY_CHUNK_ENTITIES.setAccessLevel(level);
+        //Message.OVERLAY_CHUNK_TIMING.setAccessLevel(level);
+        //Message.LIST_CHUNK_LOADED.setAccessLevel(level);
+        //Message.LIST_CHUNK_TICKETS.setAccessLevel(level);
     }
 
     public static void setOpisMinimumLevel(AccessLevel level) {

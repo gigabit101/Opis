@@ -1,13 +1,13 @@
 package mcp.mobius.opis.swing.actions;
 
-import mapwriter.Mw;
-import mapwriter.api.MwAPI;
-import mapwriter.gui.MwGui;
+//import mapwriter.Mw;
+//import mapwriter.api.MwAPI;
+//import mapwriter.gui.MwGui;
 import mcp.mobius.opis.api.TabPanelRegistrar;
-import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
+//import mcp.mobius.opis.data.holders.basetypes.CoordinatesBlock;
 import mcp.mobius.opis.data.holders.basetypes.TargetEntity;
 import mcp.mobius.opis.data.holders.newtypes.DataEntity;
-import mcp.mobius.opis.gui.overlay.entperchunk.OverlayEntityPerChunk;
+//import mcp.mobius.opis.gui.overlay.entperchunk.OverlayEntityPerChunk;
 import mcp.mobius.opis.network.PacketManager;
 import mcp.mobius.opis.network.enums.Message;
 import mcp.mobius.opis.network.packets.client.PacketReqData;
@@ -33,12 +33,12 @@ public class ActionTimingEntities implements ActionListener {
         DataEntity data = (DataEntity) table.getTableData().get(indexData);
 
         if (e.getSource() == panel.getBtnCenter()) {
-            CoordinatesBlock coord = data.pos;
-            PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_ENTITIES));
-            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, data.pos.asCoordinatesChunk()));
-            MwAPI.setCurrentDataProvider(OverlayEntityPerChunk.INSTANCE);
-            OverlayEntityPerChunk.INSTANCE.selectedChunk = coord.asCoordinatesChunk();
-            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.getInstance(), coord.dim, coord.x, coord.z));
+//            CoordinatesBlock coord = data.pos;
+//            PacketManager.sendToServer(new PacketReqData(Message.OVERLAY_CHUNK_ENTITIES));
+//            PacketManager.sendToServer(new PacketReqData(Message.LIST_CHUNK_ENTITIES, data.pos.asCoordinatesChunk()));
+//            MwAPI.setCurrentDataProvider(OverlayEntityPerChunk.INSTANCE);
+//            OverlayEntityPerChunk.INSTANCE.selectedChunk = coord.asCoordinatesChunk();
+//            Minecraft.getMinecraft().displayGuiScreen(new MwGui(Mw.getInstance(), coord.dim, coord.x, coord.z));
         }
 
         if (e.getSource() == panel.getBtnTeleport()) {

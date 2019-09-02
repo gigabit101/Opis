@@ -47,7 +47,7 @@ public class ServerMessageHandler {
     public void handle(Message maintype, ISerializable param1, ISerializable param2, EntityPlayerMP player) {
         String name = player.getGameProfile().getName();
 
-        if (maintype == Message.OVERLAY_CHUNK_ENTITIES) {
+        /*if (maintype == Message.OVERLAY_CHUNK_ENTITIES) {
             handleOverlayChunkEntities(player);
         } else if (maintype == Message.OVERLAY_CHUNK_TIMING) {
             ArrayList<StatsChunk> timingChunks = ChunkManager.INSTANCE.getTopChunks(100);
@@ -56,14 +56,14 @@ public class ServerMessageHandler {
             PacketManager.validateAndSend(new NetDataList(Message.LIST_CHUNK_TILEENTS, TileEntityManager.INSTANCE.getTileEntitiesInChunk((CoordinatesChunk) param1)), player);
         } else if (maintype == Message.LIST_CHUNK_ENTITIES) {
             PacketManager.validateAndSend(new NetDataList(Message.LIST_CHUNK_ENTITIES, EntityManager.INSTANCE.getEntitiesInChunk((CoordinatesChunk) param1)), player);
-        } else if (maintype == Message.LIST_CHUNK_LOADED) {
+        } else*/ if (maintype == Message.LIST_CHUNK_LOADED) {
             PlayerTracker.INSTANCE.playerOverlayStatus.put(player, OverlayStatus.CHUNKSTATUS);
             PlayerTracker.INSTANCE.playerDimension.put(player, ((SerialInt) param1).value);
             PacketManager.validateAndSend(new NetDataCommand(Message.LIST_CHUNK_LOADED_CLEAR), player);
             PacketManager.splitAndSend(Message.LIST_CHUNK_LOADED, ChunkManager.INSTANCE.getLoadedChunks(((SerialInt) param1).value), player);
-        } else if (maintype == Message.LIST_CHUNK_TICKETS) {
+        } else /*if (maintype == Message.LIST_CHUNK_TICKETS) {
             PacketManager.validateAndSend(new NetDataList(Message.LIST_CHUNK_TICKETS, new ArrayList<>(ChunkManager.INSTANCE.getTickets())), player);
-        } else if (maintype == Message.LIST_TIMING_TILEENTS) {
+        } else*/ if (maintype == Message.LIST_TIMING_TILEENTS) {
             List<DataBlockTileEntity> timingTileEnts = TileEntityManager.INSTANCE.getWorses(100);
             DataTiming totalTime = TileEntityManager.INSTANCE.getTotalUpdateTime();
             PacketManager.validateAndSend(new NetDataList(Message.LIST_TIMING_TILEENTS, timingTileEnts), player);
@@ -160,16 +160,16 @@ public class ServerMessageHandler {
         }
     }
 
-    public void handleOverlayChunkEntities(EntityPlayerMP player) {
-
-        HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = EntityManager.INSTANCE.getAllEntitiesPerChunk();
-        ArrayList<DataChunkEntities> perChunk = new ArrayList<>();
-
-        for (CoordinatesChunk chunk : entities.keySet()) {
-            perChunk.add(new DataChunkEntities(chunk, entities.get(chunk).size()));
-        }
-
-        PacketManager.validateAndSend(new NetDataList(Message.OVERLAY_CHUNK_ENTITIES, perChunk), player);
-    }
+//    public void handleOverlayChunkEntities(EntityPlayerMP player) {
+//
+//        HashMap<CoordinatesChunk, ArrayList<DataEntity>> entities = EntityManager.INSTANCE.getAllEntitiesPerChunk();
+//        ArrayList<DataChunkEntities> perChunk = new ArrayList<>();
+//
+//        for (CoordinatesChunk chunk : entities.keySet()) {
+//            perChunk.add(new DataChunkEntities(chunk, entities.get(chunk).size()));
+//        }
+//
+//        PacketManager.validateAndSend(new NetDataList(Message.OVERLAY_CHUNK_ENTITIES, perChunk), player);
+//    }
 
 }

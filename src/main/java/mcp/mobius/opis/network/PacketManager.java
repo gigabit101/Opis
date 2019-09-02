@@ -22,7 +22,7 @@ import mcp.mobius.opis.network.packets.client.PacketReqData;
 import mcp.mobius.opis.network.packets.server.NetDataCommand;
 import mcp.mobius.opis.network.packets.server.NetDataList;
 import mcp.mobius.opis.network.packets.server.NetDataValue;
-import mcp.mobius.opis.network.packets.server.PacketChunks;
+//import mcp.mobius.opis.network.packets.server.PacketChunks;
 import mcp.mobius.opis.profiler.Profilers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,7 +65,7 @@ public class PacketManager {
         codec.addDiscriminator(2, NetDataCommand.class);
         codec.addDiscriminator(3, NetDataList.class);
         codec.addDiscriminator(4, NetDataValue.class);
-        codec.addDiscriminator(5, PacketChunks.class);
+        //codec.addDiscriminator(5, PacketChunks.class);
 
         channels.putAll(NetworkRegistry.INSTANCE.newChannel("Opis", codec));
 
