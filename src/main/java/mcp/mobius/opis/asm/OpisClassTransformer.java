@@ -1,9 +1,6 @@
 package mcp.mobius.opis.asm;
 
-import codechicken.asm.ASMBlock;
-import codechicken.asm.ASMReader;
-import codechicken.asm.ModularASMTransformer;
-import codechicken.asm.ObfMapping;
+import codechicken.asm.*;
 import codechicken.asm.transformers.FieldWriter;
 import codechicken.asm.transformers.MethodInjector;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -83,7 +80,7 @@ public class OpisClassTransformer implements IClassTransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
-        return transformer.transform(transformedName, basicClass);
+        return transformer.transform(name, basicClass);
     }
 
     public static void forceMap(ObfMapping mapping) {
